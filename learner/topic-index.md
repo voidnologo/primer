@@ -28,10 +28,10 @@ Foundational + modern. Consensus, replication, time, failure modes.
 
 Event-driven patterns, brokers, idempotency.
 
-- `[unexplored]` outbox-pattern-and-why-it-comes-first — default before sagas
+- `[covered]` outbox-pattern-and-why-it-comes-first → [lesson](../lessons/event-driven-architecture/2026-05-09-outbox-pattern-and-why-it-comes-first.md) *(2026-05-09, 75 min)*
 - `[unexplored]` sagas-orchestrated-vs-choreographed — when to reach for either
 - `[unexplored]` when-to-actually-event-source — the field has cooled on this
-- `[unexplored]` kafka-vs-nats-vs-redis-streams — picking the broker
+- `[unexplored]` kafka-vs-nats-vs-redis-streams — picking the broker ← **suggested next**
 
 ## docker
 
@@ -55,7 +55,15 @@ Architecture, scalability, reliability, design heuristics; staff-IC scope.
 
 ## Suggested next
 
-The Primer updates this section after each session. Currently, after the seed `agent-patterns-vs-frameworks` reference lesson:
+The Primer updates this section after each session.
 
-- `mcp-as-the-tool-calling-protocol` — natural follow-on; the patterns above mostly assume tools, MCP is how tools attach in 2026.
-- `evals-as-the-real-product` — Evaluator-Optimizer is the entry point; move from "I built an agent" to "I know it's working."
+**After lesson 1 (outbox-pattern-and-why-it-comes-first), in priority order for the realtime-feeds migration:**
+
+1. **`kafka-vs-nats-vs-redis-streams`** *(EDA, lesson 4)* — broker selection. The migration timeline pressures it; lag observability and durability are now load-bearing selection criteria per the operational layer surfaced in lesson 1.
+2. **`sagas-orchestrated-vs-choreographed`** *(EDA, lesson 2)* — multi-stage workflows with compensation; layers on top of outbox. Becomes immediately relevant as feed-processing grows multi-stage.
+3. **`when-to-actually-event-source`** *(EDA, lesson 3, optional)* — calibration against hype before encountering it in the wild. Honest answer is "rarely needed for ingest-enrich-expose." ~30 min when curiosity wins.
+
+**Earlier (still active suggestions, lower priority for the migration):**
+
+- `mcp-as-the-tool-calling-protocol` *(ai-agentic)* — natural follow-on from the seed lesson; the workflow patterns mostly assume tools, MCP is how tools attach in 2026.
+- `evals-as-the-real-product` *(ai-agentic)* — the move from "I built an agent" to "I know it's working."

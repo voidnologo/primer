@@ -2,7 +2,7 @@
 
 > The Primer reads this file at session start. Keep it accurate. Edit freely. Public-safe — no employer names, no proprietary scenarios.
 
-**Last updated:** 2026-05-09
+**Last updated:** 2026-05-09 (after lesson 1 — outbox-pattern-and-why-it-comes-first)
 
 ---
 
@@ -35,7 +35,7 @@ One line per top-level domain, with date. Calibrates how aggressively the Primer
 |---|---|---|
 | ai-agentic | 2026-05-09 | Comfortable consuming LLM APIs from application code; experimenting with prompt engineering; not yet shipped a production agent or formal eval harness; fuzzy on the 2024–26 framework landscape (LangGraph, Pydantic AI, MCP). |
 | distributed-systems | 2026-05-09 | Comfortable with Postgres replication and queue-based async; CAP at conceptual level; no production consensus-protocol experience; hasn't read Jepsen reports closely. |
-| event-driven-architecture | 2026-05-09 | **Light familiarity, no depth.** Currently runs cron-batch SQL syncs across data feeds; needs to move toward realtime event-driven processing — this is the active learning motivation (see Current Scenarios). Hasn't operated Kafka or NATS at scale; hasn't event-sourced anything in prod; curious about outbox. |
+| event-driven-architecture | 2026-05-09 | Solid grasp of the dual-write primitive, outbox mechanics (atomicity invariants, frozen-JSONB payloads, partial-index optimization), polling-vs-CDC tradeoff with the inflection point, and pattern boundaries (saga / CQRS / event-sourcing as successors). Implementation-ready for stage 1 of the realtime-feeds migration. New edge: broker selection and the operational layer (consumer-lag SLOs, freshness stamps in read paths). Hasn't operated Kafka/NATS in production yet. |
 | docker | 2026-05-09 | **Really light — explicit learning gap.** Comfortable enough to read a Dockerfile and run Compose, but needs depth on multi-stage builds, BuildKit cache mounts, distroless/Chainguard, image internals, and modern container best practices. Deploys via ECS, no Kubernetes in prod. |
 | backend-engineering | 2026-05-09 | 15+ years total, ~10 years senior. Comfortable with day-2 ops, capacity, on-call at small-to-medium scale. **Goal: move from senior backend IC to staff-comfortable** — scope, leverage, glue work, RFC writing, cross-team influence. Specific known gap: cannot currently pass a system-design-at-scale interview confidently. |
 
@@ -51,7 +51,7 @@ Problem shapes the learner is actively working through. The Primer should reach 
 - **Register:** Senior peer — meetup-after-the-talk. No motivational fluff. No cheerleading. Disagree when correct.
 - **Narrative density:** Welcome — "senior engineer explaining at a meetup." Short stories with named characters and concrete numbers beat abstract frameworks.
 - **Visuals:** Mermaid for artifacts, ASCII inline during the live conversation. Tables for tradeoffs.
-- **Time budget per session:** 60–90 minutes typical.
+- **Time budget per session:** 60–90 minutes typical. Lesson 1 ran ~75 min and felt right.
 - **Sources to trust:** the canon (`primer/source-canon.md`).
 
 ## Anti-preferences
@@ -63,6 +63,7 @@ Things that don't land — the Primer should avoid them:
 - Pre-2024 LangChain content; pre-2nd-edition DDIA; "event-source everything" content.
 - Generic curriculum drift (lesson reads like a Wikipedia article).
 - Claiming experience the learner doesn't have. The profile is the source of truth — don't infer FastAPI fluency from "Python web backend" etc.
+- **When entering a new technical domain (especially one where the learner has light familiarity in adjacent areas), lead with a brief vocabulary calibration before any conceptual probe.** The "senior depth in adjacent areas may transfer" assumption is unsafe — surfaced when "outbox" was used several times in lesson 1 before being defined; learner had to flag the calibration miss. *Glossary the first 4–8 terms before the first probe lands. Always.*
 
 ## Active goals
 
@@ -75,4 +76,7 @@ Things that don't land — the Primer should avoid them:
 
 The Primer's snapshot of where the learner is currently being stretched. Updated each session.
 
-- _empty — populated after first lesson_
+- **Broker selection** — Kafka vs NATS-JetStream vs Redis Streams vs SQS for the realtime-feeds migration. Decision framework needed; weighted heavily by lag observability + durability.
+- **Operational layer for event-driven systems** — consumer-lag SLOs (Kafka consumer-group lag, JetStream pending counts, SQS ApproximateAgeOfOldestMessage), alerting thresholds, lag dashboards.
+- **CQRS read-model patterns** — sealed/ready markers, freshness stamps, read-your-writes redirection. Direct fix for the customer-visibility pain in the realtime-feeds scenario.
+- **Saga patterns** (choreographed vs orchestrated) — relevant once feed-processing has multi-stage workflows with compensation logic.
