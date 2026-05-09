@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Original seed prompt — contains private context, not for the public repo
+initial_prompt
+
+# Claude Code local settings (per-machine permissions, etc.)
+.claude/
+
+# In-progress lesson state — local-only, regenerated per session
+lessons/**/STATE.md
+
+# Editor / OS noise
+*.swp
+*.swo
+.idea/
+.vscode/

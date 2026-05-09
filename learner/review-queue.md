@@ -1,0 +1,9 @@
+# Review Queue
+
+Spaced retrieval prompts pulled from prior lesson `Retrieval prompts` sections. The Primer surfaces these during `/learn-me-up review`.
+
+Format: `<date-last-seen> | <domain> | Q:: <question> | A:: <answer>`
+
+---
+
+(Empty — populated after first lesson.)
