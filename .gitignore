@@ -9,8 +9,8 @@ initial_prompt
 .claude/*
 !.claude/skills/
 
-# In-progress lesson state — local-only, regenerated per session (sidecar next to the artifact)
-lessons/**/*.STATE.md
+# In-progress lesson sidecars (lessons/**/*.STATE.md) are intentionally NOT ignored —
+# they sync across machines so a paused lesson can resume on another (see primer/lesson-template.md).
 
 # Editor / OS noise
 *.swp
