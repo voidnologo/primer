@@ -34,13 +34,19 @@ Wave D — resolved into goals + Proposal 0002:
 - [x] Consistency sweep: fixed stale "every 5 lessons" in SKILL.md and two depth-marker→`profile.md` paths (→ `topic-index.md`).
 - [ ] **E2** / **E4** — still deferred until post-use data.
 
-### ⚑ Proposal 0002 — deterministic state layer + habit-formation (NEEDS MAINTAINER DECISION)
+### Proposal 0002 — deterministic state layer + habit-formation: **[decided & built — D-0020]**
 
-See `proposals/0002-deterministic-state-layer-and-habit-formation.md`. Awaiting scope call before any build:
-- [ ] **⚑ Source of truth** — A (DB-of-record + markdown snapshots) / B (markdown-of-record + DB cache) / C (hybrid). *Recommend C.*
-- [ ] **⚑ Scheduler** — SM-2-lite vs FSRS. *Recommend SM-2-lite first.*
-- [ ] **⚑ Build order** — state layer before a real intake, or intake-then-migrate. *Recommend state layer first.*
-- [ ] **⚑ Script language** — Python stdlib (recommended) vs shell.
+See `proposals/0002-…md`. Decisions resolved:
+- [x] **Source of truth** — markdown stays source of truth; **no SQLite** (binary-in-git breaks cross-machine sync; no scale benefit). A gitignored rebuildable cache is a future option only.
+- [x] **Scheduler** — SM-2 (FSRS deferred until there's review volume).
+- [x] **Build order** — state layer first. **Script language** — Python 3.11+ stdlib-only (portable).
+- [x] Built `tools/primer_state.py` + `tools/test_primer_state.py` (19 tests passing) + `tools/README.md`; wired into SKILL.md / feedback-protocol.md / review-queue template.
+
+### Next up (morning)
+- [ ] Run a real `/primer init` intake against the de-personalized engine, writing into the new state layer (first true end-to-end run).
+- [ ] Verify `init-instance.sh` seeds the new `review-queue.md` format on a fresh instance.
+- [ ] Consider merging `proposal-0001-review-and-fixes` → `main` (rebase first; `origin/main` advanced).
+- [ ] Remaining habit-formation surface (proactive nudges, retention-trend payoff, meta-learning asides) — grow with real use.
 
 ## Done (this session)
 

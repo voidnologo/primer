@@ -22,16 +22,18 @@ Then a design conversation (still Session 3) added two goals and an architecture
   bookkeeping is code, not in-context LLM work). **D-0019 / Goal 5** cultivate better learning *habits*, not
   just content. Anchor reworked onto the lesson flow (Elicit-step recall); `/primer review` is now optional +
   habit-building. T3 resolved into self-contained in-repo scheduling (not Anki).
-- **Proposal 0002** written (deterministic state layer + habit-formation) — no build started.
+- **Proposal 0002** written *and decided & built* (D-0020): markdown stays source of truth (no SQLite —
+  binary-in-git breaks cross-machine sync), SM-2 scheduler, Python stdlib. Built `tools/primer_state.py`
+  (review scheduling, marker decay, recalibrate-check) + 19 passing tests + `tools/README.md`; wired into
+  SKILL.md / feedback-protocol.md / review-queue template. E3 (generation effect) also shipped.
 
-## Next up — MORNING DECISION POINT
+## Next up
 
-- **⚑ Proposal 0002 scope decisions** (first thing): source of truth (A/B/C — recommend C hybrid), scheduler
-  (SM-2-lite vs FSRS — recommend SM-2-lite first), build order (recommend state layer before intake), script
-  language (recommend Python stdlib). Then build the chosen layer + scheduler.
-- E3 (generation-effect tweak) may be done first — no decision needed. E2/E4 deferred until post-use data.
-- Then a real `/primer init` intake against the de-personalized engine.
-- Branch `proposal-0001-review-and-fixes` (pushed); not yet merged to `main`.
+- **Run a real `/primer init`** intake against the de-personalized engine, writing into the new state layer —
+  the first true end-to-end exercise. Verify `init-instance.sh` seeds the new `review-queue.md` format.
+- E2/E4 still deferred until post-use data; remaining habit-formation surface grows with use.
+- Branch `proposal-0001-review-and-fixes` (pushed); **not yet merged to `main`** — rebase first, `origin/main`
+  advanced to `1188833` while we worked.
 
 ## Don't re-litigate
 

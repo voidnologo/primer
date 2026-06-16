@@ -86,6 +86,21 @@ Resolving Wave D turned into a design conversation that produced new direction (
   **depth markers to `profile.md`** (`lesson-protocol.md §5` Recap update, `anti-patterns.md` #6) — corrected
   to `topic-index.md` per the D-0003 stable/volatile split. (The latter two predated this session.)
 
+**State layer built (Proposal 0002 decided — D-0020)**
+
+Maintainer answered the ⚑ scope questions: source-of-truth delegated to me on merits, scheduler delegated,
+state-layer-first, Python (cross-platform). My calls, with reasoning recorded in D-0020:
+- **Markdown stays source of truth; no SQLite.** The instance syncs across machines via git; a binary SQLite
+  file can't be merged (lost writes on a forgotten pull), and at one-learner scale it buys no speed. This
+  *refines* D-0018's "committed SQLite DB" — DB dropped. (A gitignored rebuildable cache remains a future
+  option if scale ever demands.)
+- **SM-2** scheduler (transparent, no training data; FSRS deferred). **Python 3.11+ stdlib-only** (portable).
+- Built `tools/primer_state.py` — `review-due/grade/add/history`, `markers-decay`, `recalibrate-check` — plus
+  `tools/test_primer_state.py` (**19 tests, all passing**) and `tools/README.md`. Smoke-tested end-to-end.
+- Wired into the engine: `SKILL.md` (review flow, recalibrate-check + decay, prompt-append, a "call code, don't
+  compute in-context" note), `feedback-protocol.md` (bookkeeping-as-code note), `review-queue.md` template
+  (scheduled line format).
+
 ## Files Modified
 
 | File | Change |
@@ -102,8 +117,15 @@ Resolving Wave D turned into a design conversation that produced new direction (
 | `templates/learner/calibration-log.md` | added `retention-miss` miss-type |
 | `README.md` | "What's a Primer?" framing; T6 privacy-hardening block |
 | `.gitignore` | T5 — `lessons/**/*.STATE.md` |
+| `tools/primer_state.py` | NEW — SM-2 scheduler, decay, recalibrate-check (stdlib) |
+| `tools/test_primer_state.py` | NEW — 19 unit tests (passing) |
+| `tools/README.md` | NEW — tools index + `primer_state.py` usage |
+| `SKILL.md` | (also) wired `primer_state.py` into review / recalibrate-check / prompt-append; state-helpers note |
+| `primer/feedback-protocol.md` | (also) bookkeeping-as-code note |
+| `templates/learner/review-queue.md` | (also) scheduled prompt-line format |
 | `docs/engineering/GOALS.md` | Goal 5 (cultivate learning); self-contained non-negotiable |
-| `docs/engineering/DECISIONS.md` | D-0014…D-0019 |
+| `docs/engineering/proposals/0002-…md` | NEW + status → decided & built |
+| `docs/engineering/DECISIONS.md` | D-0014…D-0020 |
 | `docs/engineering/proposals/0001-…md` | status → Waves A–C implemented |
 | `docs/engineering/proposals/0002-…md` | new — deterministic state layer + habit-formation |
 | `docs/engineering/pending-tasks.md` | checked off Waves A–C |
@@ -113,24 +135,26 @@ Resolving Wave D turned into a design conversation that produced new direction (
 
 Promoted to `DECISIONS.md`: **D-0014** (no hardcoded learner), **D-0015** (external anchor + decay),
 **D-0016** (~0.4–0.7σ target; 2σ folklore), **D-0017** (evidence-triggered recalibration, supersedes D-0004),
-**D-0018** (self-contained; deterministic bookkeeping is code, SQLite in-scope), **D-0019** (Goal 5 — cultivate
-learning habits). Rationale and rejected alternatives recorded there.
+**D-0018** (self-contained; deterministic bookkeeping is code), **D-0019** (Goal 5 — cultivate learning
+habits), **D-0020** (markdown source of truth, no SQLite, SM-2, Python stdlib — refines D-0018). Rationale and
+rejected alternatives recorded there.
 
 ## Open Threads
 
-- **Proposal 0002 awaits the maintainer's ⚑ scope decisions** (the morning's first item): source of truth
-  (A/B/C — recommend C, hybrid), scheduler (SM-2-lite vs FSRS — recommend SM-2-lite first), build order
-  (recommend build state layer before a real intake), script language (recommend Python stdlib). No build
-  started.
-- Proposal 0001 E2 / E4 still deferred until post-use data. E3 (generation effect) is queued, needs no
-  decision — implementing it tonight if time permits before the decision point.
-- D-0015's decay is coarse (drift high→med at recalibrate); revisit a per-marker half-life when the scheduler
-  lands (Proposal 0002).
+- Proposal 0002 decided & built (D-0020). Remaining habit-formation surface (proactive nudges, showing the
+  retention-trend payoff, meta-learning asides) rides real use rather than being front-loaded.
+- Proposal 0001 E2 / E4 still deferred until post-use data.
+- `init-instance.sh` scaffolds the data repo from `templates/learner/` — confirm it seeds the new
+  `review-queue.md` (Prompts + Review history sections) and the scheduled-line format. (Likely fine since it
+  copies templates, but verify on the next real init.)
+- D-0015's decay is coarse (drift high→med at recalibrate); a per-marker half-life is a future refinement now
+  that the scheduler exists.
 
-## Next Session (morning)
+## Next Session
 
-- **First:** resolve Proposal 0002's ⚑ scope decisions, then build the chosen state layer + scheduler.
-- Then a real `/primer init` intake against the de-personalized engine (ideally writing into the new state layer).
+- A real `/primer init` intake against the de-personalized engine, writing into the new state layer
+  (`primer_state.py`) — the first true end-to-end exercise.
+- Consider merging `proposal-0001-review-and-fixes` to `main` (rebase first — `origin/main` advanced).
 - Still pending from before: run a real `/primer init` intake against the de-personalized engine.
 
 ## Drift check

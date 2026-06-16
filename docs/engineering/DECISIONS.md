@@ -6,6 +6,31 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 ---
 
+## D-0020 · 2026-06-16 · State layer: markdown is source of truth; Python+SM-2; no committed DB
+
+**Decision:** Resolves Proposal 0002. (a) **Markdown stays the source of truth**; a stdlib Python module
+(`tools/primer_state.py`) does the deterministic bookkeeping by reading/rewriting it. (b) **No SQLite** — not
+now, and never as a committed source of truth. (c) Scheduler is **SM-2** (lightweight, transparent). (d)
+Scripts are **Python 3.11+, stdlib-only** (portable mac/linux/windows, nothing to install). Refines D-0018's
+"committed SQLite DB" — the DB idea is dropped.
+
+**Context:** the maintainer delegated the source-of-truth (A/B/C) and scheduler choices, asking for the
+best-on-merits option (familiar preferred only if equal-or-better). On merits: the private instance **syncs
+across machines via git**, and a SQLite file is binary — git can't merge it, so concurrent/forgotten-pull
+edits produce unmergeable conflicts and lost writes. Markdown merges line-by-line and stays human-readable. At
+one-learner scale (hundreds of prompts) a script parsing markdown is instant, so SQLite buys nothing here. SM-2
+over FSRS because FSRS needs trained parameters and review volume we won't have, and the *habit* (Goal 5)
+matters more than optimal intervals.
+
+**Alternatives:** A (DB-of-record + markdown snapshots) and committed-DB hybrids — rejected (binary-in-git
+breaks D-0001 sync, no scale benefit); FSRS — rejected for now (needs data; upgradeable later); a gitignored
+rebuildable SQLite *cache* — deferred (add only if query needs ever outgrow markdown; never source of truth).
+
+**Tradeoff:** primer owns a small parsing/scheduling module (with tests) instead of leaning on a DB engine, in
+exchange for clean git sync, hand-editability (the Open-Learner-Model property), and zero install. Built this
+session: `tools/primer_state.py` (`review-due/grade/add/history`, `markers-decay`, `recalibrate-check`) +
+`tools/test_primer_state.py` (19 tests, passing); wired into `SKILL.md` and `feedback-protocol.md`.
+
 ## D-0019 · 2026-06-15 · Cultivating learning habits & meta-learning is a project goal (GOALS Goal 5)
 
 **Decision:** primer's job is not only to teach content but to **gradually make the learner better at learning** — building spaced-retrieval, active-recall, and metacognitive habits over time. Added as Goal 5 in `GOALS.md`. The spaced-review capability is justified by *habit-formation* (the system grows the habit), not by assuming the learner already reviews.

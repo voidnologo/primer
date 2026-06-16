@@ -1,7 +1,9 @@
 # Proposal 0002 — Deterministic state layer (scripts + SQLite) & habit-formation
 
 **Date:** 2026-06-15
-**Status:** proposed — **awaiting the maintainer's scope/architecture decision (⚑ below) before any build**
+**Status:** decided & built (D-0020, Session 3). Source of truth = **markdown** (no DB); scheduler = **SM-2**;
+Python stdlib; state layer before intake. `tools/primer_state.py` + tests shipped and wired into the engine.
+Habit-formation track (§4) partly in place (Elicit-step anchor + proactive review offer); the rest rides real use.
 **Author:** Session 3 (emerged from the Wave-D review discussion)
 **Depends on / extends:** D-0018 (self-contained; bookkeeping is code), D-0019 (Goal 5: cultivate learning),
 D-0015 (external anchor + decay), Proposal 0001.

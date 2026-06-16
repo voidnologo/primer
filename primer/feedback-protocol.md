@@ -4,6 +4,8 @@ The loop that keeps the profile true after intake. Intake produces a profile tha
 
 The core failure of a naive loop is conflating things that change at different rates and only updating at one timescale. This protocol runs at three.
 
+**Deterministic bookkeeping runs as code, not in-context.** The mechanical parts of this loop — spaced-repetition scheduling (SM-2), confidence decay over time, and the recalibration trigger (counting misses/lessons) — are handled by `tools/primer_state.py`, which reads and rewrites the markdown state files. The model *calls* it and interprets the result; it does not recompute dates and counts by hand (token-expensive, and models miscount). Markdown stays the source of truth so the learner model remains hand-editable and git-syncs cleanly across machines. See DECISIONS D-0018/D-0020.
+
 ## Stable vs. volatile — the split that makes the loop work
 
 Two kinds of fact live in the profile, and mixing them in one file means the volatile churn drags the stable traits along and the stable traits never get deliberately revisited.
