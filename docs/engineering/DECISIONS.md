@@ -14,7 +14,7 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 **Findings (via claude-code-guide):** command name derives from the skill dir/symlink name; `${CLAUDE_SKILL_DIR}` resolves to the skill's install location at runtime.
 
-**Tradeoff:** the physical repo dir name and the local-dir move become cosmetic — nothing depends on them. Engine includes are now location-independent. The local-dir move and GitHub repo rename are deferred (the latter is Caleb's), with zero functional impact.
+**Tradeoff:** the physical repo dir name and the local-dir move become cosmetic — nothing depends on them. Engine includes are now location-independent, so the GitHub repo rename and local-dir move carry zero functional impact.
 
 ## D-0011 · 2026-06-15 · Engineering session/decision logs in the public core
 

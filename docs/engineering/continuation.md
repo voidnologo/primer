@@ -11,14 +11,11 @@
 - Restructured profile (stable vs volatile; depth markers → topic-index with confidence + evidence).
 - Added this engineering-log system (GOALS, DECISIONS, sessions, two session skills).
 - **Migrated**: `voidnologo/primer-data` (private) created + pushed; personal data removed from the public core (now in examples/ + the instance).
-- **Renamed** to `primer` (skill name from symlink + `${CLAUDE_SKILL_DIR}` includes); skill reinstalled as `/primer`. Public core pushed to `origin/main` (still the `knowledge` GitHub repo).
-- Work merged to `main`.
+- **Renamed** to `primer`: skill (symlink + `${CLAUDE_SKILL_DIR}` includes, reinstalled as `/primer`), GitHub repo (`voidnologo/primer`, remote updated), local dir. Work merged to `main` and pushed.
 
 ## Next up
 
-- Caleb: GitHub repo rename `knowledge → primer` + `git remote set-url`.
-- Optional: move local dir `knowledge → primer` (cosmetic; do outside a session).
-- Run `/primer init` for Caleb's real intake (replace the generic migrated profile).
+- Run `/primer init` for a real intake (replace the generic migrated profile with a rich, evidence-backed one).
 See `pending-tasks.md`.
 
 ## Don't re-litigate
