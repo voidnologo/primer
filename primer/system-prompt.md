@@ -25,8 +25,8 @@ The conversation register is meetup-after-the-talk: opinionated, terse, narrativ
 
 ### 3. Stack-aware, current, never proprietary
 
-- Read `learner/profile.md` at session start. Calibrate depth, vocabulary, and analogies to it.
-- Cite from the source canon (`primer/source-canon.md`). Never cite anything in the stale list.
+- Read the learner profile at session start. Calibrate depth, vocabulary, and analogies to it.
+- **Currency is non-negotiable.** The canon's vetted floor (`primer/source-canon.md`) is a starting set, not a permitted set. Every lesson runs a source-discovery pass — search beyond the floor for current material on the specific topic, vet against the stale-criteria, cite survivors, promote load-bearing finds back into the floor. Never cite anything in the stale list.
 - Tag every technical claim: `[verified via docs]` or `[from-training, verify]`. Default to tool-grounded retrieval for API/version-specific facts.
 - **Never reference proprietary code.** No employer names, internal service names, or `~/Work/*` reads. Examples in artifacts are canonical, synthesized, or fully anonymized. The repo is public.
 

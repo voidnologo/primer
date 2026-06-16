@@ -1,8 +1,10 @@
-# Learner Profile
+# Learner Profile — Stable Traits
 
-> The Primer reads this file at session start. Keep it accurate. Edit freely. Public-safe — no employer names, no proprietary scenarios.
+> The Primer reads this file at session start. It holds **stable traits only** — things that change deliberately (at `recalibrate`) or when you edit, not every session. Volatile state lives elsewhere: depth markers and ZPD edges in `learner/topic-index.md` (with confidence + evidence), calibration misses in `learner/calibration-log.md`. See `primer/feedback-protocol.md` for the split.
+>
+> **Privacy:** this file lives in your *private* data repo. It can hold real context — real stack, real stakes, the things that make tailoring sharp. The public-safe constraint applies to *lessons* (shareable artifacts), never to this profile. (Until the class/instance split lands, this copy still sits in the public core, so it remains public-safe; enrich it with real context once it moves to the private repo — a deep `recalibrate` is the natural moment.)
 
-**Last updated:** 2026-05-09 (after lesson 1 — outbox-pattern-and-why-it-comes-first)
+**Last updated:** 2026-06-15 (restructured: stable/volatile split; depth markers moved to topic-index)
 
 ---
 
@@ -27,17 +29,7 @@ Public-safe abstraction of the kind of systems shipped:
 
 **Role:** Backend team technical lead. Responsible for modernizing and growing the team's web backend.
 
-## Depth markers
-
-One line per top-level domain, with date. Calibrates how aggressively the Primer fades introductory material.
-
-| Domain | Date | Current depth |
-|---|---|---|
-| ai-agentic | 2026-05-09 | Comfortable consuming LLM APIs from application code; experimenting with prompt engineering; not yet shipped a production agent or formal eval harness; fuzzy on the 2024–26 framework landscape (LangGraph, Pydantic AI, MCP). |
-| distributed-systems | 2026-05-09 | Comfortable with Postgres replication and queue-based async; CAP at conceptual level; no production consensus-protocol experience; hasn't read Jepsen reports closely. |
-| event-driven-architecture | 2026-05-09 | Solid grasp of the dual-write primitive, outbox mechanics (atomicity invariants, frozen-JSONB payloads, partial-index optimization), polling-vs-CDC tradeoff with the inflection point, and pattern boundaries (saga / CQRS / event-sourcing as successors). Implementation-ready for stage 1 of the realtime-feeds migration. New edge: broker selection and the operational layer (consumer-lag SLOs, freshness stamps in read paths). Hasn't operated Kafka/NATS in production yet. |
-| docker | 2026-05-09 | **Really light — explicit learning gap.** Comfortable enough to read a Dockerfile and run Compose, but needs depth on multi-stage builds, BuildKit cache mounts, distroless/Chainguard, image internals, and modern container best practices. Deploys via ECS, no Kubernetes in prod. |
-| backend-engineering | 2026-05-09 | 15+ years total, ~10 years senior. Comfortable with day-2 ops, capacity, on-call at small-to-medium scale. **Goal: move from senior backend IC to staff-comfortable** — scope, leverage, glue work, RFC writing, cross-team influence. Specific known gap: cannot currently pass a system-design-at-scale interview confidently. |
+> **Depth markers moved.** Per-domain depth, confidence, and evidence now live in `learner/topic-index.md`. This file no longer carries them — they churned every session and dragged the stable traits with them.
 
 ## Current scenarios
 
@@ -49,10 +41,12 @@ Problem shapes the learner is actively working through. The Primer should reach 
 ## Preferences
 
 - **Register:** Senior peer — meetup-after-the-talk. No motivational fluff. No cheerleading. Disagree when correct.
+- **Productive-struggle tolerance:** High. Wants to derive invariants, not be handed them. Probe-first is the right default; pushes back on framing, which is engagement, not resistance.
+- **Correction style:** Direct. State the error and the reasoning; no hint-laddering, no softening. Offer a concrete test to settle it.
 - **Narrative density:** Welcome — "senior engineer explaining at a meetup." Short stories with named characters and concrete numbers beat abstract frameworks.
 - **Visuals:** Mermaid for artifacts, ASCII inline during the live conversation. Tables for tradeoffs.
 - **Time budget per session:** 60–90 minutes typical. Lesson 1 ran ~75 min and felt right.
-- **Sources to trust:** the canon (`primer/source-canon.md`).
+- **Sources to trust:** the canon's vetted floor (`primer/source-canon.md`) plus the per-lesson discovery pass — currency is non-negotiable.
 
 ## Anti-preferences
 
@@ -72,11 +66,4 @@ Things that don't land — the Primer should avoid them:
 3. **Build production fluency in event-driven architecture** — specifically, replacing batch-SQL-sync cron jobs with realtime event-driven data processing.
 4. **Build production fluency in agentic workflows** — area where shipping, not just consuming.
 
-## Open ZPD edges
-
-The Primer's snapshot of where the learner is currently being stretched. Updated each session.
-
-- **Broker selection** — Kafka vs NATS-JetStream vs Redis Streams vs SQS for the realtime-feeds migration. Decision framework needed; weighted heavily by lag observability + durability.
-- **Operational layer for event-driven systems** — consumer-lag SLOs (Kafka consumer-group lag, JetStream pending counts, SQS ApproximateAgeOfOldestMessage), alerting thresholds, lag dashboards.
-- **CQRS read-model patterns** — sealed/ready markers, freshness stamps, read-your-writes redirection. Direct fix for the customer-visibility pain in the realtime-feeds scenario.
-- **Saga patterns** (choreographed vs orchestrated) — relevant once feed-processing has multi-stage workflows with compensation logic.
+> **Open ZPD edges moved** to `learner/topic-index.md` (volatile — they're the Primer's per-session snapshot of where you're being stretched, not a stable trait).

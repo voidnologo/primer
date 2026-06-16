@@ -23,32 +23,58 @@ Lessons feel like a senior staff engineer talking to a colleague. Productive str
 </objective>
 
 <execution_context>
+The `primer/*` files below are the **engine** — they ship with the public core and are loaded statically.
+
 @$HOME/personal/learning/knowledge/primer/system-prompt.md
 @$HOME/personal/learning/knowledge/primer/lesson-protocol.md
+@$HOME/personal/learning/knowledge/primer/intake-protocol.md
+@$HOME/personal/learning/knowledge/primer/feedback-protocol.md
 @$HOME/personal/learning/knowledge/primer/lesson-template.md
 @$HOME/personal/learning/knowledge/primer/source-canon.md
 @$HOME/personal/learning/knowledge/primer/anti-patterns.md
 @$HOME/personal/learning/knowledge/primer/visuals.md
-@$HOME/personal/learning/knowledge/learner/profile.md
-@$HOME/personal/learning/knowledge/learner/topic-index.md
+
+Learner state is **instance data** — it lives in the learner's private data repo, not the core, and is read at runtime from the resolved data dir (see *Resolve the data dir* in `<process>`). It is **not** statically included here.
 </execution_context>
 
 <process>
+## Resolve the data dir (every invocation, before routing)
+
+Learner state lives in a private data repo whose path differs per machine. Resolve it first:
+
+1. Read `~/.config/the-primer/config`. It contains `DATA_DIR=<absolute path>`. All learner state — `profile.md`, `topic-index.md`, `calibration-log.md`, `log.md`, `review-queue.md`, `open-questions.md`, `lessons/` — reads and writes target `$DATA_DIR/`.
+2. If the config is absent, the instance isn't initialized — route to `init` regardless of the argument (except `help`).
+3. Dev fallback: if no config but a `learner/` dir exists alongside the core repo, use it (transitional / pre-split).
+
+Then read `$DATA_DIR/profile.md` and `$DATA_DIR/topic-index.md` to calibrate before any lesson flow.
+
+## The argument
+
 The skill takes one argument. Route on it:
+
+## `/the-primer init` — First-time setup (intake interview)
+
+Run when no instance exists. Execute the intake interview in `primer/intake-protocol.md`: the 6-phase cold-start interview (frame → identity → goals & stakes → per-domain calibration with one live probe each → learning style → anti-preferences → synthesis). On completion, scaffold `$DATA_DIR` from `templates/learner/` and write the initial profile, seeded topic-index (with confidence + evidence), calibration-log, and first log entry. Close by proposing the first 2–3 lessons. If `~/.config/the-primer/config` doesn't exist yet, walk the learner through `tools/init-instance.sh` first.
+
+## `/the-primer recalibrate` — Correct the model
+
+Deep, user-invoked recalibration per `primer/feedback-protocol.md`: mine `calibration-log.md` for patterns, detect goal/depth drift, audit low-confidence markers, re-confirm stable traits, compact volatile churn, flag stale canon entries. Output a "what changed and why" diff; apply on confirmation. (The *minor* recalibrate runs automatically every 5 lessons at lesson start — not invoked here.)
 
 ## `/learn-me-up <topic>` — Run a lesson
 
-1. **Calibrate.** Read `learner/profile.md` and `learner/topic-index.md`. Note the depth marker for the topic's domain. Note any prior lessons in this domain. Note relevant entries in `learner/open-questions.md`.
-2. **Plan.** Propose a one-paragraph lesson plan to the learner before diving in: framing, key invariants you'll cover, what you'll skip given their depth. Get a quick acknowledgment or course-correction.
-3. **Run the protocol.** Elicit → Probe → Diagnose → Deepen → Recap (`primer/lesson-protocol.md`). Use AskUserQuestion sparingly for branching choices; default to free-form conversation.
-4. **Self-check** against `primer/anti-patterns.md` before writing the artifact.
-5. **Write the artifact** to `lessons/<domain-slug>/<YYYY-MM-DD>-<lesson-slug>.md` per `primer/lesson-template.md`. Include retrieval prompts.
-6. **Update state**:
-   - Append retrieval prompts to `learner/review-queue.md`.
-   - Append open threads to `learner/open-questions.md`.
-   - Update depth marker in `learner/profile.md` for the relevant domain.
-   - Append one line to `learner/log.md`.
-   - Update `learner/topic-index.md`: mark the topic covered/in-progress; add suggested next lessons.
+1. **Calibrate.** Read `$DATA_DIR/profile.md` (stable traits) and `$DATA_DIR/topic-index.md` (depth markers with confidence + evidence, open ZPD edges). Note the depth marker and its confidence for the topic's domain — low-confidence markers are assumptions to probe, not facts to fade past. Note prior lessons in this domain and relevant entries in `$DATA_DIR/open-questions.md`.
+2. **Minor recalibrate check.** If 5+ lessons have been logged since the last recalibrate (count `$DATA_DIR/log.md`), run the minor recalibrate first (`primer/feedback-protocol.md`): scan `calibration-log.md` for repeated misses, flip warranted statuses, surface stale low-confidence markers, show a 3–5 line diff, then proceed.
+3. **Plan.** Propose a one-paragraph lesson plan: framing, key invariants, what you'll skip given their depth. Get a quick acknowledgment or course-correction.
+4. **Run the protocol.** Elicit → Probe → Diagnose → Deepen → Recap (`primer/lesson-protocol.md`). The Deepen step's source-discovery pass is mandatory. Use AskUserQuestion sparingly; default to free-form conversation.
+5. **Self-check** against `primer/anti-patterns.md` before writing the artifact.
+6. **Write the artifact** to `$DATA_DIR/lessons/<domain-slug>/<YYYY-MM-DD>-<lesson-slug>.md` per `primer/lesson-template.md`. Include retrieval prompts. Promote any load-bearing newly-discovered source into the canon floor.
+7. **Update state** (`primer/feedback-protocol.md`):
+   - Append retrieval prompts to `$DATA_DIR/review-queue.md`.
+   - Append open threads to `$DATA_DIR/open-questions.md`.
+   - Update the domain's depth marker in `$DATA_DIR/topic-index.md`: depth, `[confidence]`, evidence (this session). Mark the topic covered/in-progress; refresh ZPD edges and suggested next.
+   - Append any calibration misses to `$DATA_DIR/calibration-log.md`. Infer the silent micro-feedback signals (calibration / engagement / mastery / style fit) from the conversation and record them — do not ask the learner.
+   - Append one line to `$DATA_DIR/log.md`.
+   - Stable traits in `profile.md` change only via `recalibrate`, not here.
 
 ## `/learn-me-up next` — Suggest next lessons
 
@@ -82,10 +108,10 @@ Render a brief usage block listing the verbs. Don't dump the full requirements d
 </process>
 
 <constraints>
-- **Never read `~/Work/*` or any proprietary work codebase.** The repo is public; proprietary code must not surface.
-- **Never include employer names, internal service names, or work-codebase identifiers** in artifacts. The profile is public-safe by construction.
+- **Never auto-read `~/Work/*` or any proprietary work codebase.** Work context reaches the profile only through what the learner says, never by reading code.
+- **Lessons are the shareable artifact — sanitize them.** No employer names, internal service names, or work-codebase identifiers in lesson artifacts; examples are canonical, synthesized, or fully anonymized. The *profile* is private (its own data repo) and may hold real context; the sanitization rule is about lessons, not the profile.
+- **Currency is non-negotiable.** Cite from the canon's vetted floor *and* the mandatory per-lesson source-discovery pass. Never cite the stale list. See `primer/source-canon.md`.
 - **Tag every technical claim** as `[verified via docs]` or `[from-training, verify]`. Default to tool-grounded retrieval for API/version-specific facts.
-- **Cite from the canon, not the stale list.** See `primer/source-canon.md`.
 - **For conceptual questions, probe before answering.** Khanmigo rule.
 - **Hold positions under pushback** when correct. Sycophancy is failure.
 - **Max one in-progress session at a time** in `lessons/*/STATE.md`. No parallel in-progress sessions.

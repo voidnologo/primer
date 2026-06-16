@@ -39,6 +39,8 @@ Update `learner/profile.md` mentally; commit it at the Recap.
 
 The body of the lesson.
 
+**Source-discovery pass first.** Before building the body, run the mandatory source-discovery pass (`primer/source-canon.md`): the floor in the canon is a starting set, not a permitted set. Actively search for current material on *this specific topic*, vet candidates against the stale-criteria, and cite survivors with `[verified via docs]` / `[from-training, verify]` tags. Currency is non-negotiable — the floor ages and the field moves between sessions, so the pass runs even when floor coverage looks strong. Promote load-bearing finds back into the floor at recap.
+
 **Universal high-quality progression:**
 
 1. **Primitives** — what's the underlying problem, before any tool? State it cleanly.

@@ -1,12 +1,21 @@
 # Source Canon — 2026-Current
 
-The allowlist + stale-list the skill draws from. Every lesson's `sources_consulted` should pull from the allowlist. Anything in the stale-list must be explicitly avoided — the learner has stated that wasted-time-on-outdated-takes is the failure mode they most fear.
+**Currency is non-negotiable.** The learner has stated that wasted-time-on-outdated-takes is the failure mode they most fear. Every lesson must be grounded in current material.
 
-This file is itself a living document. Each session checks `freshness_check` in its frontmatter; if the canon is more than ~3 months stale at session start, re-validate before grounding claims.
+This file is **not** the set of sources a lesson is permitted to cite. It is two things:
+
+1. A **vetted floor** — sources already explored and confirmed load-bearing in 2026. Cite them freely; they are a shortcut for exploration already done. Their presence here does **not** mean they are the only good sources, and their absence does **not** mean a source is disallowed.
+2. A **stale-list** — sources explicitly avoided. *This* is the currency guardrail, not the floor.
+
+**Every lesson runs a source-discovery pass** (see `primer/lesson-protocol.md`): the Primer actively searches for current sources on the specific topic, beyond the floor, vets them against the stale-criteria below, and cites them with the usual tags. The floor is where a lesson *starts*, never where it *stops*. A closed allowlist would freeze knowledge at the moment the list was written — the opposite of the goal.
+
+This file is a living document. Each session checks `freshness_check` in its frontmatter; if the canon is more than ~3 months stale at session start, re-validate before grounding claims. Sources that prove load-bearing in a lesson get promoted back into the floor at recap (see *Refreshing this file*), so the floor grows from real use.
 
 ---
 
-## Allowlist (load-bearing in 2026)
+## Vetted floor (load-bearing in 2026)
+
+> Cite freely. This is a starting set, not a permitted set. Always search beyond it (see *Source-discovery pass* below).
 
 ### AI / Agentic Workflows
 
@@ -61,7 +70,29 @@ This file is itself a living document. Each session checks `freshness_check` in 
 
 ---
 
-## Stale list (explicitly avoid)
+## Source-discovery pass (every lesson)
+
+Before the Deepen body, the Primer spends real effort finding current sources on the *specific* topic — not just reaching into the floor above. The floor saves time on the broad strokes; the discovery pass catches what's newer, more specific, or has moved since the floor was last touched.
+
+What the pass does:
+
+1. **Search** for current material on the exact topic (official docs, recent talks/papers, maintained projects, primary-source blogs from credible practitioners).
+2. **Vet** each candidate against the stale-criteria below. A source that fails is dropped, not cited.
+3. **Cite** survivors in `sources_consulted` with `[verified via docs]` (fetched this session) or `[from-training, verify]` tags.
+4. **Promote** any source that proved load-bearing into the floor at recap.
+
+The pass is mandatory even for topics with strong floor coverage — the floor ages, and the field moves between sessions.
+
+## Stale-criteria (how to vet a candidate)
+
+A source is stale — and excluded regardless of where it was found — if any hold:
+
+- It predates a known consensus shift in its domain (see *Cross-cutting shifts* below) and hasn't been updated past it.
+- A maintained successor exists that the field has moved to (e.g., a 1st ed. when a current ed. ships; a site that's actively maintained vs. a frozen book).
+- It teaches a pattern the field has explicitly cooled on (e.g., "event-source everything," Alpine-as-default).
+- The author/version/RFC claims can't be grounded and the topic is version- or API-specific.
+
+## Stale list (named instances to avoid)
 
 - Pre-2024 LangChain monolith tutorials — superseded by Anthropic "Building Effective Agents" + LangGraph + Pydantic AI.
 - Designing Data-Intensive Applications, 1st ed. (2017) — noticeably dated on cloud and streaming. Use 2nd ed.
@@ -86,10 +117,17 @@ This file is itself a living document. Each session checks `freshness_check` in 
 
 ## Refreshing this file
 
-When `freshness_check` exceeds ~3 months on a session, the skill should:
+Two triggers keep the floor current:
 
-1. Spawn a research subagent to verify each domain's allowlist is still load-bearing.
-2. Surface any new sources that have entered the conversation (high signal: new books, talks at major conferences, projects with rapid star growth).
-3. Update this file and bump the date.
+**Per-lesson promotion (every session).** A source surfaced during the discovery pass that proved load-bearing for the lesson gets added to the floor at recap, with its tag. This is the primary growth path — the floor accretes from real use, not from scheduled reviews.
+
+**Periodic re-validation (`freshness_check` > ~3 months).** The skill should:
+
+1. Spawn a research subagent to verify each domain's floor is still load-bearing.
+2. Surface new sources that have entered lessons or conversation (high signal: new books, talks at major conferences, projects with rapid star growth).
+3. Demote any floor entry that now fails the stale-criteria into the stale list.
+4. Update this file and bump the date.
+
+The deep `recalibrate` ritual (see `primer/feedback-protocol.md`) also flags floor entries that have gone stale.
 
 Prefer fewer, higher-quality sources over comprehensive lists. When in doubt, cut.

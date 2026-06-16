@@ -6,6 +6,29 @@ Status legend: `[unexplored]` `[in-progress]` `[covered]` `[mastered]`
 
 ---
 
+## Depth markers (confidence + evidence)
+
+One row per top-level domain. Calibrates how aggressively the Primer fades introductory material. `confidence` reflects how much is *demonstrated* vs *self-reported* — a marker built only from self-report or a single intake probe stays `low` until a lesson confirms it. See `primer/feedback-protocol.md`.
+
+| Domain | Updated | Depth | Confidence | Evidence |
+|---|---|---|---|---|
+| ai-agentic | 2026-05-09 | Comfortable consuming LLM APIs from app code; experimenting with prompt engineering; not yet shipped a production agent or formal eval harness; fuzzy on the 2024–26 framework landscape (LangGraph, Pydantic AI, MCP). | med | Reference lesson `agent-patterns-vs-frameworks` (2026-05-09); rest self-reported. |
+| distributed-systems | 2026-05-09 | Comfortable with Postgres replication and queue-based async; CAP at conceptual level; no production consensus-protocol experience; hasn't read Jepsen reports closely. | low | Self-reported only — no lesson yet. Candidate for a probe. |
+| event-driven-architecture | 2026-05-09 | Solid on the dual-write primitive, outbox mechanics (atomicity invariants, frozen-JSONB payloads, partial-index optimization), polling-vs-CDC tradeoff with the inflection point, and pattern boundaries (saga / CQRS / event-sourcing as successors). Implementation-ready for stage 1 of the realtime-feeds migration. Hasn't operated Kafka/NATS in production. | high (outbox) / low (broker + ops) | Lesson `outbox-pattern-and-why-it-comes-first` (2026-05-09, 75m) — demonstrated, derived invariants under probing. |
+| docker | 2026-05-09 | **Really light — explicit learning gap.** Can read a Dockerfile and run Compose; needs depth on multi-stage builds, BuildKit cache mounts, distroless/Chainguard, image internals. Deploys via ECS, no Kubernetes in prod. | low | Self-reported gap — no lesson yet. |
+| backend-engineering | 2026-05-09 | 15+ yrs total, ~10 senior. Comfortable with day-2 ops, capacity, on-call at small-to-medium scale. Known gap: cannot currently pass a system-design-at-scale interview confidently. | med | Long real-world experience (self-reported); no lesson yet to confirm the staff-scope edge. |
+
+## Open ZPD edges
+
+The Primer's per-session snapshot of where the learner is currently being stretched. Volatile — updated each session.
+
+- **Broker selection** — Kafka vs NATS-JetStream vs Redis Streams vs SQS for the realtime-feeds migration. Decision framework needed; weighted heavily by lag observability + durability.
+- **Operational layer for event-driven systems** — consumer-lag SLOs (Kafka consumer-group lag, JetStream pending counts, SQS ApproximateAgeOfOldestMessage), alerting thresholds, lag dashboards.
+- **CQRS read-model patterns** — sealed/ready markers, freshness stamps, read-your-writes redirection. Direct fix for the customer-visibility pain in the realtime-feeds scenario.
+- **Saga patterns** (choreographed vs orchestrated) — relevant once feed-processing has multi-stage workflows with compensation logic.
+
+---
+
 ## ai-agentic
 
 Building LLM-powered systems, tool use, agent loops, evaluation.
