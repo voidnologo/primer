@@ -1,6 +1,6 @@
 # Source Canon — 2026-Current
 
-**Currency is non-negotiable.** The learner has stated that wasted-time-on-outdated-takes is the failure mode they most fear. Every lesson must be grounded in current material.
+**Currency is non-negotiable.** Wasting time learning a take the field has already moved past is a core failure mode for any technical learner (and an explicit fear for many). Every lesson must be grounded in current material.
 
 This file is **not** the set of sources a lesson is permitted to cite. It is two things:
 
@@ -13,9 +13,20 @@ This file is a living document. Each session checks `freshness_check` in its fro
 
 ---
 
-## Vetted floor (load-bearing in 2026)
+## Vetted floor — starter pack (load-bearing in 2026)
 
 > Cite freely. This is a starting set, not a permitted set. Always search beyond it (see *Source-discovery pass* below).
+>
+> **This floor is a domain *starter pack*, not a universal canon.** It currently covers the
+> systems/backend/AI-agentic domains the public core shipped with — it is *not* the set of domains primer is
+> for. A learner whose goal lies elsewhere (frontend, data, a new language, a non-software field) starts with
+> an empty floor in that domain and grows it through the per-lesson discovery pass and promotion. The floor
+> below is one example of an accreted floor, not a claim about what every learner should study.
+>
+> **Edition/date specifics carry the same tagging discipline as lesson claims.** Any entry asserting an
+> edition, year, or version (`[edition — verify]` below) is the model's most hallucination-prone class; treat
+> it as `[from-training, verify]` until grounded by the discovery pass or a freshness check. The currency
+> guardrail is the stale-list and the discovery pass — not blind trust in the floor's own metadata.
 
 ### AI / Agentic Workflows
 
@@ -25,13 +36,13 @@ This file is a living document. Each session checks `freshness_check` in its fro
 - **LangGraph** — https://langchain-ai.github.io/langgraph/ — Stateful graph orchestration. Reach for it when durable state demands it; not before.
 - **Pydantic AI** — https://ai.pydantic.dev/ — FastAPI-style DX for agents; first-class MCP and structured output. Best fit for Python-heavy stacks.
 - **Model Context Protocol (MCP)** — https://modelcontextprotocol.io/ — Tool-calling standard as of 2026. Read the spec, not blog summaries.
-- **Chip Huyen — *AI Engineering* (O'Reilly, 2025)** — https://www.oreilly.com/library/view/ai-engineering/9781098166298/ — Eval, RAG, deployment, cost — the systems-engineer view of LLM apps.
+- **Chip Huyen — *AI Engineering* (O'Reilly, 2025)** `[edition — verify]` — https://www.oreilly.com/library/view/ai-engineering/9781098166298/ — Eval, RAG, deployment, cost — the systems-engineer view of LLM apps.
 - **Hamel Husain on evals** — https://hamel.dev/ — "Your AI Product Needs Evals" is required reading.
 
 ### Distributed Systems
 
 - **MIT 6.5840 (formerly 6.824)** — https://pdos.csail.mit.edu/6.824/ — The gold standard. Raft / Spinnaker / CRAQ labs in Go.
-- **Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)** — https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/ — Updated for cloud, streaming, modern storage. The book.
+- **Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)** `[edition — verify]` — https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/ — Updated for cloud, streaming, modern storage. The book.
 - **Jepsen analyses** — https://jepsen.io/analyses — Empirical consistency teardowns; how real systems fail in real ways.
 - **aphyr/distsys-class** — https://github.com/aphyr/distsys-class — Practitioner counterpart to 6.5840.
 - **Marc Brooker's blog** — https://brooker.co.za/blog/ — AWS principal engineer; current thinking on consensus, durability, formal methods in production.
@@ -42,7 +53,7 @@ This file is a living document. Each session checks `freshness_check` in its fro
 
 - **microservices.io (Chris Richardson)** — https://microservices.io/patterns/ — Saga, outbox, event sourcing, CQRS. Actively maintained.
 - **Oskar Dudycz — Event-Driven.io** — https://event-driven.io/ — Most prolific current voice on event sourcing pragmatics; "should you build it" essays are unusually honest.
-- **Confluent — *Kafka: The Definitive Guide*, 2nd ed.** — https://www.confluent.io/resources/kafka-the-definitive-guide/ — Updated for KRaft (no ZooKeeper).
+- **Confluent — *Kafka: The Definitive Guide*, 2nd ed.** `[edition — verify]` — https://www.confluent.io/resources/kafka-the-definitive-guide/ — Updated for KRaft (no ZooKeeper).
 - **Microsoft Azure Architecture Center — patterns** — https://learn.microsoft.com/azure/architecture/patterns/ — Vendor-neutral writeups of CQRS, event sourcing, outbox, saga with tradeoffs.
 - **NATS JetStream docs** — https://docs.nats.io/nats-concepts/jetstream — Lightweight Kafka alternative.
 - **Debezium docs** — https://debezium.io/documentation/ — CDC + outbox-pattern reference implementation.
@@ -51,7 +62,7 @@ This file is a living document. Each session checks `freshness_check` in its fro
 ### Docker / Containers
 
 - **Docker official docs — Build with Docker** — https://docs.docker.com/build/ — BuildKit, cache mounts, multi-stage, bake. Source of truth.
-- **Nigel Poulton — *Docker Deep Dive*, 2025 ed.** — https://leanpub.com/dockerdeepdive — Updated yearly. Current edition adds Build Cloud, buildx, Model Runner.
+- **Nigel Poulton — *Docker Deep Dive*, 2025 ed.** `[edition — verify]` — https://leanpub.com/dockerdeepdive — Updated yearly. Current edition adds Build Cloud, buildx, Model Runner.
 - **Google distroless** — https://github.com/GoogleContainerTools/distroless — Canonical minimal runtime images; `:debug` variants for incident response.
 - **Chainguard Images** — https://images.chainguard.dev/ — The 2025-26 distroless successor with continuous CVE patching.
 - **wagoodman/dive** — https://github.com/wagoodman/dive — Layer-by-layer image inspection; teaches what your Dockerfile actually produces.

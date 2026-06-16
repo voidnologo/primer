@@ -22,7 +22,7 @@ This system is the working approximation: a skill that, given a topic, generates
 
 ## 2. Design Principles
 
-Drawn from adaptive-tutoring research (Bloom's 2-sigma, ITS meta-analyses showing 0.66σ; recent generative-AI tutors landing 0.73–1.3σ in controlled trials) and the strongest existing curricula in software engineering. See `primer/source-canon.md` for citations.
+Drawn from adaptive-tutoring research and the strongest existing curricula in software engineering. A note on effect sizes, since currency cuts both ways: **Bloom's "2-sigma" is folklore** — it traces to unpublished dissertations and has never replicated; the 96-study tutoring meta-analysis pools to ~0.37σ (Nickow et al. 2020), and even live human tutoring tops out near 0.79σ (VanLehn 2011). Intelligent-tutoring-system medians land around 0.42–0.66σ (Ma et al. 2014; Kulik & Fletcher 2016), the upper end inflated by locally-authored tests. The headline generative-AI-tutor RCT (Kestin et al. 2025) is **0.63σ** honest — widely-cited "0.73–1.3σ" figures are quantile-derived, not the average effect. **The defensible design target is ~0.4–0.7σ on transfer-valid (not self-authored) assessments.** See [`docs/engineering/research/2026-06-15-ai-tutoring-and-learning-science.md`](docs/engineering/research/2026-06-15-ai-tutoring-and-learning-science.md) for the verified citations and `primer/source-canon.md` for the source canon.
 
 **P1 — Senior peer, not teacher.** The lesson register is a senior engineer talking to a colleague. Terse, opinionated, allowed to disagree, defends correct positions under pushback. No cheerleading. No "Great question!". No motivational fluff.
 

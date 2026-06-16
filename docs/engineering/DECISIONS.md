@@ -6,6 +6,36 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 ---
 
+## D-0016 · 2026-06-15 · Design target is ~0.4–0.7σ on transfer-valid assessments; 2σ is folklore
+
+**Decision:** State the system's evidence-grounded effect-size target as **~0.4–0.7σ on transfer-valid (not self-authored) assessments**, and stop citing Bloom's "2-sigma" and "generative-AI tutors at 0.73–1.3σ" as design grounding.
+
+**Context:** `REQUIREMENTS.md §2` grounded the design in figures that don't survive verification — ironic in a project whose top non-negotiable is currency. 2σ traces to unpublished dissertations and never replicated (pooled tutoring ~0.37σ, Nickow 2020; human tutoring ~0.79σ, VanLehn 2011); ITS medians are ~0.42–0.66σ (Ma 2014; Kulik & Fletcher 2016), inflated by local tests; the headline gen-AI RCT is 0.63σ honest (Kestin 2025), the higher figures quantile-derived.
+
+**Alternatives:** keep the aspirational numbers (rejected — they fail the project's own source-grounding rule); drop effect sizes entirely (rejected — a target is useful, and the honest range still motivates the design).
+
+**Tradeoff:** a less impressive headline, in exchange for a defensible bar. Implication captured in the feedback loop: self-authored retrieval prompts inflate, so cold-review scores are a calibration signal, not a mastery/effect-size claim (see D-0015). Verified citations: `docs/engineering/research/2026-06-15-ai-tutoring-and-learning-science.md`.
+
+## D-0015 · 2026-06-15 · The feedback loop gets an external anchor + forgetting-aware confidence decay
+
+**Decision:** Depth-marker confidence moves **both ways** and **decays with time**. Cold retrieval in `/primer review` is the external anchor: a miss lowers confidence and logs a calibration entry; a clean answer to an old prompt raises it. Untouched `[high]` markers drift toward `[med]`/reprobe at minor-recalibrate. Review scores are recorded as a calibration signal, explicitly *not* a mastery metric.
+
+**Context:** The loop updated the model only from its own prior assessments, and confidence only ratcheted up — a closed self-assessment loop that drifts optimistic imperceptibly (Boucle "Optimism Feedback Loop"), compounding the BKT monotonicity gap (no forgetting). This worked *against* the goal that the profile gets more true with use.
+
+**Alternatives:** a formal forgetting model (FSRS/Half-Life Regression) per marker (rejected for now — heavier than warranted before real lesson data; revisit under Proposal 0001 T3); leave the loop self-referential (rejected — the drift is the core risk a self-training system must defend against).
+
+**Tradeoff:** the anchor is coarse and the prompts are self-authored, so review scores can't be read as effect sizes — accepted, because "the estimate survived delayed recall" is still the strongest non-self-generated signal available without external assessments. Implements Proposal 0001 C2 + T1 + E1.
+
+## D-0014 · 2026-06-15 · The public engine carries no hardcoded learner
+
+**Decision:** The engine (`primer/*`) is learner-agnostic. `system-prompt.md` reads the learner from `$DATA_DIR/learner/profile.md` rather than asserting a fixed bio; senior-peer/meetup is the *default* register, overridable by the profile; the source canon is framed as a domain *starter pack*, not a universal canon; the lesson-template domain list is per-instance, not a fixed enum.
+
+**Context:** The public core hardcoded the maintainer's bio ("15+ years … technical lead …"), a backend-only canon, and a five-value domain enum — while the README promised "any learner and any goal." This put personal data in the public repo (violating the sharable-without-leaking goal) and mis-onboarded a stranger. It is also a pedagogical miscalibration: an engine that assumes an expert under-scaffolds novice adopters, and over/under-scaffolding is a measured harm (expertise reversal, asymmetric — Tetzlaff 2025).
+
+**Alternatives:** physically split the backend canon into the maintainer's instance and ship a thin starter, or ship multiple domain packs (deferred — Proposal 0001 ⚑ decision; this change does the *framing* now and leaves the content move for later); keep the bio and document it as "the reference learner" (rejected — still personal data in the public core).
+
+**Tradeoff:** the senior-peer voice is now explicitly a default rather than the identity, so the engine reads slightly less opinionated up front — accepted, since the non-negotiable register traits (no sycophancy, productive struggle, currency, confidence-honesty) are preserved as universal. Implements Proposal 0001 C1 (and fixed a stale `profile.md`→`topic-index.md` depth-marker path in `anti-patterns.md`).
+
 ## D-0013 · 2026-06-15 · Lessons are private/personal, not shareable-by-default
 
 **Decision:** Lesson artifacts are personal — calibrated to the learner — and live only in the private instance, alongside the profile. The public core ships no personal lessons. Publishing is a deliberate, separate step. **Supersedes the lesson-sharing aspect of D-0001** (which framed "only lessons are sanitized," implying lessons were the shareable surface).

@@ -6,7 +6,7 @@ Every session writes one `LESSON.md` to `lessons/<domain-slug>/<YYYY-MM-DD>-<les
 
 `lessons/<domain-slug>/<YYYY-MM-DD>-<lesson-slug>.md`
 
-- `domain-slug`: one of the top-level domains in `learner/topic-index.md` (`ai-agentic`, `distributed-systems`, `event-driven-architecture`, `docker`, `backend-engineering`).
+- `domain-slug`: the top-level domain from the learner's `topic-index.md` that this lesson belongs to. Domains are **per-instance**, not a fixed set — they come from the learner's own topic map. (The starter pack happens to ship `ai-agentic`, `distributed-systems`, `event-driven-architecture`, `docker`, `backend-engineering`, but another learner's index will have different ones.)
 - `YYYY-MM-DD`: session start date.
 - `lesson-slug`: 2–6 hyphenated words, content-bearing (`consensus-and-raft`, not `lesson-3`).
 

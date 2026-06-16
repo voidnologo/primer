@@ -39,7 +39,27 @@ This is the routine version of what currently happens by luck. The existing "lea
 
 ### Confidence + evidence on depth markers
 
-Update each touched marker in `topic-index.md`: adjust the depth description, set `[confidence]`, append the evidence. Strongest possible upgrade signal: **the learner correcting a Primer error** — that demonstrates mastery beyond passive recall, so it raises confidence more than a clean answer does.
+Update each touched marker in `topic-index.md`: adjust the depth description, set `[confidence]`, append the evidence. Confidence moves **both ways**, and the direction matters more than the level:
+
+- **Up** — a clean answer raises it; **the learner correcting a Primer error** raises it most, because it demonstrates mastery beyond passive recall.
+- **Down** — stumbling on something the marker claimed was solid, needing heavy narrowing to engage, or **missing a cold retrieval prompt in `/primer review`** (see *External anchor* below) lowers it. A downgrade is not a failure to hide; it is the loop working.
+
+A marker that only ever goes up is the warning sign in *Profile rot* — see the decay rule next.
+
+### Confidence decays with time (forgetting-aware)
+
+A confidence level is a claim about the **present**, and two things age out from under it: the learner's recall (knowledge decays without retrieval) and the Primer's own calibration (the evidence was a demonstration on one past day). So an untouched high-confidence marker is not "still high" — it is **unverified and getting staler**.
+
+This mirrors how production learner models handle it: estimates lapse toward "needs review" over time rather than staying mastered forever (the forgetting-aware approach behind Duolingo's scheduler — Half-Life Regression, DAS3H). primer's version is coarse and runs at recalibrate, not a formula per turn: a `[confidence: high]` marker untouched for several lessons should **drift toward `med` and surface as a reprobe candidate**, not sit at `high` indefinitely. The decay is what keeps the model honest in the absence of fresh evidence — and what stops the loop from quietly inflating its own certainty over time (the closed-self-assessment drift this protocol exists to resist).
+
+### External anchor — the loop is not allowed to grade only itself
+
+The depth markers are the Primer's *own* assessment of the learner. A loop that updates its model only from its own prior assessments drifts optimistic imperceptibly. The external anchor is **cold retrieval**: `/primer review` runs prompts the learner saw in a *past* lesson, with the answer not in front of them. A miss there is evidence the model didn't generate this session — so it feeds back hard:
+
+- On a missed review prompt, append a `calibration-log.md` entry (`<date> | <domain> | retention-miss | missed cold retrieval on <prompt topic> | lower <domain> confidence, requeue`) and **lower the relevant marker's confidence**.
+- On a clean answer to an *old* prompt (the older, the stronger), confirm or raise confidence — that is durable retention, not session-fresh recall.
+
+This is a coarse anchor, not a clean measurement: the prompts are Primer-authored, so a high review score is a calibration signal, **not** a mastery claim or an effect size (self-authored tests inflate). Weight it as "the model's estimate survived contact with delayed recall," and prefer signal the Primer did *not* author — the learner reporting they applied a pattern in real work — when it surfaces.
 
 ### Silent micro-feedback (inferred, never asked)
 
@@ -64,7 +84,7 @@ System-triggered (default N = 5; configurable). Lightweight, runs at the start o
 
 1. Scan `calibration-log.md` since the last recalibrate for **repeated** miss-types in the same domain → fold into the relevant depth marker or anti-preference.
 2. Flip any `[status]` that the evidence clearly warrants (e.g., `[in-progress]` → `[covered]`).
-3. Surface — don't resolve — any depth marker still at `[confidence: low]` that hasn't been touched in several lessons (a standing assumption worth a probe next time).
+3. Apply time decay (forgetting-aware): **drift any `[confidence: high]` marker untouched for several lessons toward `med`** and flag it as a reprobe candidate; and surface — don't resolve — any `[confidence: low]` marker untouched for several lessons (a standing assumption worth a probe next time). Both are about markers going stale; the difference is high-confidence ones decay, low-confidence ones just get re-flagged.
 4. Show a 3–5 line "changed since last check" diff. Proceed into the lesson.
 
 Minor recalibrate does **not** rewrite stable traits or goals.
@@ -85,7 +105,8 @@ The distinction that matters: the minor tier keeps volatile state honest cheaply
 
 ## What this protocol is defending against
 
-- **Profile rot** — markers that were true at intake and silently went stale. Confidence + evidence + the confidence audit catch it.
+- **Profile rot** — markers that were true at intake and silently went stale. Confidence + evidence + time decay + the confidence audit catch it.
+- **Optimism drift** — a closed self-assessment loop inflating its own certainty over time because it reads its own prior assessments as ground truth. The external anchor (cold retrieval feeds confidence both ways) and time decay are the guard.
 - **Lucky-catch dependence** — useful observations (like the vocabulary-calibration rule) being noticed only when someone happens to. The calibration-log makes capture routine.
 - **Append-only sprawl** — volatile state piling up until the profile is noise. The two recalibrate tiers compact it.
 - **Over-fitting to one session** — rewriting a stable trait because of a single off day. Only deep recalibrate touches stable traits, and only on patterns.

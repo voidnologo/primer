@@ -82,9 +82,15 @@ Read profile + topic-index + open-questions. Propose 2–3 best-next lessons. Us
 
 Selection priority: (1) topics tied to active goals, (2) prerequisites for in-progress topics, (3) recent open threads, (4) domain breadth.
 
-## `/primer review` — Interleaved retrieval
+## `/primer review` — Interleaved retrieval (and the model's external anchor)
 
 Pull 6–10 prompts from `$DATA_DIR/learner/review-queue.md`, weighted toward older entries (spaced review). Run them as a 60–120 second warm-up. Mark answered prompts; surface ones missed for re-review. Can stand alone or precede a `<topic>` lesson.
+
+This is not only warm-up — it is the feedback loop's **external anchor** (`primer/feedback-protocol.md`). Cold retrieval is evidence the Primer did not generate this session, so wire the result back:
+
+1. **On a miss** (especially on an older prompt): append a `calibration-log.md` entry and **lower the relevant domain's depth-marker confidence** in `topic-index.md`; requeue the prompt at a shorter interval.
+2. **On a clean answer to an old prompt:** confirm/raise confidence — durable retention, not session-fresh recall.
+3. **Record the score.** Append one line to the review-queue's *Review history* (`<date> | n/m correct | by-age note`). This is a calibration signal, **not** a mastery metric — the prompts are Primer-authored, so don't read a high score as proof of learning (self-authored tests inflate). Over time the trend says whether the model's confidence is surviving contact with delayed recall.
 
 ## `/primer resume` — Continue an in-progress lesson
 

@@ -1,6 +1,6 @@
 # Lesson Protocol — Elicit → Probe → Diagnose → Deepen → Recap
 
-The interaction loop the skill runs every session. Drawn from AutoTutor (deep-reasoning questions outperform recall by ~one letter grade), Carnegie Cognitive Tutor (RCT-validated step-level model tracing), and Khan Academy's Khanmigo (Socratic, refuses direct answers).
+The interaction loop the skill runs every session. Drawn from AutoTutor (deep-reasoning questions outperform recall by roughly one letter grade — `[from-training, verify]`), Carnegie Cognitive Tutor (RCT-validated step-level model tracing), and Khan Academy's Khanmigo (Socratic, refuses direct answers). Note: the strongest *evidence* (MathTutorBench 2025; Stanford Tutor CoPilot RCT 2024) is that models default to revealing the full solution and are best used to assist + retrieve vetted content, not to withhold by willpower — which is exactly why the probe-first rule and the source-discovery pass are load-bearing, not stylistic.
 
 ## 1. Elicit (~5% of session)
 
@@ -26,6 +26,8 @@ Question types that work:
 What does NOT work: recall ("what is Raft?"), quiz-style multiple choice, "do you know about X?".
 
 If the learner says "I don't know" — follow up with a *narrower* question, not the answer. Lower the bar until they can engage. This is ZPD calibration in action.
+
+But if the learner explicitly taps out ("just show me", "give me the answer"), honor it: answer directly, then come back to the reasoning once they have the shape. The narrowing is for when they're still trying; it is not a way to refuse a direct request. Default toward narrowing for high struggle-tolerance profiles, toward answering-then-applying for low-tolerance ones (`profile.md`).
 
 ## 3. Diagnose (~5%)
 
