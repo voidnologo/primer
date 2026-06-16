@@ -12,8 +12,19 @@ Every session writes one `LESSON.md` to `lessons/<domain-slug>/<YYYY-MM-DD>-<les
 
 **In-progress state:** while a lesson is unfinished, its resume state lives in a sidecar next to the
 (eventual) artifact: `lessons/<domain-slug>/<YYYY-MM-DD>-<lesson-slug>.STATE.md`. `/primer resume` looks for
-these. On completion the sidecar is deleted and only the `.md` artifact remains. (`.STATE.md` files are
-local-only — gitignored — since they're regenerated per session.)
+these. On completion the sidecar is deleted and only the `.md` artifact remains.
+
+`.STATE.md` files are **committed, not gitignored** — they sync across machines so a lesson paused on one
+machine can resume on another. Write the sidecar as a **self-contained handoff checkpoint**: capture what the
+learner answered (Elicit/Probe), where the diagnosis landed, and what's next — not as a scratchpad that leans
+on the live session's in-context memory. Flush it at any natural stopping point before the session ends.
+
+The one thing that does **not** cross machines is the live Claude session transcript itself — the
+conversational turns since the last flush. So cross-machine resume picks up from the last checkpoint written
+into the sidecar, not mid-dialogue. That residual gap is inherent to interactive sessions; the fix is to
+flush often, not to gitignore. (Because the engine enforces max one in-progress session, concurrent edits to
+the same sidecar from two machines don't arise; an abandoned sidecar is a cleanup nuisance, not a correctness
+issue.)
 
 ## Frontmatter
 

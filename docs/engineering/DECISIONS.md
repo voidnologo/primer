@@ -6,6 +6,36 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 ---
 
+## D-0021 · 2026-06-16 · In-progress lesson sidecars (`.STATE.md`) are committed, not gitignored
+
+**Decision:** `lessons/**/*.STATE.md` resume sidecars are **committed and git-synced**, reversing the earlier
+"local-only, gitignored" treatment. The sidecar is written as a **self-contained handoff checkpoint** —
+capturing what the learner answered (Elicit/Probe), where the diagnosis landed, and what's next — and flushed
+at any natural stopping point, not used as a scratchpad that leans on the live session's in-context memory.
+Updated `primer/lesson-template.md` (the convention), the core repo `.gitignore` (removed the ignore rule),
+and confirmed `tools/init-instance.sh` writes instance gitignores without the rule. (`init-instance.sh`
+already did; no change needed there.)
+
+**Context:** the maintainer's portability goal — pause a lesson on machine 1, resume it on machine 2 —
+requires the sidecar to sync, and gitignoring it directly blocked that. The earlier "regenerated per session"
+rationale only holds for same-machine scratch. Gitignoring `.STATE.md` also contradicted the project's
+own load-bearing principle that the private instance is fully git-syncable across machines (D-0001, and the
+explicit reason markdown-not-SQLite was chosen in D-0018/D-0020). The one genuine limit is narrow and
+inherent: the live Claude session transcript (conversational turns since the last flush) does **not** cross
+machines, so cross-machine resume picks up from the last checkpoint written into the sidecar, not mid-dialogue.
+The fix for that gap is to flush often, not to gitignore.
+
+**Alternatives:** keep gitignored, accept no cross-machine resume (rejected — defeats the stated goal and
+contradicts D-0001 sync); sync the full session transcript too (rejected — machine-local and Claude-session-
+bound, not primer's to move; the checkpoint-in-sidecar discipline is the portable subset). Concurrent edits to
+the same sidecar from two machines don't arise because the engine enforces max one in-progress session
+(SKILL.md constraint); an abandoned sidecar is a cleanup nuisance, not a correctness issue.
+
+**Tradeoff:** the sidecar must be authored as a durable handoff (slightly more discipline per flush, and a
+stale sidecar can linger after an abandoned lesson) in exchange for cross-machine resume and consistency with
+the all-markdown-git-syncs design. Refines the resume-state design (Proposal 0001's `.STATE.md` path
+reconciliation); the path/format from that work stands.
+
 ## D-0020 · 2026-06-16 · State layer: markdown is source of truth; Python+SM-2; no committed DB
 
 **Decision:** Resolves Proposal 0002. (a) **Markdown stays the source of truth**; a stdlib Python module
