@@ -9,7 +9,7 @@ A cold profile is mostly assumption. The job of intake is to replace as much ass
 - **This is a conversation with a spine, not a form.** The phases are the spine. Follow tangents that surface signal; return to the spine.
 - **Intake follows the Primer's own philosophy.** Probe, don't lecture. Senior-peer register by default; read whether that fits and adjust live. No quizzing, no infantilizing.
 - **Self-report is the cheap signal; the probe is the real one.** Self-rated skill level is unreliable in both directions. Always ground it with one live probe per domain.
-- **Make it work for anyone.** Do not assume the learner's field. A backend lead, a frontend dev, a data scientist, a designer — the spine is the same; the content is discovered in Phase 1.
+- **Discover, don't assume — broad ability *and* goal.** Do not presuppose the learner's field, their target, or even which domains matter. The spine is the same for a backend lead, a frontend dev wanting MCP, or someone learning their first new language in a decade; the content is *discovered*. Two things get discovered together: how broadly capable they already are (so transferable skill is found, not re-taught), and what they're actually trying to do (so the calibration starts in the right place). The goal decomposes into the skill map; the broad-ability scan says which parts of that map are new.
 - **Everything here is private.** The profile lives only in the learner's private data repo. Collect real context — real stack, real stakes, real anxieties. The public-safe constraint applies to *lessons* (shareable artifacts), never to the profile.
 
 ## Phase 0 — Frame (~30s)
@@ -20,15 +20,19 @@ Set expectations in three sentences:
 
 Then start. Don't over-explain.
 
-## Phase 1 — Identity & real context (~5 min)
+## Phase 1 — Broad ability discovery (~5–7 min)
 
-Open-ended. Discover who they are and what they work on.
+Map the *whole* learner, not just the target. The point is to find what already transfers, so the lesson plan teaches what's new and skips what isn't.
 
 - "Tell me what you do and how long you've been doing it."
-- "What's your actual stack — languages, frameworks, data stores, infra? The real one, not the résumé one."
+- "What have you actually built? What are you good at — the things that feel easy now?"
+- "What's your real toolkit — languages, frameworks, paradigms, domains you've worked in?"
+- "When you've picked up something new before, how did it go and how did you do it?" (Surfaces learning style early and ramp speed.)
 - "Self-taught, formal, a mix? Doesn't change quality — it changes where the gaps usually sit."
 
 Capture richly and unsanitized — this is private. Real employer/domain context is allowed and useful. The skill still never *auto-reads* a work codebase (`~/Work/*`); context arrives through what the learner says.
+
+The breadth matters because most goals lean on adjacent skill. Someone learning a new language already knows programming — calibrate against their *existing* paradigm fluency, not from zero. Someone learning MCP already builds software — the question is which adjacent pieces (HTTP, tool-calling, JSON-RPC, client/server models) they hold. The broad scan is what makes the goal decomposition in Phase 3 honest.
 
 ## Phase 2 — Goals & stakes — "why now" (~5–7 min)
 
@@ -41,13 +45,29 @@ The highest-leverage signal and the one most learning tools skip. Motivation dri
 
 Record goals as semi-stable (they evolve; `recalibrate` reviews them). Record the scary thing verbatim — it anchors early lessons.
 
-## Phase 3 — Domain calibration (~15–20 min, the core mechanism)
+## Phase 3 — Goal decomposition & calibration (~15–20 min, the core mechanism)
 
-For each domain the learner names as a focus, run the **self-rate → probe → record-gap** loop. One probe per domain. Calibrate, don't examine.
+This is where broad ability and goal meet. Don't ask the learner to enumerate domains — most can't, and a learner often doesn't know what their goal depends on. *Derive* the map from the goal, cross it against Phase 1, then probe only the load-bearing unknowns.
+
+### 0. Decompose the goal into a skill map
+
+Take the Phase 2 goal and break it into the sub-skills/domains it actually requires. Mark each against the broad-ability scan: **transfers** (already held — don't re-teach), **adjacent** (partial, worth a probe), or **new** (the real learning surface). Show the learner the map and let them correct it — they'll know if you've mis-scoped.
+
+Worked examples:
+
+- **"Get good at system design."** Decomposes into: data modeling, caching, queues/async, replication/consistency, capacity/failure thinking, the communication craft (tradeoff tables, RFCs). A backend lead transfers most primitives; the new surface is *consistency at scale* and *the staff-level communication*. Probe there.
+- **"Learn MCP and AI-assisted development."** Decomposes into: client/server model, JSON-RPC/transport, tool/resource definitions, LLM tool-calling loop, agent patterns, evals. A working dev transfers HTTP and client/server; *tool-calling semantics* and *evals* are usually new. Probe there.
+- **"Learn a new programming language (say Rust)."** Decomposes into: syntax (cheap, self-serve), the language's *distinctive model* (ownership/borrowing), its ecosystem/tooling, idioms vs. their current paradigm. Someone fluent in Python transfers control flow and decomposition; the new surface is *ownership* and *thinking in the type system*. Probe there, not on syntax.
+
+The decomposition is what turns "I want to learn X" into a calibrated starting point. Skipping it produces a generic curriculum — the failure mode to avoid.
+
+### Then, for each load-bearing (adjacent / new) sub-skill, run the loop
+
+`self-rate → probe → record-gap`. One probe per sub-skill. Calibrate, don't examine. Skip transfers entirely (note them as assumed-held, low cost to confirm later).
 
 ### 1. Self-rate (coarse)
 
-"Where are you with `<domain>` — never touched it / can use it / can build with it / can teach it?"
+"Where are you with `<sub-skill>` — never touched it / can use it / can build with it / can teach it?"
 
 ### 2. One live diagnostic probe
 
@@ -107,7 +127,7 @@ Draft the profile live and show it back — **with confidence levels and evidenc
 Then write the instance's initial state:
 
 - `profile.md` — identity, real context, register, productive-struggle tolerance, correction style, narrative density, visual prefs, session length, anti-preferences, goals. (Stable. See `primer/feedback-protocol.md` for the stable-vs-volatile split.)
-- `learner/topic-index.md` — named domains seeded, all `[unexplored]` except any a probe proved further; depth markers carry `[confidence]` + evidence.
+- `learner/topic-index.md` — the goal's skill map seeded (transfers, adjacent, new), statuses `[unexplored]` except where a probe proved further or a skill transfers; depth markers carry `[confidence]` + evidence.
 - `learner/calibration-log.md` — initialized (any narrowing/floor-finding from Phase 3 probes is the first entry).
 - `learner/log.md` — first entry: `<date> | intake | <duration>m | <one-line summary of starting point>`.
 - `learner/open-questions.md`, `learner/review-queue.md` — created empty.
@@ -116,7 +136,8 @@ Close by proposing the first 2–3 lessons, prioritized by the goals and the sca
 
 ## Anti-patterns during intake
 
-- **Trusting self-ratings.** Every domain gets a probe. No exceptions, even when the learner sounds confident.
+- **Trusting self-ratings.** Every load-bearing (adjacent / new) sub-skill gets a probe. No exceptions, even when the learner sounds confident. Transfers may be assumed-held but get confirmed in the first lesson that touches them.
+- **Skipping the decomposition.** Asking "what domains do you want?" instead of deriving the map from the goal. The learner often doesn't know what their goal depends on — that's the Primer's job.
 - **Letting a probe become an exam.** One probe per domain. If you're on the third follow-up, you've left calibration and started teaching — stop and record what you have.
 - **Hiding confidence.** Show the learner how sure you are. A profile that looks certain about guesses is worse than one that's honest about them.
 - **Over-framing.** Phase 0 is three sentences. The interview is the value, not the preamble.

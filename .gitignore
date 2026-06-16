@@ -4,8 +4,10 @@
 # Original seed prompt — contains private context, not for the public repo
 initial_prompt
 
-# Claude Code local settings (per-machine permissions, etc.)
-.claude/
+# Claude Code local settings (per-machine permissions, etc.) — but keep the
+# shared dev-process skills (session-start/session-end) in the public core.
+.claude/*
+!.claude/skills/
 
 # In-progress lesson state — local-only, regenerated per session
 lessons/**/STATE.md

@@ -1,0 +1,113 @@
+# Primer — Decision Log
+
+Append-only record of engineering decisions: the **why**, the tradeoffs, and what was rejected. Git history is the *what*; this is the *why*. New decisions go at the top. Each entry is dated and numbered.
+
+Format: decision, context, alternatives considered, tradeoff accepted.
+
+---
+
+## D-0011 · 2026-06-15 · Engineering session/decision logs in the public core
+
+**Decision:** Track development "why" in `docs/engineering/` — `GOALS.md` (north star), `DECISIONS.md` (this file), `sessions/` (per-session logs) — plus a `/session-start` / `/session-end` mechanism.
+
+**Context:** Git records what changed; the reasoning and rejected alternatives were living only in chat. Need durable design memory to maintain focus and prevent drift across sessions.
+
+**Alternatives:** keep it in commit messages only (rejected — no room for tradeoffs/alternatives, not browsable as a design narrative); a single CHANGELOG (rejected — conflates what/why).
+
+**Tradeoff:** a small per-session documentation cost, paid back as anti-drift and onboarding for future contributors. Logs live in the public core (they document the engine and carry no personal data).
+
+**Format basis:** adapted the maintainer's existing session-skill convention from the public `~/personal/card-game` project (session_start/end + numbered notes + pending-tasks + continuation), with two primer changes: a `GOALS.md` north-star read for anti-drift, and a dedicated ADR-style `DECISIONS.md`. Implemented as **modern skills** (`.claude/skills/<name>/SKILL.md`), not legacy `.claude/commands/`. The proprietary work repos were not read.
+
+## D-0010 · 2026-06-15 · Project name is "primer", not "the-primer"
+
+**Decision:** Name the project/repo/skill `primer`.
+
+**Context:** "the-primer" reads truer to the source material but the leading "the" gets dropped or questioned in practice.
+
+**Tradeoff:** slight loss of fidelity to *The Diamond Age* framing for everyday memorability. Internal engine directory `primer/` and the skill name share the word — acceptable (different namespaces).
+
+## D-0009 · 2026-06-15 · Data-repo layout mirrors the core (`learner/` + `lessons/`)
+
+**Decision:** The private data repo root contains `learner/` (state) and `lessons/` (artifacts); `$DATA_DIR` points at the root.
+
+**Context:** Initial scaffold flattened state to the data-dir root, which contradicted the `learner/…` paths used throughout the protocol docs.
+
+**Alternatives:** flat root with bare filenames (rejected — would have required rewriting ~13 references across the engine docs and lost the state/artifact grouping).
+
+**Tradeoff:** one extra path segment, in exchange for a clean wholesale migration (move existing `learner/` + `lessons/` as-is) and zero protocol-doc churn. Dev-fallback ($DATA_DIR = core repo root) then works unchanged.
+
+## D-0008 · 2026-06-15 · init scaffolds locally and prints commands; never calls GitHub
+
+**Decision:** `tools/init-instance.sh` scaffolds the data dir, git-inits it, writes the per-machine config, and **prints** the `gh`/`git` commands for the user to run.
+
+**Context:** The public core can't assume how others host or auth their private data.
+
+**Alternatives:** auto-create via `gh` (rejected for the core — assumes gh auth and a hosting choice); point-at-existing only (rejected — more manual for the common case).
+
+**Tradeoff:** one manual push step, in exchange for portability across unknown user setups. (For the maintainer's *own* instance migration, using `gh` directly is fine — that's not the core's job.)
+
+## D-0007 · 2026-06-15 · Per-machine data pointer in `~/.config/primer/config` (XDG)
+
+**Decision:** The skill resolves `$DATA_DIR` from `~/.config/primer/config`.
+
+**Context:** The same private data repo is cloned to different paths on personal vs. work machines.
+
+**Alternatives:** gitignored pointer file in the core (rejected — lost on re-clone); env var (rejected — invisible, easy to forget on a new machine).
+
+**Tradeoff:** a config file outside both repos to manage, in exchange for surviving re-clones and being naturally per-machine.
+
+## D-0006 · 2026-06-15 · Currency: canon is a vetted floor, not a ceiling
+
+**Decision:** The allowlist is a pre-vetted *starting set*; every lesson runs a mandatory source-discovery pass beyond it; the stale-list + stale-criteria are the real currency guardrail; load-bearing finds get promoted back into the floor.
+
+**Context:** A closed allowlist would freeze knowledge at list-authoring time — the opposite of the currency goal.
+
+**Alternatives:** strict allowlist (rejected — restricts current info); no canon at all (rejected — discards vetting already done, every lesson re-explores from scratch).
+
+**Tradeoff:** per-lesson search cost, in exchange for non-negotiable currency plus a floor that ages forward through use.
+
+## D-0005 · 2026-06-15 · Micro-feedback is silent (inferred), never asked
+
+**Decision:** The Primer infers engagement/difficulty/style-fit from the conversation and records it; it does not ask end-of-lesson rating questions.
+
+**Context:** Explicit rating prompts read as the fluff the learner profile explicitly rejects.
+
+**Tradeoff:** inference is noisier than a direct answer, but avoids friction and stays in-register. Patterns get confirmed across sessions via the calibration log, not a single self-report.
+
+## D-0004 · 2026-06-15 · Two-tier recalibration (minor auto every 5, deep on demand)
+
+**Decision:** A lightweight minor recalibrate auto-runs every 5 lessons (compacts volatile state, shows a diff); a deep recalibrate the user invokes rewrites stable traits and goals.
+
+**Context:** An append-only loop accretes volatile state and never corrects the model; but stable traits shouldn't be rewritten on one session.
+
+**Alternatives:** only-manual (rejected — drift goes uncaught); only-automatic deep (rejected — too heavy to run often, risks over-fitting traits).
+
+**Tradeoff:** N=5 is a guess to tune. Two mechanisms instead of one, in exchange for cheap continuous hygiene + deliberate, evidence-based trait changes.
+
+## D-0003 · 2026-06-15 · Feedback loop runs at three timescales; stable/volatile split
+
+**Decision:** Capture silently within a lesson, capture signals at lesson end (calibration log + confidence/evidence on depth markers), recalibrate periodically. Stable traits → `profile.md`; volatile state (depth markers, ZPD edges, calibration misses) → `learner/`.
+
+**Context:** The original loop only updated at session end and mixed stable traits with volatile depth markers in one file, so the file churned and traits were never deliberately revisited.
+
+**Tradeoff:** more files and more moving parts, in exchange for a profile that gets more true with use and is honest about confidence.
+
+## D-0002 · 2026-06-15 · Intake = self-report + one live diagnostic probe per domain
+
+**Decision:** The cold-start interview grounds each self-rated domain with a single live diagnostic probe (causal/counterfactual/critique), and records the gap at low confidence.
+
+**Context:** Self-rated skill level is unreliable in both directions; a blank or self-report-only profile mis-calibrates the first lessons.
+
+**Alternatives:** self-report only (rejected — unreliable); placement-exam depth (rejected — too much onboarding friction).
+
+**Tradeoff:** ~30–45 min onboarding and one probe's worth of uncertainty per domain, in exchange for a first profile grounded in demonstrated behavior. Real depth is refined by later lessons.
+
+## D-0001 · 2026-06-15 · Privacy via class/instance repo split, not a public-safe profile
+
+**Decision:** Separate a public core (engine) from a private instance data repo (profile + lessons). The profile is private and may be rich; only lessons are sanitized.
+
+**Context:** The original model made the profile "public-safe," which capped its richness — the genuinely useful tailoring signal (real stack, stakes, anxieties) couldn't be stored. The maintainer also needs profile + lessons synced across two machines.
+
+**Alternatives:** two files (public + gitignored private) in one repo (rejected — superseded; doesn't give cross-machine sync); keep fully public-safe (rejected — caps quality); all data gitignored local-only (rejected — no sync).
+
+**Tradeoff:** managing two repos and a private remote (trust boundary: private GitHub repo, not local-only), in exchange for a rich profile, clean sharing, and git-based multi-machine sync.
