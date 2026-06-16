@@ -1,61 +1,80 @@
-# knowledge
+# primer
 
-A personal, Primer-style learning system for a senior backend engineer.
+A personal, Primer-style learning system — an adaptive tutor that runs interactive lessons calibrated to *you* and gets sharper the more you use it.
 
-Inspired by the Young Lady's Illustrated Primer from Neal Stephenson's *The Diamond Age*, implemented as a Claude Code skill that runs interactive, narrative tutorials calibrated to a persistent learner profile and captures every session as a durable markdown artifact.
+Inspired by the Young Lady's Illustrated Primer from Neal Stephenson's *The Diamond Age*, implemented as a Claude Code skill that runs narrative, calibrated lessons against a persistent, evidence-backed learner profile and captures every session as a durable markdown artifact.
 
-Goal: stay current as a senior backend engineer; grow into staff-level technical leadership; never waste time on outdated takes.
+It works for any learner and any goal — system design, MCP and AI-assisted development, picking up a new language, distributed systems. The intake interview discovers your ability and decomposes *your* goal; it doesn't assume a curriculum.
 
-## How it works
+## Class and instance
 
-1. Invoke `/learn-me-up <topic>` in Claude Code.
-2. The skill reads `learner/profile.md`, calibrates depth, runs the **Elicit → Probe → Diagnose → Deepen → Recap** lesson protocol.
-3. The session is captured to `lessons/<domain>/<YYYY-MM-DD>-<slug>.md` per the strict template.
-4. Retrieval prompts, open threads, and depth markers feed back into the learner model. Future sessions adapt.
+primer is split in two:
 
-See [`REQUIREMENTS.md`](REQUIREMENTS.md) for the full system contract; [`primer/`](primer/) for the rules and personality; [`learner/`](learner/) for the persistent state; [`lessons/`](lessons/) for the corpus.
+- **This repo — the public core ("the class").** The engine: the skill, the protocols (`primer/`), templates, and example lessons. It holds **zero** personal data. Clone it and pull updates as the community improves it.
+- **Your private data repo ("the instance").** Your profile, depth markers, calibration log, and lessons. Private, and git-synced across your machines. Created from the core by `init`.
 
-## Install
+This is why the profile can be rich (real stack, real goals) without ever leaking: it lives only in your private repo. Only lesson artifacts are written to be shareable.
+
+## Install & first run
 
 ```bash
-./tools/install.sh
+git clone <this repo>
+cd primer
+./tools/install.sh          # symlinks the repo as the `primer` skill
 ```
 
-Symlinks the repo into `~/.claude/skills/learn-me-up`. Then in any Claude Code session:
+Then, in any Claude Code session:
 
 ```
-/learn-me-up
-/learn-me-up index
-/learn-me-up <topic>
+/primer init                # one-time: scaffold your private data repo + intake interview
 ```
+
+`init` walks you through `tools/init-instance.sh` (scaffolds your data repo locally and prints the `git`/`gh` commands to push it private), then runs the cold-start interview to build your first profile. After that:
+
+```
+/primer <topic>             # run a lesson
+/primer index               # show your topic map
+```
+
+### Second machine
+
+Clone your private data repo, then point that machine at it:
+
+```bash
+./tools/init-instance.sh <path-to-your-data-repo-clone>
+```
+
+It detects the existing instance and only writes that machine's pointer (`~/.config/primer/config`).
 
 ## Subcommands
 
-- `/learn-me-up <topic>` — start an interactive lesson
-- `/learn-me-up next` — suggest 2–3 best-next lessons
-- `/learn-me-up review` — interleaved spaced-retrieval warm-up from prior lessons
-- `/learn-me-up resume` — pick up an in-progress lesson
-- `/learn-me-up index` — show topic-index tree with status
-- `/learn-me-up profile` — show or update the learner profile
-- `/learn-me-up suggest <goal>` — propose a multi-lesson track for a stated goal
+- `/primer init` — first-time setup: intake interview, builds your profile
+- `/primer <topic>` — start an interactive lesson
+- `/primer next` — suggest 2–3 best-next lessons
+- `/primer recalibrate` — deep profile review (the minor one runs automatically every 5 lessons)
+- `/primer review` — interleaved spaced-retrieval warm-up from prior lessons
+- `/primer resume` — pick up an in-progress lesson
+- `/primer index` — show topic-index tree with status
+- `/primer profile` — show or update your profile
+- `/primer suggest <goal>` — propose a multi-lesson track for a stated goal
 
 ## Design principles
 
-8 principles drive the system. The full set is in [`REQUIREMENTS.md` § 2](REQUIREMENTS.md#2-design-principles). The most load-bearing:
+The full set and the engineering rationale live in [`docs/engineering/GOALS.md`](docs/engineering/GOALS.md) and [`docs/engineering/DECISIONS.md`](docs/engineering/DECISIONS.md). The most load-bearing:
 
-- **Senior peer, not teacher.** Lessons read like a senior engineer talking to a colleague. No motivational fluff; no cheerleading.
+- **Personal, calibrated, evidence-backed.** Depth markers carry confidence + evidence; the system knows what it has *seen* you do vs. what it *assumed*. Intake discovers ability and goal; the feedback cycle keeps the profile true.
+- **Senior peer, not teacher.** Lessons read like a senior engineer talking to a colleague (register is calibrated per learner). No motivational fluff.
 - **Productive struggle over fluent answers.** Every lesson forces prediction or critique before the explanation lands.
-- **Primitives → failure modes → patterns → tradeoffs.** Universal high-quality progression. Never start with a framework.
-- **Currency is non-negotiable.** Every lesson cites from a 2026-current allowlist (`primer/source-canon.md`); a stale-list is explicitly avoided.
-- **Stack-aware, never proprietary.** No employer names, no work-codebase snippets — ever. Stack awareness comes from the public-safe profile.
+- **Currency is non-negotiable.** The canon (`primer/source-canon.md`) is a *vetted floor*, not a ceiling — every lesson searches for current sources beyond it; a stale-list is the guardrail.
+- **Private by architecture, never proprietary.** Personal data lives only in your private instance; lessons are sanitized; the skill never auto-reads a work codebase.
 
-## Reading the lessons online
+## Developing primer
 
-The lesson corpus is markdown — works as-is in any editor or directly on GitHub. A static-site rendering of finalized lessons is a planned v1.2 addition; the SSG choice is deferred until the corpus is large enough to know what the navigation should look like.
+Engineering happens against the north star in [`docs/engineering/`](docs/engineering/) using the `session-start` / `session-end` skills, which track the *why* (decisions, tradeoffs) alongside git's *what*. See [`REQUIREMENTS.md`](REQUIREMENTS.md) for the original design contract (historical; the living design record is now `docs/engineering/` + `primer/`).
 
 ## Contributing
 
-This is one engineer's Primer. Other engineers should fork and bring their own profile and corpus. The architecture (skill + primer + learner + lessons) is the reusable part.
+The public core is the reusable part. Other learners clone it and bring their own private instance — fork or PR improvements to the engine; never commit personal data here.
 
 ## License
 

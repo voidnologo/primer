@@ -1,6 +1,8 @@
-# `knowledge` — Requirements & Project Structure
+# `primer` — Requirements & Project Structure
 
-A personal, Primer-style learning system for a senior backend engineer. Implemented as a Claude Code skill (`/learn-me-up`) that produces interactive, adaptive lessons in the terminal, captures each session as a markdown artifact, and maintains a persistent learner model that evolves over time.
+> **Historical design contract.** This is the original v1 requirements doc, written when primer was a single-repo, single-user system. The architecture has since moved to a public-core / private-instance split with an intake interview and a multi-timescale feedback cycle. The **living** design record is now [`docs/engineering/GOALS.md`](docs/engineering/GOALS.md) (north star), [`docs/engineering/DECISIONS.md`](docs/engineering/DECISIONS.md) (decisions + rationale), and the protocols in [`primer/`](primer/). Read this for original intent; read those for current behavior.
+
+A personal, Primer-style learning system. Implemented as a Claude Code skill (`/primer`) that produces interactive, adaptive lessons in the terminal, captures each session as a markdown artifact, and maintains a persistent learner model that evolves over time.
 
 > "A book that knew her, that adapted itself to what she needed, that wove instruction into story." — *The Diamond Age*, paraphrased
 
@@ -56,19 +58,19 @@ A richer, evolving version of this lives in `learner/profile.md` and is updated 
 
 ---
 
-## 4. The Skill — `/learn-me-up`
+## 4. The Skill — `/primer`
 
 ### 4.1 Invocation forms
 
 | Form | Behavior |
 |---|---|
-| `/learn-me-up <topic>` | Start an interactive lesson on `<topic>`. The skill checks the topic index for prior coverage, calibrates depth from `learner/profile.md`, and proposes a lesson plan before diving in. |
-| `/learn-me-up next` | Suggest the 2–3 best next lessons given current profile (filling gaps, reinforcing recent learning, prerequisites for stated goals). User picks. |
-| `/learn-me-up review` | 60–120 second interleaved retrieval warm-up over recent topics; surfaces from `learner/review-queue.md`. Can stand alone or precede a new lesson. |
-| `/learn-me-up resume` | Pick up an in-progress lesson (state lives in `lessons/<topic>/<slug>/STATE.md`). |
-| `/learn-me-up index` | Render `learner/topic-index.md` as a tree with status (covered / in-progress / next-suggested). |
-| `/learn-me-up profile` | Show or update `learner/profile.md` interactively. |
-| `/learn-me-up suggest <goal>` | Given a high-level goal ("I'm being asked to design a saga between two services"), suggest a *track* of lessons that gets the learner there. |
+| `/primer <topic>` | Start an interactive lesson on `<topic>`. The skill checks the topic index for prior coverage, calibrates depth from `learner/profile.md`, and proposes a lesson plan before diving in. |
+| `/primer next` | Suggest the 2–3 best next lessons given current profile (filling gaps, reinforcing recent learning, prerequisites for stated goals). User picks. |
+| `/primer review` | 60–120 second interleaved retrieval warm-up over recent topics; surfaces from `learner/review-queue.md`. Can stand alone or precede a new lesson. |
+| `/primer resume` | Pick up an in-progress lesson (state lives in `lessons/<topic>/<slug>/STATE.md`). |
+| `/primer index` | Render `learner/topic-index.md` as a tree with status (covered / in-progress / next-suggested). |
+| `/primer profile` | Show or update `learner/profile.md` interactively. |
+| `/primer suggest <goal>` | Given a high-level goal ("I'm being asked to design a saga between two services"), suggest a *track* of lessons that gets the learner there. |
 
 **Scenario anchoring is conversational, not flagged.** If the learner wants a lesson framed around a specific problem shape ("we're considering moving an internal reporting flow to event-driven — teach me CQRS with that in mind"), they say so in the opening turn. The skill responds in canonical / anonymized terms — no proprietary code or identifiers reach the artifact.
 
@@ -151,7 +153,7 @@ Files are markdown so the learner can read and edit them directly. The system re
 learner/
   profile.md          The "who you are" file. Role, stack, depth markers per topic, preferences, register. Updated each session.
   topic-index.md      Hierarchical map: domain → topic → sub-topic, with status: [unexplored|in-progress|covered|mastered] and links to lessons/.
-  review-queue.md     Orbit-style retrieval prompts pending interleave. Pulled from at /learn-me-up review.
+  review-queue.md     Orbit-style retrieval prompts pending interleave. Pulled from at /primer review.
   open-questions.md   Threads pulled-on but not chased. Surfaced when relevant to a new lesson.
   log.md              Append-only one-line log of every session. Date · topic · mode · duration · ZPD-edge.
 ```
@@ -208,7 +210,7 @@ Encoded in `primer/anti-patterns.md` and enforced via the role contract:
 
 ## 8. Initial Topic Seed
 
-Five top-level domains, with proposed first lessons. Not a fixed track — these are starting points the system can draw from when the learner asks for `/learn-me-up next` and has no other anchor.
+Five top-level domains, with proposed first lessons. Not a fixed track — these are starting points the system can draw from when the learner asks for `/primer next` and has no other anchor.
 
 - **AI / agentic workflows** — `agent-patterns-vs-frameworks` (the Anthropic taxonomy) → `evals-as-the-real-product` → `mcp-as-the-tool-calling-protocol` → `building-a-stateful-agent-with-langgraph`.
 - **Distributed systems** — `consensus-without-implementing-paxos` → `replication-and-the-three-flavors-of-consistency` → `time-clocks-and-why-they-lie` → `reading-a-jepsen-report`.
@@ -254,7 +256,7 @@ knowledge/                       The repo *is* the skill directory.
 ├── tracks/                      Future: curated multi-lesson sequences. Empty in v1.
 │
 └── tools/
-    └── install.sh               Symlinks the repo into ~/.claude/skills/learn-me-up.
+    └── install.sh               Symlinks the repo into ~/.claude/skills/primer.
 ```
 
 ### Skill installation
@@ -262,7 +264,7 @@ knowledge/                       The repo *is* the skill directory.
 The repo *is* the skill directory — `SKILL.md` lives at the root. Install by symlinking the whole repo into `~/.claude/skills/`:
 
 ```bash
-ln -s "$(pwd)" ~/.claude/skills/learn-me-up
+ln -s "$(pwd)" ~/.claude/skills/primer
 ```
 
 `tools/install.sh` automates this. The repo is the canonical thing; the user's machine just symlinks.
@@ -306,7 +308,7 @@ The system is successful if, after 10 sessions, the learner can:
 ## 13. Resolved Decisions
 
 1. **Repo visibility** — **public.** Profile is written at a public-safe level of abstraction. No proprietary code or identifiers in the repo, ever.
-2. **Skill name** — `/learn-me-up` (hyphen, matching convention).
+2. **Skill name** — `/primer` (hyphen, matching convention).
 3. **Stack grounding** — always-on via profile; never reads `~/Work/*`; scenario anchoring happens conversationally with canonical / anonymized examples in the artifact.
 4. **First lesson** — no live sample run today. Refinement happens through real use.
 5. **v1 scope** — recommended: skill + `primer/*` + `learner/*` scaffolding + install + repo + one hand-authored reference `LESSON.md` demonstrating the artifact format.
@@ -317,10 +319,10 @@ The system is successful if, after 10 sessions, the learner can:
 
 1. Write `primer/system-prompt.md` and `primer/lesson-protocol.md` — the core voice contract.
 2. Write `primer/lesson-template.md`, `primer/source-canon.md`, `primer/anti-patterns.md`, `primer/visuals.md`.
-3. Write `learn-me-up/SKILL.md` — the skill that ties it together.
+3. Write `SKILL.md` — the skill that ties it together.
 4. Scaffold `learner/` — empty `profile.md` (filled interactively in step 6), `topic-index.md` seeded with §8, empty `review-queue.md`, `open-questions.md`, `log.md`.
 5. Write `tools/install.sh`, `README.md`, `LICENSE`.
 6. Run an interactive profile bootstrap with the learner — fill `profile.md` with real depth markers and preferences (public-safe abstraction).
 7. Hand-author one reference `LESSON.md` in `lessons/ai-agentic/` to demonstrate the artifact format. Static, not a live session.
 8. `git init`, first commit, `gh repo create voidnologo/knowledge --public`, push.
-9. Symlink the skill and verify `/learn-me-up index` works end-to-end.
+9. Symlink the skill and verify `/primer index` works end-to-end.

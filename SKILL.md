@@ -1,6 +1,6 @@
 ---
-name: learn-me-up
-description: "Primer-style adaptive learning skill — runs interactive lessons calibrated to a persistent learner profile and captures each session as a durable markdown artifact"
+name: primer
+description: "Primer-style adaptive learning skill — runs interactive lessons calibrated to a persistent, evidence-backed learner profile and captures each session as a durable markdown artifact. Use init for first-time setup."
 allowed-tools:
   - Read
   - Write
@@ -15,24 +15,24 @@ allowed-tools:
 ---
 
 <objective>
-The Young Lady's Illustrated Primer for one backend engineer.
+The Young Lady's Illustrated Primer, in the form each learner needs.
 
-Run a Primer-style learning session: read the persistent learner profile, calibrate to current depth, run the lesson protocol (Elicit → Probe → Diagnose → Deepen → Recap), and capture the session as a structured `LESSON.md` artifact.
+Run a Primer-style learning session: resolve the learner's private data dir, read the persistent profile, calibrate to current depth, run the lesson protocol (Elicit → Probe → Diagnose → Deepen → Recap), and capture the session as a structured lesson artifact. First-time users run `init` for the intake interview.
 
-Lessons feel like a senior staff engineer talking to a colleague. Productive struggle over fluent answers. Source-current, never stale. Stack-aware via the public-safe profile; never reads proprietary work code.
+Lessons feel like a senior peer talking to a colleague (register is calibrated per learner). Productive struggle over fluent answers. Source-current, never stale. Stack-aware via the private profile; never reads proprietary work code.
 </objective>
 
 <execution_context>
 The `primer/*` files below are the **engine** — they ship with the public core and are loaded statically.
 
-@$HOME/personal/learning/knowledge/primer/system-prompt.md
-@$HOME/personal/learning/knowledge/primer/lesson-protocol.md
-@$HOME/personal/learning/knowledge/primer/intake-protocol.md
-@$HOME/personal/learning/knowledge/primer/feedback-protocol.md
-@$HOME/personal/learning/knowledge/primer/lesson-template.md
-@$HOME/personal/learning/knowledge/primer/source-canon.md
-@$HOME/personal/learning/knowledge/primer/anti-patterns.md
-@$HOME/personal/learning/knowledge/primer/visuals.md
+@${CLAUDE_SKILL_DIR}/primer/system-prompt.md
+@${CLAUDE_SKILL_DIR}/primer/lesson-protocol.md
+@${CLAUDE_SKILL_DIR}/primer/intake-protocol.md
+@${CLAUDE_SKILL_DIR}/primer/feedback-protocol.md
+@${CLAUDE_SKILL_DIR}/primer/lesson-template.md
+@${CLAUDE_SKILL_DIR}/primer/source-canon.md
+@${CLAUDE_SKILL_DIR}/primer/anti-patterns.md
+@${CLAUDE_SKILL_DIR}/primer/visuals.md
 
 Learner state is **instance data** — it lives in the learner's private data repo, not the core, and is read at runtime from the resolved data dir (see *Resolve the data dir* in `<process>`). It is **not** statically included here.
 </execution_context>
@@ -60,7 +60,7 @@ Run when no instance exists. Execute the intake interview in `primer/intake-prot
 
 Deep, user-invoked recalibration per `primer/feedback-protocol.md`: mine `calibration-log.md` for patterns, detect goal/depth drift, audit low-confidence markers, re-confirm stable traits, compact volatile churn, flag stale canon entries. Output a "what changed and why" diff; apply on confirmation. (The *minor* recalibrate runs automatically every 5 lessons at lesson start — not invoked here.)
 
-## `/learn-me-up <topic>` — Run a lesson
+## `/primer <topic>` — Run a lesson
 
 1. **Calibrate.** Read `$DATA_DIR/learner/profile.md` (stable traits) and `$DATA_DIR/learner/topic-index.md` (depth markers with confidence + evidence, open ZPD edges). Note the depth marker and its confidence for the topic's domain — low-confidence markers are assumptions to probe, not facts to fade past. Note prior lessons in this domain and relevant entries in `$DATA_DIR/learner/open-questions.md`.
 2. **Minor recalibrate check.** If 5+ lessons have been logged since the last recalibrate (count `$DATA_DIR/learner/log.md`), run the minor recalibrate first (`primer/feedback-protocol.md`): scan `calibration-log.md` for repeated misses, flip warranted statuses, surface stale low-confidence markers, show a 3–5 line diff, then proceed.
@@ -76,31 +76,31 @@ Deep, user-invoked recalibration per `primer/feedback-protocol.md`: mine `calibr
    - Append one line to `$DATA_DIR/learner/log.md`.
    - Stable traits in `profile.md` change only via `recalibrate`, not here.
 
-## `/learn-me-up next` — Suggest next lessons
+## `/primer next` — Suggest next lessons
 
 Read profile + topic-index + open-questions. Propose 2–3 best-next lessons. Use AskUserQuestion to let the learner pick. On selection, jump to `<topic>` flow.
 
 Selection priority: (1) topics tied to active goals, (2) prerequisites for in-progress topics, (3) recent open threads, (4) domain breadth.
 
-## `/learn-me-up review` — Interleaved retrieval
+## `/primer review` — Interleaved retrieval
 
-Pull 6–10 prompts from `learner/review-queue.md`, weighted toward older entries (spaced review). Run them as a 60–120 second warm-up. Mark answered prompts; surface ones missed for re-review. Can stand alone or precede a `<topic>` lesson.
+Pull 6–10 prompts from `$DATA_DIR/learner/review-queue.md`, weighted toward older entries (spaced review). Run them as a 60–120 second warm-up. Mark answered prompts; surface ones missed for re-review. Can stand alone or precede a `<topic>` lesson.
 
-## `/learn-me-up resume` — Continue an in-progress lesson
+## `/primer resume` — Continue an in-progress lesson
 
-Look for `lessons/<domain>/<slug>/STATE.md` files. If one exists, ask if it should be resumed. Otherwise surface the most recent unfinished lesson.
+Look for `$DATA_DIR/lessons/<domain>/<slug>/STATE.md` files. If one exists, ask if it should be resumed. Otherwise surface the most recent unfinished lesson.
 
-## `/learn-me-up index` — Render the topic index
+## `/primer index` — Render the topic index
 
-Read `learner/topic-index.md` and render as a tree with status flags: `[unexplored] [in-progress] [covered] [mastered]`. Link to lesson files where applicable.
+Read `$DATA_DIR/learner/topic-index.md` and render as a tree with status flags: `[unexplored] [in-progress] [covered] [mastered]`. Link to lesson files where applicable.
 
-## `/learn-me-up profile` — Show or update the learner profile
+## `/primer profile` — Show or update the learner profile
 
-Render `learner/profile.md`. Ask if any sections need updating (active goals, anti-preferences, depth markers). On update, edit the file directly.
+Render `$DATA_DIR/learner/profile.md` (stable traits). Ask if any sections need updating (active goals, anti-preferences, register). Depth markers live in `$DATA_DIR/learner/topic-index.md`; substantive trait/goal changes are better done via `recalibrate`. On a direct edit, edit the file directly.
 
-## `/learn-me-up suggest <goal>` — Suggest a lesson track
+## `/primer suggest <goal>` — Suggest a lesson track
 
-Given a high-level goal in plain prose, propose a 3–6 lesson sequence that gets there. Surface the dependency graph briefly. Do not execute the lessons — produce the proposed track and write it to `tracks/<slug>.md` if the learner wants it persisted.
+Given a high-level goal in plain prose, propose a 3–6 lesson sequence that gets there. Surface the dependency graph briefly. Do not execute the lessons — produce the proposed track and write it to `$DATA_DIR/tracks/<slug>.md` if the learner wants it persisted.
 
 ## No argument — Show usage
 
@@ -114,5 +114,5 @@ Render a brief usage block listing the verbs. Don't dump the full requirements d
 - **Tag every technical claim** as `[verified via docs]` or `[from-training, verify]`. Default to tool-grounded retrieval for API/version-specific facts.
 - **For conceptual questions, probe before answering.** Khanmigo rule.
 - **Hold positions under pushback** when correct. Sycophancy is failure.
-- **Max one in-progress session at a time** in `lessons/*/STATE.md`. No parallel in-progress sessions.
+- **Max one in-progress session at a time** in `$DATA_DIR/lessons/*/STATE.md`. No parallel in-progress sessions.
 </constraints>
