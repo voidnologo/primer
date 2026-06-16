@@ -283,7 +283,7 @@ ln -s "$(pwd)" ~/.claude/skills/primer
 ## 11. Out of Scope (v1)
 
 - Multi-user / sharing — this is one learner's Primer.
-- Programmatic spaced-repetition scheduler — the system *generates* prompts; an external SRS (Anki/Mochi) does the scheduling.
+- Programmatic spaced-repetition scheduler — the system *generates* prompts; an external SRS (Anki/Mochi) does the scheduling. **(Superseded — see D-0018/D-0019 + Proposal 0002.)** Scheduling is now in-scope, self-contained, and deterministic (scripts + an optional local SQLite DB in the private data repo); cultivating the review habit is a project goal (Goal 5); external SRS export is optional, never required.
 - Web UI — CLI only.
 - Audio/video lessons.
 - Pre-planned curriculum tracks — `tracks/` exists as a hook, but v1 ships ad-hoc with curriculum-aware suggestions.

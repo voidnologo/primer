@@ -54,9 +54,15 @@ This mirrors how production learner models handle it: estimates lapse toward "ne
 
 ### External anchor — the loop is not allowed to grade only itself
 
-The depth markers are the Primer's *own* assessment of the learner. A loop that updates its model only from its own prior assessments drifts optimistic imperceptibly. The external anchor is **cold retrieval**: `/primer review` runs prompts the learner saw in a *past* lesson, with the answer not in front of them. A miss there is evidence the model didn't generate this session — so it feeds back hard:
+The depth markers are the Primer's *own* assessment of the learner. A loop that updates its model only from its own prior assessments drifts optimistic imperceptibly. The anchor is **cold retrieval** — recall of *past* material with the answer not in front of the learner — and it comes from two places, plus a passive guard:
 
-- On a missed review prompt, append a `calibration-log.md` entry (`<date> | <domain> | retention-miss | missed cold retrieval on <prompt topic> | lower <domain> confidence, requeue`) and **lower the relevant marker's confidence**.
+- **Always-on — the Elicit-step recall** (`primer/lesson-protocol.md`): every lesson in a domain with prior coverage opens by asking the learner to recall a prior invariant. This rides the lesson flow, so the anchor fires whether or not the learner ever runs a separate review. It is the primary anchor, because it doesn't depend on a habit the learner may not form.
+- **Optional — `/primer review`**: a deliberate cold-retrieval pass over the queue, for learners who want spaced refreshers. Not every learner will; the loop must not depend on it.
+- **Passive guard — time decay** (above): when no retrieval happens at all, confidence still lapses toward reprobe rather than sitting high forever.
+
+A miss in either retrieval path is evidence the model didn't generate this session, so it feeds back hard:
+
+- On a missed recall (Elicit or review), append a `calibration-log.md` entry (`<date> | <domain> | retention-miss | missed cold retrieval on <prompt topic> | lower <domain> confidence, requeue`) and **lower the relevant marker's confidence**.
 - On a clean answer to an *old* prompt (the older, the stronger), confirm or raise confidence — that is durable retention, not session-fresh recall.
 
 This is a coarse anchor, not a clean measurement: the prompts are Primer-authored, so a high review score is a calibration signal, **not** a mastery claim or an effect size (self-authored tests inflate). Weight it as "the model's estimate survived contact with delayed recall," and prefer signal the Primer did *not* author — the learner reporting they applied a pattern in real work — when it surfaces.

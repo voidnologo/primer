@@ -82,11 +82,11 @@ Read profile + topic-index + open-questions. Propose 2–3 best-next lessons. Us
 
 Selection priority: (1) topics tied to active goals, (2) prerequisites for in-progress topics, (3) recent open threads, (4) domain breadth.
 
-## `/primer review` — Interleaved retrieval (and the model's external anchor)
+## `/primer review` — Interleaved retrieval (optional; habit-building)
 
 Pull 6–10 prompts from `$DATA_DIR/learner/review-queue.md`, weighted toward older entries (spaced review). Run them as a 60–120 second warm-up. Mark answered prompts; surface ones missed for re-review. Can stand alone or precede a `<topic>` lesson.
 
-This is not only warm-up — it is the feedback loop's **external anchor** (`primer/feedback-protocol.md`). Cold retrieval is evidence the Primer did not generate this session, so wire the result back:
+This is **optional to invoke** — some learners prefer to skim prior lesson logs. But cultivating the review habit is a project goal (`docs/engineering/GOALS.md` Goal 5), so the Primer **offers it proactively** ("you've got a few recalls due — want a 90-second warm-up?") and briefly says why retrieval beats re-reading, rather than waiting to be asked. The always-on anchor is the Elicit-step recall inside each lesson (`primer/lesson-protocol.md`); `/primer review` is the second, deliberate cold-retrieval source. Either way, wire the result back into the model (`primer/feedback-protocol.md`):
 
 1. **On a miss** (especially on an older prompt): append a `calibration-log.md` entry and **lower the relevant domain's depth-marker confidence** in `topic-index.md`; requeue the prompt at a shorter interval.
 2. **On a clean answer to an old prompt:** confirm/raise confidence — durable retention, not session-fresh recall.

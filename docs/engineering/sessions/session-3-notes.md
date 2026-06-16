@@ -60,46 +60,68 @@ closed-self-assessment drift that was the review's top structural finding. Three
 - Added "What's a Primer?" — a short, non-academic section on the *Diamond Age* Primer (Nell + the book that
   meets her where she is) and why this project exists, plus a "What this is" implementation paragraph.
 
+**Wave D discussion → two new goals + an architecture proposal**
+
+Resolving Wave D turned into a design conversation that produced new direction (captured durably):
+- **Goal 5 (D-0019)** — cultivating better learning *habits* and gradually training better learning is a
+  project goal, not just delivering content. Added to `GOALS.md`.
+- **Self-contained + bookkeeping-as-code (D-0018)** — no external tool is ever required; scripts and a local
+  SQLite DB (in the private data repo) are in-scope so deterministic work (decay, triggers, scheduling) leaves
+  the LLM context. Supersedes REQUIREMENTS P7/§11's "external SRS does the scheduling."
+- **Anchor reworked** — since the maintainer won't do periodic review (prefers skimming logs), the Wave B
+  external anchor was moved onto the lesson flow: a light **recall check at the Elicit step** (always-on),
+  with `/primer review` now *optional* and the Primer offering it proactively as habit-building. Time-decay is
+  the passive guard. (`lesson-protocol.md`, `feedback-protocol.md`, `SKILL.md`.)
+- **Proposal 0001 T3 resolved into Proposal 0002** — self-contained in-repo scheduling, not Anki.
+- **Proposal 0002 written** — deterministic state layer (scripts + SQLite) + habit-formation track, with the
+  source-of-truth (A/B/C), scheduler (SM-2-lite vs FSRS), and build-order choices left as ⚑ decisions. No
+  build started — awaiting the maintainer's scope call.
+
 ## Files Modified
 
 | File | Change |
 |------|--------|
-| `REQUIREMENTS.md` | C4 — verified effect sizes + target |
-| `primer/lesson-protocol.md` | C4 tag + assist-evidence; T7 escape hatch in Probe |
-| `primer/source-canon.md` | C3 edition tags + verify discipline; C1 starter-pack framing |
+| `REQUIREMENTS.md` | C4 verified effect sizes + target; §11 superseded note (self-contained scheduling) |
+| `primer/lesson-protocol.md` | C4 tag + assist-evidence; T7 escape hatch; Elicit-step recall anchor |
+| `primer/source-canon.md` | C3 edition tags + verify discipline; C1 starter-pack framing; generalized currency rationale |
 | `primer/system-prompt.md` | C1 de-personalize; T7 escape hatch |
-| `primer/anti-patterns.md` | C1 generalize learner; fix stale depth-marker path |
-| `primer/lesson-template.md` | C1 per-instance domain list |
-| `primer/feedback-protocol.md` | C2 decay + external anchor + bidirectional confidence |
-| `SKILL.md` | T1/E1 review wiring; T5 resume path; T4 recalibrate trigger |
+| `primer/anti-patterns.md` | C1 generalize + stale-path fix; T2 prompt self-check |
+| `primer/lesson-template.md` | C1 per-instance domains; T2 prompt-quality bar; T5 sidecar convention |
+| `primer/feedback-protocol.md` | C2 decay + bidirectional confidence; T1/anchor (2 sources + decay); T4 trigger |
+| `SKILL.md` | T1/E1 review wiring; T5 resume path; T4 trigger; review→optional+habit framing |
 | `templates/learner/review-queue.md` | E1 — Review history section |
 | `templates/learner/calibration-log.md` | added `retention-miss` miss-type |
-| `primer/lesson-template.md` | C1 domains; T2 prompt-quality bar; T5 sidecar convention |
-| `primer/anti-patterns.md` | C1 generalize + path fix; T2 prompt self-check |
 | `README.md` | "What's a Primer?" framing; T6 privacy-hardening block |
 | `.gitignore` | T5 — `lessons/**/*.STATE.md` |
-| `docs/engineering/DECISIONS.md` | D-0014, D-0015, D-0016, D-0017 |
+| `docs/engineering/GOALS.md` | Goal 5 (cultivate learning); self-contained non-negotiable |
+| `docs/engineering/DECISIONS.md` | D-0014…D-0019 |
 | `docs/engineering/proposals/0001-…md` | status → Waves A–C implemented |
+| `docs/engineering/proposals/0002-…md` | new — deterministic state layer + habit-formation |
 | `docs/engineering/pending-tasks.md` | checked off Waves A–C |
 | `docs/engineering/continuation.md` | updated last-session pointer |
 
 ## Key Design Decisions
 
-Promoted to `DECISIONS.md`: **D-0014** (no hardcoded learner in the public engine), **D-0015** (external
-anchor + forgetting-aware decay), **D-0016** (~0.4–0.7σ target; 2σ is folklore), **D-0017** (evidence-triggered
-recalibration, supersedes D-0004's fixed N=5). Rationale and rejected alternatives are recorded there.
+Promoted to `DECISIONS.md`: **D-0014** (no hardcoded learner), **D-0015** (external anchor + decay),
+**D-0016** (~0.4–0.7σ target; 2σ folklore), **D-0017** (evidence-triggered recalibration, supersedes D-0004),
+**D-0018** (self-contained; deterministic bookkeeping is code, SQLite in-scope), **D-0019** (Goal 5 — cultivate
+learning habits). Rationale and rejected alternatives recorded there.
 
 ## Open Threads
 
-- **Wave D awaits the maintainer's ⚑ decisions** (reiterated to them this session): T3 (Anki export vs FSRS
-  metadata — recommend Anki first), E2 (situated-idea prompts — recommend defer until post-use data), E4
-  (`/primer synthesize` — recommend defer). E3 (generation-effect tweak) needs no decision and is queued.
-- D-0015's decay is coarse (drift high→med at recalibrate). If real review data shows it's too blunt, revisit
-  a per-marker half-life — overlaps T3.
+- **Proposal 0002 awaits the maintainer's ⚑ scope decisions** (the morning's first item): source of truth
+  (A/B/C — recommend C, hybrid), scheduler (SM-2-lite vs FSRS — recommend SM-2-lite first), build order
+  (recommend build state layer before a real intake), script language (recommend Python stdlib). No build
+  started.
+- Proposal 0001 E2 / E4 still deferred until post-use data. E3 (generation effect) is queued, needs no
+  decision — implementing it tonight if time permits before the decision point.
+- D-0015's decay is coarse (drift high→med at recalibrate); revisit a per-marker half-life when the scheduler
+  lands (Proposal 0002).
 
-## Next Session
+## Next Session (morning)
 
-- Resolve Wave D ⚑ decisions, then implement what's chosen (+ E3 regardless).
+- **First:** resolve Proposal 0002's ⚑ scope decisions, then build the chosen state layer + scheduler.
+- Then a real `/primer init` intake against the de-personalized engine (ideally writing into the new state layer).
 - Still pending from before: run a real `/primer init` intake against the de-personalized engine.
 
 ## Drift check

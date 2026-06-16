@@ -27,11 +27,19 @@ Wave C — quality & hygiene: **[done — Session 3]**
 - [x] **T6** — privacy hardening documented in README (recommended global `~/.claude/settings.json` deny block; repo `.claude/*` is gitignored).
 - [x] **T4** — evidence-triggered recalibration (M=4 misses OR N=8 cap); D-0017 supersedes D-0004's fixed N=5.
 
-Wave D — enhancements & ⚑ decisions (defer until post-use data):
-- [ ] **⚑ T3** — decide SRS story: Anki export (recommended first) vs FSRS due metadata.
-- [ ] **E3** — generation-effect tweak (learner states invariant before Primer writes prompts).
-- [ ] **⚑ E2** — situated-idea dynamic prompts (scope decision).
-- [ ] **⚑ E4** — `/primer synthesize <domain>` distillation verb (scope decision).
+Wave D — resolved into goals + Proposal 0002:
+- [x] **T3** — resolved: self-contained in-repo scheduling (not Anki). Folded into Proposal 0002. (D-0018)
+- [x] New goals captured: **D-0018** (self-contained; bookkeeping-as-code), **D-0019** (Goal 5 — cultivate learning habits). Anchor reworked onto the lesson flow (Elicit recall); `/primer review` now optional + habit-building.
+- [ ] **E3** — generation-effect tweak (learner states invariant before Primer writes prompts). No decision needed; queued.
+- [ ] **E2** / **E4** — still deferred until post-use data.
+
+### ⚑ Proposal 0002 — deterministic state layer + habit-formation (NEEDS MAINTAINER DECISION)
+
+See `proposals/0002-deterministic-state-layer-and-habit-formation.md`. Awaiting scope call before any build:
+- [ ] **⚑ Source of truth** — A (DB-of-record + markdown snapshots) / B (markdown-of-record + DB cache) / C (hybrid). *Recommend C.*
+- [ ] **⚑ Scheduler** — SM-2-lite vs FSRS. *Recommend SM-2-lite first.*
+- [ ] **⚑ Build order** — state layer before a real intake, or intake-then-migrate. *Recommend state layer first.*
+- [ ] **⚑ Script language** — Python stdlib (recommended) vs shell.
 
 ## Done (this session)
 

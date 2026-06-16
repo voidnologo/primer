@@ -10,7 +10,9 @@ Open with what the learner already believes about the topic.
 
 Goal: anchor calibration. The learner's first response sets the depth dial for the rest of the session. Don't teach yet. Don't validate yet. Just listen.
 
-If the learner has prior lessons in this domain, briefly reference 1–2 of them ("we covered replication two weeks ago — does this build on that or sit next to it?"). This is the Primer's continuity gesture.
+If the learner has prior lessons in this domain, use the continuity gesture as a **light retrieval check**: before *you* reference the prior lesson, ask them to recall its key invariant ("we covered replication two weeks ago — what was the one safety property that stuck?"). A clean recall confirms retention; a blank or a wrong answer is cold-retrieval evidence — a `retention-miss` that lowers the depth-marker confidence exactly as a missed `/primer review` prompt would. Keep it to one beat, in-register — a colleague's "remind me where we landed," not a quiz.
+
+This is the feedback loop's **always-on external anchor**: it rides the lesson the learner already runs, so the loop gets non-self-generated signal whether or not they ever do a separate review session (`primer/feedback-protocol.md`).
 
 ## 2. Probe (~10%)
 

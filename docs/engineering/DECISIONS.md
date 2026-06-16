@@ -6,6 +6,26 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 ---
 
+## D-0019 · 2026-06-15 · Cultivating learning habits & meta-learning is a project goal (GOALS Goal 5)
+
+**Decision:** primer's job is not only to teach content but to **gradually make the learner better at learning** — building spaced-retrieval, active-recall, and metacognitive habits over time. Added as Goal 5 in `GOALS.md`. The spaced-review capability is justified by *habit-formation* (the system grows the habit), not by assuming the learner already reviews.
+
+**Context:** the maintainer stated this directly, and that they personally won't do periodic refreshers today (they skim prior lesson logs). Those reconcile: the system's role is to cultivate the habit the learner lacks, riding the flow they *do* use (the Elicit-step recall in every lesson) and gently expanding — not requiring review, not abandoning it. Matuschak's "Why books don't work": the medium must own the metacognitive scaffolding because the learner can't be assumed to.
+
+**Alternatives:** treat review as the learner's responsibility (rejected — abdicates the scaffolding); force/nag review (rejected — off-register, and the desirable-difficulties illusion means learners undervalue it, so pressure backfires).
+
+**Tradeoff:** more product surface (habit nudges, explaining the *why* of retrieval-over-rereading), in exchange for pursuing the actual goal — a learner who learns better over time, not just well-answered single sessions.
+
+## D-0018 · 2026-06-15 · primer is self-contained; deterministic bookkeeping is code, not in-context LLM work
+
+**Decision:** primer delivers its full core loop (lessons, review, learner model) with nothing but the skill and the user's own data repo — **no external tool or service is ever a requirement** (now a `GOALS.md` non-negotiable). Scripts, code, and a **local SQLite DB committed in the private data repo** are explicitly in-scope as implementation: deterministic bookkeeping (confidence decay, recalibration triggers, review scheduling, miss-counting) should run as code, not as in-context LLM work.
+
+**Context:** maintainer directives — "the primer should be self-contained"; "no problems with scripts/code, even a local sqlite db… not everything has to be pure ai usage (that will become very token and context expensive)." The Wave B feedback loop introduced real arithmetic (decay, triggers, scheduling); doing it by having the model read/rewrite markdown each session is costly and unreliable (LLMs miscount and mis-date).
+
+**Alternatives:** external SRS as the scheduler (rejected — external dependency); all-LLM markdown state (rejected — token/context cost + arithmetic unreliability).
+
+**Tradeoff:** primer owns more code and a state-store design decision, in exchange for self-containment, lower per-session cost, and reliable bookkeeping. Supersedes REQUIREMENTS P7/§11's "an external SRS does the scheduling." The concrete state-layer architecture (what moves to SQLite, source of truth, how inspectability is preserved) is **Proposal 0002** — pending the maintainer's scope decision.
+
 ## D-0017 · 2026-06-15 · Minor recalibrate is evidence-triggered with a cap (supersedes D-0004's fixed N=5)
 
 **Decision:** The minor recalibrate fires when **either** M+ calibration-log misses have accumulated since the last one (default M=4) **or** N lessons have passed (default N=8, the cap). **Supersedes the "auto every 5 lessons" cadence in D-0004** (the two-tier minor/deep structure from D-0004 stands).

@@ -17,15 +17,25 @@
 - The engine is now learner-agnostic and the feedback loop has an external anchor (cold retrieval feeds
   confidence both ways; untouched high-confidence markers decay) — closing the closed-self-assessment drift.
 
-## Next up
+Then a design conversation (still Session 3) added two goals and an architecture proposal:
+- **D-0018** self-contained (no required external tools; scripts + local SQLite are in-scope; deterministic
+  bookkeeping is code, not in-context LLM work). **D-0019 / Goal 5** cultivate better learning *habits*, not
+  just content. Anchor reworked onto the lesson flow (Elicit-step recall); `/primer review` is now optional +
+  habit-building. T3 resolved into self-contained in-repo scheduling (not Anki).
+- **Proposal 0002** written (deterministic state layer + habit-formation) — no build started.
 
-- **Wave D** — awaiting maintainer's ⚑ decisions: T3 (Anki export vs FSRS metadata), E2 (situated-idea
-  prompts), E4 (`/primer synthesize`). E3 (generation-effect tweak) is queued and needs no decision.
-- Branch `proposal-0001-review-and-fixes` is not yet merged to `main`.
-- Still pending: run a real `/primer init` against the de-personalized engine.
+## Next up — MORNING DECISION POINT
+
+- **⚑ Proposal 0002 scope decisions** (first thing): source of truth (A/B/C — recommend C hybrid), scheduler
+  (SM-2-lite vs FSRS — recommend SM-2-lite first), build order (recommend state layer before intake), script
+  language (recommend Python stdlib). Then build the chosen layer + scheduler.
+- E3 (generation-effect tweak) may be done first — no decision needed. E2/E4 deferred until post-use data.
+- Then a real `/primer init` intake against the de-personalized engine.
+- Branch `proposal-0001-review-and-fixes` (pushed); not yet merged to `main`.
 
 ## Don't re-litigate
 
-`DECISIONS.md` D-0001…D-0017 are settled (privacy via repo split, one-probe intake, three-timescale feedback,
+`DECISIONS.md` D-0001…D-0019 are settled (privacy via repo split, one-probe intake, three-timescale feedback,
 currency floor, `primer` naming, symlink-determines-command, no-hardcoded-learner, external-anchor+decay,
-~0.4–0.7σ target, evidence-triggered recalibration). Touch them only with new evidence.
+~0.4–0.7σ target, evidence-triggered recalibration, self-contained/bookkeeping-as-code, cultivate-learning
+Goal 5). Touch them only with new evidence.
