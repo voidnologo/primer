@@ -6,9 +6,14 @@ Every session writes one `LESSON.md` to `lessons/<domain-slug>/<YYYY-MM-DD>-<les
 
 `lessons/<domain-slug>/<YYYY-MM-DD>-<lesson-slug>.md`
 
-- `domain-slug`: one of the top-level domains in `learner/topic-index.md` (`ai-agentic`, `distributed-systems`, `event-driven-architecture`, `docker`, `backend-engineering`).
+- `domain-slug`: the top-level domain from the learner's `topic-index.md` that this lesson belongs to. Domains are **per-instance**, not a fixed set — they come from the learner's own topic map. (The starter pack happens to ship `ai-agentic`, `distributed-systems`, `event-driven-architecture`, `docker`, `backend-engineering`, but another learner's index will have different ones.)
 - `YYYY-MM-DD`: session start date.
 - `lesson-slug`: 2–6 hyphenated words, content-bearing (`consensus-and-raft`, not `lesson-3`).
+
+**In-progress state:** while a lesson is unfinished, its resume state lives in a sidecar next to the
+(eventual) artifact: `lessons/<domain-slug>/<YYYY-MM-DD>-<lesson-slug>.STATE.md`. `/primer resume` looks for
+these. On completion the sidecar is deleted and only the `.md` artifact remains. (`.STATE.md` files are
+local-only — gitignored — since they're regenerated per session.)
 
 ## Frontmatter
 
@@ -75,6 +80,20 @@ These also append to `learner/open-questions.md`.
 ### `## Retrieval prompts`
 
 5–15 atomic Q/A pairs in `Q::A` format (Anki-importable). At least 2 must be deep-reasoning (causal/counterfactual).
+
+**Quality bar (write to it; the easy failure is "prompt-shaped text" — prompts that look right but test the surface phrasing, not the understanding).** Each prompt should be:
+
+- **focused** — one idea per prompt; if the answer is a list, split it.
+- **precise** — the question admits one defensible answer; vague questions train vague recall.
+- **consistent** — cues the same retrieval each time, so spaced review measures the same thing.
+- **tractable** — answerable from what the lesson actually built; not a trivia lookup.
+- **effortful** — retrieval, not recognition. No yes/no, no "is X important?".
+
+For *conceptual* material (where LLM-written prompts most often test phrasing), reach for a pattern beyond
+definition-recall: **why-it-matters** ("what breaks if you skip X?"), **contrast** ("when does X beat Y, and
+when does it lose?"), **application** ("given <concrete situation>, what would you reach for?"), or
+**prediction** ("what fails first if <invariant> is removed?"). The deep-reasoning prompts should come from
+these, not from reworded definitions.
 
 ```
 Q:: What's the safety property Raft enforces, in one sentence?

@@ -16,6 +16,7 @@ A personal, Primer-style learning system (after the Young Lady's Illustrated Pri
 2. **A real feedback cycle.** The system learns the learner over time: intake bootstraps, every lesson adds evidence, recalibration corrects drift. The profile should get *more* true with use, not staler.
 3. **Low-friction onboarding for a stranger.** A new user reaches a useful first lesson via a structured intake, not a blank profile they have to hand-author.
 4. **Sharable without leaking.** The core is public and useful to others; personal data never touches it.
+5. **Cultivate better learning, not just deliver content.** primer should gradually make the learner *better at learning* — building good habits (spaced retrieval, active recall, metacognition) over time, not just answering well in the moment. The system owns the metacognitive scaffolding (what to review, when, how deeply); it models and gently grows good practice rather than assuming the learner already has it or nagging them into it. (Matuschak: the medium, not the learner, must own the metacognitive work.)
 
 ## Non-negotiables (a change that breaks one of these is wrong)
 
@@ -25,6 +26,7 @@ A personal, Primer-style learning system (after the Young Lady's Illustrated Pri
 - **Senior-peer register, no sycophancy.** Hold correct positions under pushback. No motivational fluff. (Default register; intake can recalibrate per learner.)
 - **Honesty about confidence.** Depth markers carry confidence + evidence. The system distinguishes what it *knows* about the learner from what it *assumed*. No certain-looking guesses.
 - **Stable vs. volatile separation.** Stable traits and volatile state live apart, so churn doesn't corrupt traits and traits get deliberately revisited.
+- **Self-contained.** primer delivers its full core loop — lessons, spaced review, the learner model — with nothing but the skill and the user's own data repo. No external tool or service is ever a *requirement*. Integrations (e.g., exporting retrieval prompts to an SRS app) are optional conveniences, never load-bearing.
 
 ## Anti-drift checklist
 

@@ -6,6 +6,66 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 ---
 
+## D-0019 · 2026-06-15 · Cultivating learning habits & meta-learning is a project goal (GOALS Goal 5)
+
+**Decision:** primer's job is not only to teach content but to **gradually make the learner better at learning** — building spaced-retrieval, active-recall, and metacognitive habits over time. Added as Goal 5 in `GOALS.md`. The spaced-review capability is justified by *habit-formation* (the system grows the habit), not by assuming the learner already reviews.
+
+**Context:** the maintainer stated this directly, and that they personally won't do periodic refreshers today (they skim prior lesson logs). Those reconcile: the system's role is to cultivate the habit the learner lacks, riding the flow they *do* use (the Elicit-step recall in every lesson) and gently expanding — not requiring review, not abandoning it. Matuschak's "Why books don't work": the medium must own the metacognitive scaffolding because the learner can't be assumed to.
+
+**Alternatives:** treat review as the learner's responsibility (rejected — abdicates the scaffolding); force/nag review (rejected — off-register, and the desirable-difficulties illusion means learners undervalue it, so pressure backfires).
+
+**Tradeoff:** more product surface (habit nudges, explaining the *why* of retrieval-over-rereading), in exchange for pursuing the actual goal — a learner who learns better over time, not just well-answered single sessions.
+
+## D-0018 · 2026-06-15 · primer is self-contained; deterministic bookkeeping is code, not in-context LLM work
+
+**Decision:** primer delivers its full core loop (lessons, review, learner model) with nothing but the skill and the user's own data repo — **no external tool or service is ever a requirement** (now a `GOALS.md` non-negotiable). Scripts, code, and a **local SQLite DB committed in the private data repo** are explicitly in-scope as implementation: deterministic bookkeeping (confidence decay, recalibration triggers, review scheduling, miss-counting) should run as code, not as in-context LLM work.
+
+**Context:** maintainer directives — "the primer should be self-contained"; "no problems with scripts/code, even a local sqlite db… not everything has to be pure ai usage (that will become very token and context expensive)." The Wave B feedback loop introduced real arithmetic (decay, triggers, scheduling); doing it by having the model read/rewrite markdown each session is costly and unreliable (LLMs miscount and mis-date).
+
+**Alternatives:** external SRS as the scheduler (rejected — external dependency); all-LLM markdown state (rejected — token/context cost + arithmetic unreliability).
+
+**Tradeoff:** primer owns more code and a state-store design decision, in exchange for self-containment, lower per-session cost, and reliable bookkeeping. Supersedes REQUIREMENTS P7/§11's "an external SRS does the scheduling." The concrete state-layer architecture (what moves to SQLite, source of truth, how inspectability is preserved) is **Proposal 0002** — pending the maintainer's scope decision.
+
+## D-0017 · 2026-06-15 · Minor recalibrate is evidence-triggered with a cap (supersedes D-0004's fixed N=5)
+
+**Decision:** The minor recalibrate fires when **either** M+ calibration-log misses have accumulated since the last one (default M=4) **or** N lessons have passed (default N=8, the cap). **Supersedes the "auto every 5 lessons" cadence in D-0004** (the two-tier minor/deep structure from D-0004 stands).
+
+**Context:** D-0004 admitted N=5 was an untuned guess. A fixed count fires on a schedule blind to whether the model is actually miscalibrated — too late when misses are piling up, wasteful when nothing's wrong. The importance-threshold idea (Generative Agents) triggers reflection on accumulated evidence instead.
+
+**Alternatives:** keep fixed N and just tune it after real data (rejected — tuning a count doesn't fix the blindness to evidence); pure threshold with no cap (rejected — a quiet stretch would never get hygiene, and stale markers wouldn't decay). The cap preserves periodic decay/compaction.
+
+**Tradeoff:** two thresholds to tune instead of one, in exchange for recalibration that responds to how miscalibrated the model actually is. Implements Proposal 0001 T4.
+
+## D-0016 · 2026-06-15 · Design target is ~0.4–0.7σ on transfer-valid assessments; 2σ is folklore
+
+**Decision:** State the system's evidence-grounded effect-size target as **~0.4–0.7σ on transfer-valid (not self-authored) assessments**, and stop citing Bloom's "2-sigma" and "generative-AI tutors at 0.73–1.3σ" as design grounding.
+
+**Context:** `REQUIREMENTS.md §2` grounded the design in figures that don't survive verification — ironic in a project whose top non-negotiable is currency. 2σ traces to unpublished dissertations and never replicated (pooled tutoring ~0.37σ, Nickow 2020; human tutoring ~0.79σ, VanLehn 2011); ITS medians are ~0.42–0.66σ (Ma 2014; Kulik & Fletcher 2016), inflated by local tests; the headline gen-AI RCT is 0.63σ honest (Kestin 2025), the higher figures quantile-derived.
+
+**Alternatives:** keep the aspirational numbers (rejected — they fail the project's own source-grounding rule); drop effect sizes entirely (rejected — a target is useful, and the honest range still motivates the design).
+
+**Tradeoff:** a less impressive headline, in exchange for a defensible bar. Implication captured in the feedback loop: self-authored retrieval prompts inflate, so cold-review scores are a calibration signal, not a mastery/effect-size claim (see D-0015). Verified citations: `docs/engineering/research/2026-06-15-ai-tutoring-and-learning-science.md`.
+
+## D-0015 · 2026-06-15 · The feedback loop gets an external anchor + forgetting-aware confidence decay
+
+**Decision:** Depth-marker confidence moves **both ways** and **decays with time**. Cold retrieval in `/primer review` is the external anchor: a miss lowers confidence and logs a calibration entry; a clean answer to an old prompt raises it. Untouched `[high]` markers drift toward `[med]`/reprobe at minor-recalibrate. Review scores are recorded as a calibration signal, explicitly *not* a mastery metric.
+
+**Context:** The loop updated the model only from its own prior assessments, and confidence only ratcheted up — a closed self-assessment loop that drifts optimistic imperceptibly (Boucle "Optimism Feedback Loop"), compounding the BKT monotonicity gap (no forgetting). This worked *against* the goal that the profile gets more true with use.
+
+**Alternatives:** a formal forgetting model (FSRS/Half-Life Regression) per marker (rejected for now — heavier than warranted before real lesson data; revisit under Proposal 0001 T3); leave the loop self-referential (rejected — the drift is the core risk a self-training system must defend against).
+
+**Tradeoff:** the anchor is coarse and the prompts are self-authored, so review scores can't be read as effect sizes — accepted, because "the estimate survived delayed recall" is still the strongest non-self-generated signal available without external assessments. Implements Proposal 0001 C2 + T1 + E1.
+
+## D-0014 · 2026-06-15 · The public engine carries no hardcoded learner
+
+**Decision:** The engine (`primer/*`) is learner-agnostic. `system-prompt.md` reads the learner from `$DATA_DIR/learner/profile.md` rather than asserting a fixed bio; senior-peer/meetup is the *default* register, overridable by the profile; the source canon is framed as a domain *starter pack*, not a universal canon; the lesson-template domain list is per-instance, not a fixed enum.
+
+**Context:** The public core hardcoded the maintainer's bio ("15+ years … technical lead …"), a backend-only canon, and a five-value domain enum — while the README promised "any learner and any goal." This put personal data in the public repo (violating the sharable-without-leaking goal) and mis-onboarded a stranger. It is also a pedagogical miscalibration: an engine that assumes an expert under-scaffolds novice adopters, and over/under-scaffolding is a measured harm (expertise reversal, asymmetric — Tetzlaff 2025).
+
+**Alternatives:** physically split the backend canon into the maintainer's instance and ship a thin starter, or ship multiple domain packs (deferred — Proposal 0001 ⚑ decision; this change does the *framing* now and leaves the content move for later); keep the bio and document it as "the reference learner" (rejected — still personal data in the public core).
+
+**Tradeoff:** the senior-peer voice is now explicitly a default rather than the identity, so the engine reads slightly less opinionated up front — accepted, since the non-negotiable register traits (no sycophancy, productive struggle, currency, confidence-honesty) are preserved as universal. Implements Proposal 0001 C1 (and fixed a stale `profile.md`→`topic-index.md` depth-marker path in `anti-patterns.md`).
+
 ## D-0013 · 2026-06-15 · Lessons are private/personal, not shareable-by-default
 
 **Decision:** Lesson artifacts are personal — calibrated to the learner — and live only in the private instance, alongside the profile. The public core ships no personal lessons. Publishing is a deliberate, separate step. **Supersedes the lesson-sharing aspect of D-0001** (which framed "only lessons are sanitized," implying lessons were the shareable surface).

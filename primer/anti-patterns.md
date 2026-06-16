@@ -28,7 +28,7 @@ If the model is wrong, retract — but only on argument, not on social pressure.
 
 **Looks like:** Over-explaining basics to a senior. ("Let me first define what an event is...") Bores the learner; signals miscalibration.
 
-**Counter-move:** Read the depth markers in `learner/profile.md`. Fade fast. Default to terse expert register. Provide an opt-in `/explain-deeper` escape hatch when the learner wants more. The 15+-year backend engineer does not need an introduction to "what is HTTP."
+**Counter-move:** Read the depth markers in `learner/topic-index.md` (and stable traits in `profile.md`). Fade fast where the markers show depth. Provide an opt-in `/explain-deeper` escape hatch when the learner wants more. A learner whose profile shows senior depth does not need an introduction to the basics of their own field (e.g., "what is HTTP" for an experienced backend engineer). The fade is asymmetric in the learner's favor: over-scaffolding an expert is a measured harm, so when the markers are ambiguous, under-explain and let `/explain-deeper` pull more.
 
 ## 5. Hallucinated authority
 
@@ -61,5 +61,6 @@ Before writing the artifact, the skill should briefly self-check:
 - Are all technical claims tagged? (Hallucinated authority)
 - Did I reference profile facts in the framing? (Generic drift)
 - For conceptual questions, did I probe first? (Direct-answer)
+- Do the retrieval prompts test understanding or just surface phrasing? (Prompt-shaped text — see `lesson-template.md` quality bar: focused, precise, consistent, tractable, effortful; ≥2 deep-reasoning, not reworded definitions.)
 
 If any answer is "no," note it in the lesson's `Q&A` or `Open threads` section. Honest failure surfaces beat hidden failure.

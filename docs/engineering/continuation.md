@@ -4,20 +4,38 @@
 
 **Project:** primer — adaptive Primer-style learning system. Class/instance: public core (engine) + private per-user data repo (profile + lessons).
 
-## Last session (1) — Feedback cycle, intake, class/instance redesign
+## Last session (3) — Cold review + implementation (Proposal 0001 Waves A & B)
 
-- Built the onboarding interview (`primer/intake-protocol.md`, discovery-first: broad ability + goal decomposition + one probe per load-bearing sub-skill) and the feedback cycle (`primer/feedback-protocol.md`, three timescales, two-tier recalibrate).
-- Reframed currency: canon = vetted floor + mandatory per-lesson source discovery.
-- Restructured profile (stable vs volatile; depth markers → topic-index with confidence + evidence).
-- Added this engineering-log system (GOALS, DECISIONS, sessions, two session skills).
-- **Migrated**: `voidnologo/primer-data` (private) created + pushed; all personal data (profile + lessons) removed from the public core — it now lives only in the private instance. Lessons are private-by-default (D-0013); `examples/` removed.
-- **Renamed** to `primer`: skill (symlink + `${CLAUDE_SKILL_DIR}` includes, reinstalled as `/primer`), GitHub repo (`voidnologo/primer`, remote updated), local dir. Work merged to `main` and pushed.
+- **Session 2** (review): fresh-eyes audit + two web research sweeps → durable research artifacts in
+  `docs/engineering/research/` and `docs/engineering/proposals/0001-…md` (findings C1–C4, T1–T7, E1–E4 + plan).
+- **Session 3** (implement): shipped Wave A (C4 effect-size correction, C3 canon edition tags, C1
+  de-personalize the public engine), Wave B (C2 forgetting-aware confidence decay, T1 review→calibration
+  external anchor, E1 review-score recording, T7 "just show me" escape hatch), and Wave C (T2 prompt-quality
+  bar, T5 resume-path reconcile, T6 README privacy hardening, T4 evidence-triggered recalibration). Also added
+  a "What's a Primer?" framing section to the README. Decisions D-0014–D-0017. Branch
+  `proposal-0001-review-and-fixes` (Waves A–C committed).
+- The engine is now learner-agnostic and the feedback loop has an external anchor (cold retrieval feeds
+  confidence both ways; untouched high-confidence markers decay) — closing the closed-self-assessment drift.
 
-## Next up
+Then a design conversation (still Session 3) added two goals and an architecture proposal:
+- **D-0018** self-contained (no required external tools; scripts + local SQLite are in-scope; deterministic
+  bookkeeping is code, not in-context LLM work). **D-0019 / Goal 5** cultivate better learning *habits*, not
+  just content. Anchor reworked onto the lesson flow (Elicit-step recall); `/primer review` is now optional +
+  habit-building. T3 resolved into self-contained in-repo scheduling (not Anki).
+- **Proposal 0002** written (deterministic state layer + habit-formation) — no build started.
 
-- Run `/primer init` for a real intake (replace the generic migrated profile with a rich, evidence-backed one).
-See `pending-tasks.md`.
+## Next up — MORNING DECISION POINT
+
+- **⚑ Proposal 0002 scope decisions** (first thing): source of truth (A/B/C — recommend C hybrid), scheduler
+  (SM-2-lite vs FSRS — recommend SM-2-lite first), build order (recommend state layer before intake), script
+  language (recommend Python stdlib). Then build the chosen layer + scheduler.
+- E3 (generation-effect tweak) may be done first — no decision needed. E2/E4 deferred until post-use data.
+- Then a real `/primer init` intake against the de-personalized engine.
+- Branch `proposal-0001-review-and-fixes` (pushed); not yet merged to `main`.
 
 ## Don't re-litigate
 
-`DECISIONS.md` D-0001…D-0012 are settled (privacy via repo split, one-probe intake, three-timescale feedback, currency floor, `primer` naming, symlink-determines-command). Touch them only with new evidence.
+`DECISIONS.md` D-0001…D-0019 are settled (privacy via repo split, one-probe intake, three-timescale feedback,
+currency floor, `primer` naming, symlink-determines-command, no-hardcoded-learner, external-anchor+decay,
+~0.4–0.7σ target, evidence-triggered recalibration, self-contained/bookkeeping-as-code, cultivate-learning
+Goal 5). Touch them only with new evidence.

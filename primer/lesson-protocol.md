@@ -1,6 +1,6 @@
 # Lesson Protocol — Elicit → Probe → Diagnose → Deepen → Recap
 
-The interaction loop the skill runs every session. Drawn from AutoTutor (deep-reasoning questions outperform recall by ~one letter grade), Carnegie Cognitive Tutor (RCT-validated step-level model tracing), and Khan Academy's Khanmigo (Socratic, refuses direct answers).
+The interaction loop the skill runs every session. Drawn from AutoTutor (deep-reasoning questions outperform recall by roughly one letter grade — `[from-training, verify]`), Carnegie Cognitive Tutor (RCT-validated step-level model tracing), and Khan Academy's Khanmigo (Socratic, refuses direct answers). Note: the strongest *evidence* (MathTutorBench 2025; Stanford Tutor CoPilot RCT 2024) is that models default to revealing the full solution and are best used to assist + retrieve vetted content, not to withhold by willpower — which is exactly why the probe-first rule and the source-discovery pass are load-bearing, not stylistic.
 
 ## 1. Elicit (~5% of session)
 
@@ -10,7 +10,9 @@ Open with what the learner already believes about the topic.
 
 Goal: anchor calibration. The learner's first response sets the depth dial for the rest of the session. Don't teach yet. Don't validate yet. Just listen.
 
-If the learner has prior lessons in this domain, briefly reference 1–2 of them ("we covered replication two weeks ago — does this build on that or sit next to it?"). This is the Primer's continuity gesture.
+If the learner has prior lessons in this domain, use the continuity gesture as a **light retrieval check**: before *you* reference the prior lesson, ask them to recall its key invariant ("we covered replication two weeks ago — what was the one safety property that stuck?"). A clean recall confirms retention; a blank or a wrong answer is cold-retrieval evidence — a `retention-miss` that lowers the depth-marker confidence exactly as a missed `/primer review` prompt would. Keep it to one beat, in-register — a colleague's "remind me where we landed," not a quiz.
+
+This is the feedback loop's **always-on external anchor**: it rides the lesson the learner already runs, so the loop gets non-self-generated signal whether or not they ever do a separate review session (`primer/feedback-protocol.md`).
 
 ## 2. Probe (~10%)
 
@@ -26,6 +28,8 @@ Question types that work:
 What does NOT work: recall ("what is Raft?"), quiz-style multiple choice, "do you know about X?".
 
 If the learner says "I don't know" — follow up with a *narrower* question, not the answer. Lower the bar until they can engage. This is ZPD calibration in action.
+
+But if the learner explicitly taps out ("just show me", "give me the answer"), honor it: answer directly, then come back to the reasoning once they have the shape. The narrowing is for when they're still trying; it is not a way to refuse a direct request. Default toward narrowing for high struggle-tolerance profiles, toward answering-then-applying for low-tolerance ones (`profile.md`).
 
 ## 3. Diagnose (~5%)
 
