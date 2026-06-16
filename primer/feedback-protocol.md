@@ -78,9 +78,14 @@ These feed the calibration-log and, when a pattern is clear, the anti-preference
 
 The append-only loop accretes volatile state until it needs compacting and the model needs correcting. Two tiers, by the user's design.
 
-### Minor recalibrate — auto, every 5 lessons
+### Minor recalibrate — auto, evidence-triggered (capped)
 
-System-triggered (default N = 5; configurable). Lightweight, runs at the start of the 6th/11th/… lesson, takes ~2–3 minutes, shows a short diff and proceeds:
+System-triggered, but on *evidence* rather than a fixed count: it fires at the start of the next lesson when **either**
+
+- **M+ calibration-log misses** have accumulated since the last recalibrate (default M = 4; the importance-threshold idea — a model that's missing a lot needs correcting sooner), **or**
+- **N lessons** have passed since the last recalibrate regardless of misses (default N = 8 — the cap, so a quiet stretch still gets periodic hygiene).
+
+Both defaults are configurable. This replaces the old fixed "every 5 lessons": it fires *sooner* when the model is visibly miscalibrated and *no later* than the cap. Lightweight, ~2–3 minutes, shows a short diff and proceeds:
 
 1. Scan `calibration-log.md` since the last recalibrate for **repeated** miss-types in the same domain → fold into the relevant depth marker or anti-preference.
 2. Flip any `[status]` that the evidence clearly warrants (e.g., `[in-progress]` → `[covered]`).

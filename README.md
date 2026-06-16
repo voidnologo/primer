@@ -2,9 +2,17 @@
 
 A personal, Primer-style learning system — an adaptive tutor that runs interactive lessons calibrated to *you* and gets sharper the more you use it.
 
-Inspired by the Young Lady's Illustrated Primer from Neal Stephenson's *The Diamond Age*, implemented as a Claude Code skill that runs narrative, calibrated lessons against a persistent, evidence-backed learner profile and captures every session as a durable markdown artifact.
+## What's a "Primer"?
 
-It works for any learner and any goal — system design, MCP and AI-assisted development, picking up a new language, distributed systems. The intake interview discovers your ability and decomposes *your* goal; it doesn't assume a curriculum.
+In Neal Stephenson's *The Diamond Age*, the *Young Lady's Illustrated Primer* is a book made for a single child. It was commissioned for an aristocrat's granddaughter — but a copy slips into the hands of Nell, a girl from the slums it was never meant for. That turns out not to matter. The Primer meets her where she is.
+
+It isn't a textbook. It pays attention to who's actually reading it, learns her world, and teaches through stories bent to fit her life — smuggling in reading, logic, computation, self-defense, and eventually how to *think* — always pitched just past what she can already do, never lecturing, never bored of her, never talking down. Over years, that book raises a neglected kid into a formidable adult. The teaching works because it's a relationship, not a syllabus.
+
+That's the north star, aimed at one stubborn problem: staying sharp in a field that keeps moving. This project won't write you a fairy tale or raise your children — but it goes after the part that *is* reproducible. A tutor that genuinely knows you: your real depth, your gaps, the register you want to be spoken in. One that teaches when you pull on a thread, not when a curriculum says to. One whose lessons are yours — they live in your own repo, they outlast the session, and the model of you gets a little truer every time you show up.
+
+## What this is
+
+Implemented as a Claude Code skill, primer runs narrative, calibrated lessons against a persistent, evidence-backed learner profile and captures every session as a durable markdown artifact. It works for any learner and any goal — system design, MCP and AI-assisted development, picking up a new language, distributed systems. The intake interview discovers your ability and decomposes *your* goal; it doesn't assume a curriculum.
 
 ## Class and instance
 
@@ -45,6 +53,28 @@ Clone your private data repo, then point that machine at it:
 ```
 
 It detects the existing instance and only writes that machine's pointer (`~/.config/primer/config`).
+
+### Privacy hardening (recommended)
+
+primer never auto-reads a work codebase — but that is an instruction the model follows, not a wall. For
+defense in depth, add a deny rule to your **global** Claude Code settings (`~/.claude/settings.json`) so the
+tools physically can't read proprietary paths during a session. Adjust the paths to your machine:
+
+```jsonc
+{
+  "permissions": {
+    "deny": [
+      "Read(//Users/you/Work/**)",
+      "Edit(//Users/you/Work/**)",
+      "Bash(cat //Users/you/Work/**)"
+    ]
+  }
+}
+```
+
+This is belt-and-suspenders on top of the skill's own rule (the engine still redirects work-specific
+scenarios to canonical analogs). Stack-aware framing comes from your profile and what you say in the
+conversation, never from reading the code.
 
 ## Subcommands
 

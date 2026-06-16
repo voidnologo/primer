@@ -9,8 +9,8 @@ initial_prompt
 .claude/*
 !.claude/skills/
 
-# In-progress lesson state — local-only, regenerated per session
-lessons/**/STATE.md
+# In-progress lesson state — local-only, regenerated per session (sidecar next to the artifact)
+lessons/**/*.STATE.md
 
 # Editor / OS noise
 *.swp

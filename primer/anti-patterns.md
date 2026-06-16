@@ -61,5 +61,6 @@ Before writing the artifact, the skill should briefly self-check:
 - Are all technical claims tagged? (Hallucinated authority)
 - Did I reference profile facts in the framing? (Generic drift)
 - For conceptual questions, did I probe first? (Direct-answer)
+- Do the retrieval prompts test understanding or just surface phrasing? (Prompt-shaped text — see `lesson-template.md` quality bar: focused, precise, consistent, tractable, effortful; ≥2 deep-reasoning, not reworded definitions.)
 
 If any answer is "no," note it in the lesson's `Q&A` or `Open threads` section. Honest failure surfaces beat hidden failure.

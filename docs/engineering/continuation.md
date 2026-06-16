@@ -9,20 +9,23 @@
 - **Session 2** (review): fresh-eyes audit + two web research sweeps → durable research artifacts in
   `docs/engineering/research/` and `docs/engineering/proposals/0001-…md` (findings C1–C4, T1–T7, E1–E4 + plan).
 - **Session 3** (implement): shipped Wave A (C4 effect-size correction, C3 canon edition tags, C1
-  de-personalize the public engine) and Wave B (C2 forgetting-aware confidence decay, T1 review→calibration
-  external anchor, E1 review-score recording, T7 "just show me" escape hatch). Decisions D-0014–D-0016.
+  de-personalize the public engine), Wave B (C2 forgetting-aware confidence decay, T1 review→calibration
+  external anchor, E1 review-score recording, T7 "just show me" escape hatch), and Wave C (T2 prompt-quality
+  bar, T5 resume-path reconcile, T6 README privacy hardening, T4 evidence-triggered recalibration). Also added
+  a "What's a Primer?" framing section to the README. Decisions D-0014–D-0017. Branch
+  `proposal-0001-review-and-fixes` (Waves A–C committed).
 - The engine is now learner-agnostic and the feedback loop has an external anchor (cold retrieval feeds
   confidence both ways; untouched high-confidence markers decay) — closing the closed-self-assessment drift.
 
 ## Next up
 
-- **Wave C** (`pending-tasks.md`): T2 prompt-quality rubric → T5 resume/artifact path → T6 settings.json
-  privacy deny-list → T4 evidence-triggered recalibration.
-- **Wave D** needs ⚑ decisions: T3 (Anki export vs FSRS), E2 (situated-idea prompts), E4 (`/primer synthesize`).
+- **Wave D** — awaiting maintainer's ⚑ decisions: T3 (Anki export vs FSRS metadata), E2 (situated-idea
+  prompts), E4 (`/primer synthesize`). E3 (generation-effect tweak) is queued and needs no decision.
+- Branch `proposal-0001-review-and-fixes` is not yet merged to `main`.
 - Still pending: run a real `/primer init` against the de-personalized engine.
 
 ## Don't re-litigate
 
-`DECISIONS.md` D-0001…D-0016 are settled (privacy via repo split, one-probe intake, three-timescale feedback,
+`DECISIONS.md` D-0001…D-0017 are settled (privacy via repo split, one-probe intake, three-timescale feedback,
 currency floor, `primer` naming, symlink-determines-command, no-hardcoded-learner, external-anchor+decay,
-~0.4–0.7σ target). Touch them only with new evidence.
+~0.4–0.7σ target, evidence-triggered recalibration). Touch them only with new evidence.

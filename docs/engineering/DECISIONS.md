@@ -6,6 +6,16 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 ---
 
+## D-0017 · 2026-06-15 · Minor recalibrate is evidence-triggered with a cap (supersedes D-0004's fixed N=5)
+
+**Decision:** The minor recalibrate fires when **either** M+ calibration-log misses have accumulated since the last one (default M=4) **or** N lessons have passed (default N=8, the cap). **Supersedes the "auto every 5 lessons" cadence in D-0004** (the two-tier minor/deep structure from D-0004 stands).
+
+**Context:** D-0004 admitted N=5 was an untuned guess. A fixed count fires on a schedule blind to whether the model is actually miscalibrated — too late when misses are piling up, wasteful when nothing's wrong. The importance-threshold idea (Generative Agents) triggers reflection on accumulated evidence instead.
+
+**Alternatives:** keep fixed N and just tune it after real data (rejected — tuning a count doesn't fix the blindness to evidence); pure threshold with no cap (rejected — a quiet stretch would never get hygiene, and stale markers wouldn't decay). The cap preserves periodic decay/compaction.
+
+**Tradeoff:** two thresholds to tune instead of one, in exchange for recalibration that responds to how miscalibrated the model actually is. Implements Proposal 0001 T4.
+
 ## D-0016 · 2026-06-15 · Design target is ~0.4–0.7σ on transfer-valid assessments; 2σ is folklore
 
 **Decision:** State the system's evidence-grounded effect-size target as **~0.4–0.7σ on transfer-valid (not self-authored) assessments**, and stop citing Bloom's "2-sigma" and "generative-AI tutors at 0.73–1.3σ" as design grounding.

@@ -1,7 +1,7 @@
 # Proposal 0001 — Cold review, research synthesis, and improvement plan
 
 **Date:** 2026-06-15
-**Status:** Wave A & B implemented (Session 3, D-0014–D-0016). Wave C queued; Wave D awaiting decisions marked ⚑ below.
+**Status:** Waves A, B & C implemented (Session 3, D-0014–D-0017). Wave D awaiting decisions marked ⚑ below (E3 queued, needs no decision).
 **Author:** fresh-eyes review (Session 2)
 **Scope:** the public core (engine + docs). No personal-instance changes. No work code read.
 

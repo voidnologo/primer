@@ -21,11 +21,11 @@ Wave B — close the feedback loop (the structural fix): **[done — Session 3]*
 - [x] **T7** — "just show me" escape hatch gated on struggle-tolerance.
 - [x] Promoted to `DECISIONS.md`: D-0014 (no hardcoded learner), D-0015 (external anchor + decay), D-0016 (effect-size target).
 
-Wave C — quality & hygiene:
-- [ ] **T2** — prompt-quality rubric (Matuschak's 5 attributes + pattern language) + self-check.
-- [ ] **T5** — reconcile resume/artifact path (flat `<date>-<slug>.md` vs `<slug>/STATE.md`).
-- [ ] **T6** — `settings.json` deny-list for `~/Work`/proprietary paths (privacy defense-in-depth).
-- [ ] **T4** — evidence-triggered recalibration (replaces the N=5 tuning task below).
+Wave C — quality & hygiene: **[done — Session 3]**
+- [x] **T2** — prompt-quality rubric (Matuschak's 5 attributes + conceptual pattern language) + self-check.
+- [x] **T5** — reconciled resume/artifact path → sidecar `<date>-<slug>.STATE.md` (SKILL.md, lesson-template, .gitignore).
+- [x] **T6** — privacy hardening documented in README (recommended global `~/.claude/settings.json` deny block; repo `.claude/*` is gitignored).
+- [x] **T4** — evidence-triggered recalibration (M=4 misses OR N=8 cap); D-0017 supersedes D-0004's fixed N=5.
 
 Wave D — enhancements & ⚑ decisions (defer until post-use data):
 - [ ] **⚑ T3** — decide SRS story: Anki export (recommended first) vs FSRS due metadata.

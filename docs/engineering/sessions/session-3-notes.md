@@ -1,9 +1,11 @@
-# Session 3: Implement Proposal 0001 — Waves A & B
+# Session 3: Implement Proposal 0001 — Waves A, B & C (+ README framing)
 
 **Date:** 2026-06-15
-**Goal:** Implement the corrections and the loop-closing fix from Proposal 0001 — Wave A (C4, C3, C1) and
-Wave B (C2, T1, E1, T7). De-personalize the public engine, fix the overstated research claims, and give the
-feedback loop an external anchor + forgetting-aware confidence decay.
+**Goal:** Implement the corrections and the loop-closing fix from Proposal 0001 — Wave A (C4, C3, C1),
+Wave B (C2, T1, E1, T7), and Wave C (T2, T5, T6, T4). De-personalize the public engine, fix the overstated
+research claims, give the feedback loop an external anchor + forgetting-aware decay, then quality/hygiene.
+Also added a "What's a Primer?" framing section to the README (the *why*, for readers who haven't read
+*The Diamond Age*).
 
 ## Overview
 
@@ -41,6 +43,23 @@ closed-self-assessment drift that was the review's top structural finding. Three
 - **T7** — explicit "just show me" escape hatch gated on productive-struggle tolerance, in `system-prompt.md`
   refusal patterns and `lesson-protocol.md` Probe.
 
+**Wave C — quality & hygiene**
+- **T2** — retrieval-prompt quality bar (Matuschak's 5 attributes + a conceptual pattern-language) in
+  `lesson-template.md`; matching self-check line in `anti-patterns.md`.
+- **T5** — reconciled the resume/artifact path: in-progress state is a sidecar
+  `<date>-<slug>.STATE.md` next to the flat artifact (was a `<slug>/STATE.md` directory in `/primer resume`
+  vs a flat file in the template). Updated `SKILL.md`, `lesson-template.md`, and `.gitignore`
+  (`lessons/**/*.STATE.md`).
+- **T6** — privacy hardening documented in `README.md`: a recommended `deny` block for the user's *global*
+  `~/.claude/settings.json` (the repo's `.claude/*` is gitignored, so a committed repo setting wouldn't apply
+  to `/primer` sessions). Defense-in-depth atop the instruction-level rule.
+- **T4** — minor recalibrate is now **evidence-triggered with a cap** (M=4 misses OR N=8 lessons), replacing
+  fixed N=5. Updated `feedback-protocol.md` and `SKILL.md` step 2.
+
+**README framing (user request)**
+- Added "What's a Primer?" — a short, non-academic section on the *Diamond Age* Primer (Nell + the book that
+  meets her where she is) and why this project exists, plus a "What this is" implementation paragraph.
+
 ## Files Modified
 
 | File | Change |
@@ -52,31 +71,35 @@ closed-self-assessment drift that was the review's top structural finding. Three
 | `primer/anti-patterns.md` | C1 generalize learner; fix stale depth-marker path |
 | `primer/lesson-template.md` | C1 per-instance domain list |
 | `primer/feedback-protocol.md` | C2 decay + external anchor + bidirectional confidence |
-| `SKILL.md` | T1/E1 — `/primer review` feedback wiring + score recording |
+| `SKILL.md` | T1/E1 review wiring; T5 resume path; T4 recalibrate trigger |
 | `templates/learner/review-queue.md` | E1 — Review history section |
-| `docs/engineering/DECISIONS.md` | D-0014, D-0015, D-0016 |
-| `docs/engineering/proposals/0001-…md` | status → Wave A & B implemented |
-| `docs/engineering/pending-tasks.md` | checked off Wave A & B |
+| `templates/learner/calibration-log.md` | added `retention-miss` miss-type |
+| `primer/lesson-template.md` | C1 domains; T2 prompt-quality bar; T5 sidecar convention |
+| `primer/anti-patterns.md` | C1 generalize + path fix; T2 prompt self-check |
+| `README.md` | "What's a Primer?" framing; T6 privacy-hardening block |
+| `.gitignore` | T5 — `lessons/**/*.STATE.md` |
+| `docs/engineering/DECISIONS.md` | D-0014, D-0015, D-0016, D-0017 |
+| `docs/engineering/proposals/0001-…md` | status → Waves A–C implemented |
+| `docs/engineering/pending-tasks.md` | checked off Waves A–C |
 | `docs/engineering/continuation.md` | updated last-session pointer |
 
 ## Key Design Decisions
 
 Promoted to `DECISIONS.md`: **D-0014** (no hardcoded learner in the public engine), **D-0015** (external
-anchor + forgetting-aware decay), **D-0016** (~0.4–0.7σ target; 2σ is folklore). Rationale and rejected
-alternatives are recorded there.
+anchor + forgetting-aware decay), **D-0016** (~0.4–0.7σ target; 2σ is folklore), **D-0017** (evidence-triggered
+recalibration, supersedes D-0004's fixed N=5). Rationale and rejected alternatives are recorded there.
 
 ## Open Threads
 
-- Wave C queued: T2 (prompt-quality rubric), T5 (resume/artifact path reconcile), T6 (settings.json privacy
-  deny-list), T4 (evidence-triggered recalibration).
-- Wave D needs ⚑ decisions: T3 (Anki export vs FSRS metadata — recommend Anki first), E2 (situated-idea
-  prompts), E4 (`/primer synthesize`). Defer E2/E4 until post-use data.
+- **Wave D awaits the maintainer's ⚑ decisions** (reiterated to them this session): T3 (Anki export vs FSRS
+  metadata — recommend Anki first), E2 (situated-idea prompts — recommend defer until post-use data), E4
+  (`/primer synthesize` — recommend defer). E3 (generation-effect tweak) needs no decision and is queued.
 - D-0015's decay is coarse (drift high→med at recalibrate). If real review data shows it's too blunt, revisit
-  a per-marker half-life (T3 territory).
+  a per-marker half-life — overlaps T3.
 
 ## Next Session
 
-- Wave C (T2 → T5 → T6 → T4), then settle the Wave D ⚑ decisions.
+- Resolve Wave D ⚑ decisions, then implement what's chosen (+ E3 regardless).
 - Still pending from before: run a real `/primer init` intake against the de-personalized engine.
 
 ## Drift check

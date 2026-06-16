@@ -63,7 +63,7 @@ Deep, user-invoked recalibration per `primer/feedback-protocol.md`: mine `calibr
 ## `/primer <topic>` — Run a lesson
 
 1. **Calibrate.** Read `$DATA_DIR/learner/profile.md` (stable traits) and `$DATA_DIR/learner/topic-index.md` (depth markers with confidence + evidence, open ZPD edges). Note the depth marker and its confidence for the topic's domain — low-confidence markers are assumptions to probe, not facts to fade past. Note prior lessons in this domain and relevant entries in `$DATA_DIR/learner/open-questions.md`.
-2. **Minor recalibrate check.** If 5+ lessons have been logged since the last recalibrate (count `$DATA_DIR/learner/log.md`), run the minor recalibrate first (`primer/feedback-protocol.md`): scan `calibration-log.md` for repeated misses, flip warranted statuses, surface stale low-confidence markers, show a 3–5 line diff, then proceed.
+2. **Minor recalibrate check (evidence-triggered, capped).** Run the minor recalibrate first if **either** 4+ calibration-log misses have accumulated since the last recalibrate **or** 8+ lessons have passed since it (count `$DATA_DIR/learner/calibration-log.md` and `log.md`; defaults configurable — see `primer/feedback-protocol.md`). It scans for repeated misses, flips warranted statuses, decays stale high-confidence markers and surfaces stale low-confidence ones, shows a 3–5 line diff, then proceeds.
 3. **Plan.** Propose a one-paragraph lesson plan: framing, key invariants, what you'll skip given their depth. Get a quick acknowledgment or course-correction.
 4. **Run the protocol.** Elicit → Probe → Diagnose → Deepen → Recap (`primer/lesson-protocol.md`). The Deepen step's source-discovery pass is mandatory. Use AskUserQuestion sparingly; default to free-form conversation.
 5. **Self-check** against `primer/anti-patterns.md` before writing the artifact.
@@ -94,7 +94,7 @@ This is not only warm-up — it is the feedback loop's **external anchor** (`pri
 
 ## `/primer resume` — Continue an in-progress lesson
 
-Look for `$DATA_DIR/lessons/<domain>/<slug>/STATE.md` files. If one exists, ask if it should be resumed. Otherwise surface the most recent unfinished lesson.
+Look for in-progress state at `$DATA_DIR/lessons/<domain>/<YYYY-MM-DD>-<slug>.STATE.md` — a sidecar next to where the finished artifact will land (`primer/lesson-template.md`). If one exists, ask if it should be resumed. Otherwise surface the most recent unfinished lesson. On completion, the `.STATE.md` sidecar is removed and the `<YYYY-MM-DD>-<slug>.md` artifact remains.
 
 ## `/primer index` — Render the topic index
 
@@ -120,5 +120,5 @@ Render a brief usage block listing the verbs. Don't dump the full requirements d
 - **Tag every technical claim** as `[verified via docs]` or `[from-training, verify]`. Default to tool-grounded retrieval for API/version-specific facts.
 - **For conceptual questions, probe before answering.** Khanmigo rule.
 - **Hold positions under pushback** when correct. Sycophancy is failure.
-- **Max one in-progress session at a time** in `$DATA_DIR/lessons/*/STATE.md`. No parallel in-progress sessions.
+- **Max one in-progress session at a time** — at most one `$DATA_DIR/lessons/**/*.STATE.md` sidecar exists. No parallel in-progress sessions.
 </constraints>
