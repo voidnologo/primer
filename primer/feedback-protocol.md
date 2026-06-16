@@ -69,7 +69,7 @@ System-triggered (default N = 5; configurable). Lightweight, runs at the start o
 
 Minor recalibrate does **not** rewrite stable traits or goals.
 
-### Deep recalibrate — user-invoked (`/the-primer recalibrate`)
+### Deep recalibrate — user-invoked (`/primer recalibrate`)
 
 On demand, a full meta-session (not a lesson):
 

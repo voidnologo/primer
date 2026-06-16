@@ -1,6 +1,6 @@
 # Intake Protocol — Cold-Start Interview
 
-The interview the skill runs once, the first time a new learner initializes an instance (`/the-primer init`). It takes a stranger and produces the first profile — rich, private, and honest about its own confidence.
+The interview the skill runs once, the first time a new learner initializes an instance (`/primer init`). It takes a stranger and produces the first profile — rich, private, and honest about its own confidence.
 
 A cold profile is mostly assumption. The job of intake is to replace as much assumption as possible with *demonstrated* signal in ~30–45 minutes, and to clearly mark what's left as a guess so later lessons and `recalibrate` can correct it.
 

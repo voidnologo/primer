@@ -4,7 +4,7 @@
 >
 > **Privacy:** this file lives in your *private* data repo. It can hold real context — real stack, real stakes, the things that make tailoring sharp. The public-safe constraint applies to *lessons* (shareable artifacts), never to this profile.
 >
-> This is a template. `/the-primer init` fills it from the intake interview (`primer/intake-protocol.md`).
+> This is a template. `/primer init` fills it from the intake interview (`primer/intake-protocol.md`).
 
 **Last updated:** <intake date>
 

@@ -42,38 +42,38 @@ Learner state is **instance data** — it lives in the learner's private data re
 
 Learner state lives in a private data repo whose path differs per machine. Resolve it first:
 
-1. Read `~/.config/the-primer/config`. It contains `DATA_DIR=<absolute path>`. All learner state — `profile.md`, `topic-index.md`, `calibration-log.md`, `log.md`, `review-queue.md`, `open-questions.md`, `lessons/` — reads and writes target `$DATA_DIR/`.
+1. Read `~/.config/primer/config`. It contains `DATA_DIR=<absolute path>` — the root of the private data repo. State files live under `$DATA_DIR/learner/` (`profile.md`, `topic-index.md`, `calibration-log.md`, `log.md`, `review-queue.md`, `open-questions.md`); lesson artifacts under `$DATA_DIR/lessons/`. This mirrors the public core's own layout.
 2. If the config is absent, the instance isn't initialized — route to `init` regardless of the argument (except `help`).
-3. Dev fallback: if no config but a `learner/` dir exists alongside the core repo, use it (transitional / pre-split).
+3. Dev fallback: if no config but a `learner/` dir exists at the core repo root, use the core repo root as `$DATA_DIR` (transitional / pre-split).
 
-Then read `$DATA_DIR/profile.md` and `$DATA_DIR/topic-index.md` to calibrate before any lesson flow.
+Then read `$DATA_DIR/learner/profile.md` and `$DATA_DIR/learner/topic-index.md` to calibrate before any lesson flow.
 
 ## The argument
 
 The skill takes one argument. Route on it:
 
-## `/the-primer init` — First-time setup (intake interview)
+## `/primer init` — First-time setup (intake interview)
 
-Run when no instance exists. Execute the intake interview in `primer/intake-protocol.md`: the 6-phase cold-start interview (frame → identity → goals & stakes → per-domain calibration with one live probe each → learning style → anti-preferences → synthesis). On completion, scaffold `$DATA_DIR` from `templates/learner/` and write the initial profile, seeded topic-index (with confidence + evidence), calibration-log, and first log entry. Close by proposing the first 2–3 lessons. If `~/.config/the-primer/config` doesn't exist yet, walk the learner through `tools/init-instance.sh` first.
+Run when no instance exists. Execute the intake interview in `primer/intake-protocol.md`: the 6-phase cold-start interview (frame → identity → goals & stakes → per-domain calibration with one live probe each → learning style → anti-preferences → synthesis). On completion, scaffold `$DATA_DIR` from `templates/learner/` and write the initial profile, seeded topic-index (with confidence + evidence), calibration-log, and first log entry. Close by proposing the first 2–3 lessons. If `~/.config/primer/config` doesn't exist yet, walk the learner through `tools/init-instance.sh` first.
 
-## `/the-primer recalibrate` — Correct the model
+## `/primer recalibrate` — Correct the model
 
 Deep, user-invoked recalibration per `primer/feedback-protocol.md`: mine `calibration-log.md` for patterns, detect goal/depth drift, audit low-confidence markers, re-confirm stable traits, compact volatile churn, flag stale canon entries. Output a "what changed and why" diff; apply on confirmation. (The *minor* recalibrate runs automatically every 5 lessons at lesson start — not invoked here.)
 
 ## `/learn-me-up <topic>` — Run a lesson
 
-1. **Calibrate.** Read `$DATA_DIR/profile.md` (stable traits) and `$DATA_DIR/topic-index.md` (depth markers with confidence + evidence, open ZPD edges). Note the depth marker and its confidence for the topic's domain — low-confidence markers are assumptions to probe, not facts to fade past. Note prior lessons in this domain and relevant entries in `$DATA_DIR/open-questions.md`.
-2. **Minor recalibrate check.** If 5+ lessons have been logged since the last recalibrate (count `$DATA_DIR/log.md`), run the minor recalibrate first (`primer/feedback-protocol.md`): scan `calibration-log.md` for repeated misses, flip warranted statuses, surface stale low-confidence markers, show a 3–5 line diff, then proceed.
+1. **Calibrate.** Read `$DATA_DIR/learner/profile.md` (stable traits) and `$DATA_DIR/learner/topic-index.md` (depth markers with confidence + evidence, open ZPD edges). Note the depth marker and its confidence for the topic's domain — low-confidence markers are assumptions to probe, not facts to fade past. Note prior lessons in this domain and relevant entries in `$DATA_DIR/learner/open-questions.md`.
+2. **Minor recalibrate check.** If 5+ lessons have been logged since the last recalibrate (count `$DATA_DIR/learner/log.md`), run the minor recalibrate first (`primer/feedback-protocol.md`): scan `calibration-log.md` for repeated misses, flip warranted statuses, surface stale low-confidence markers, show a 3–5 line diff, then proceed.
 3. **Plan.** Propose a one-paragraph lesson plan: framing, key invariants, what you'll skip given their depth. Get a quick acknowledgment or course-correction.
 4. **Run the protocol.** Elicit → Probe → Diagnose → Deepen → Recap (`primer/lesson-protocol.md`). The Deepen step's source-discovery pass is mandatory. Use AskUserQuestion sparingly; default to free-form conversation.
 5. **Self-check** against `primer/anti-patterns.md` before writing the artifact.
 6. **Write the artifact** to `$DATA_DIR/lessons/<domain-slug>/<YYYY-MM-DD>-<lesson-slug>.md` per `primer/lesson-template.md`. Include retrieval prompts. Promote any load-bearing newly-discovered source into the canon floor.
 7. **Update state** (`primer/feedback-protocol.md`):
-   - Append retrieval prompts to `$DATA_DIR/review-queue.md`.
-   - Append open threads to `$DATA_DIR/open-questions.md`.
-   - Update the domain's depth marker in `$DATA_DIR/topic-index.md`: depth, `[confidence]`, evidence (this session). Mark the topic covered/in-progress; refresh ZPD edges and suggested next.
-   - Append any calibration misses to `$DATA_DIR/calibration-log.md`. Infer the silent micro-feedback signals (calibration / engagement / mastery / style fit) from the conversation and record them — do not ask the learner.
-   - Append one line to `$DATA_DIR/log.md`.
+   - Append retrieval prompts to `$DATA_DIR/learner/review-queue.md`.
+   - Append open threads to `$DATA_DIR/learner/open-questions.md`.
+   - Update the domain's depth marker in `$DATA_DIR/learner/topic-index.md`: depth, `[confidence]`, evidence (this session). Mark the topic covered/in-progress; refresh ZPD edges and suggested next.
+   - Append any calibration misses to `$DATA_DIR/learner/calibration-log.md`. Infer the silent micro-feedback signals (calibration / engagement / mastery / style fit) from the conversation and record them — do not ask the learner.
+   - Append one line to `$DATA_DIR/learner/log.md`.
    - Stable traits in `profile.md` change only via `recalibrate`, not here.
 
 ## `/learn-me-up next` — Suggest next lessons
