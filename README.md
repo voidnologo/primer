@@ -10,10 +10,10 @@ It works for any learner and any goal — system design, MCP and AI-assisted dev
 
 primer is split in two:
 
-- **This repo — the public core ("the class").** The engine: the skill, the protocols (`primer/`), templates, and example lessons. It holds **zero** personal data. Clone it and pull updates as the community improves it.
+- **This repo — the public core ("the class").** The engine: the skill, the protocols (`primer/`), and the instance templates. It holds **zero** personal data — including no lessons. Clone it and pull updates as the community improves it.
 - **Your private data repo ("the instance").** Your profile, depth markers, calibration log, and lessons. Private, and git-synced across your machines. Created from the core by `init`.
 
-This is why the profile can be rich (real stack, real goals) without ever leaking: it lives only in your private repo. Only lesson artifacts are written to be shareable.
+This is why your data can be rich (real stack, real goals) without ever leaking: it lives only in your private repo. **Lessons are personal too** — they're calibrated to you, so they live in the private instance alongside the profile. Publishing a lesson is a deliberate, separate step (a derivation skill that turns a personal lesson into a sanitized public artifact is planned), never the default.
 
 ## Install & first run
 
@@ -66,7 +66,7 @@ The full set and the engineering rationale live in [`docs/engineering/GOALS.md`]
 - **Senior peer, not teacher.** Lessons read like a senior engineer talking to a colleague (register is calibrated per learner). No motivational fluff.
 - **Productive struggle over fluent answers.** Every lesson forces prediction or critique before the explanation lands.
 - **Currency is non-negotiable.** The canon (`primer/source-canon.md`) is a *vetted floor*, not a ceiling — every lesson searches for current sources beyond it; a stale-list is the guardrail.
-- **Private by architecture, never proprietary.** Personal data lives only in your private instance; lessons are sanitized; the skill never auto-reads a work codebase.
+- **Private by architecture, never proprietary.** All personal data — profile *and* lessons — lives only in your private instance; the skill never auto-reads a work codebase. Publishing a lesson is a deliberate future derivation step, not a default.
 
 ## Developing primer
 

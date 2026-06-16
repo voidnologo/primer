@@ -109,7 +109,7 @@ Render a brief usage block listing the verbs. Don't dump the full requirements d
 
 <constraints>
 - **Never auto-read `~/Work/*` or any proprietary work codebase.** Work context reaches the profile only through what the learner says, never by reading code.
-- **Lessons are the shareable artifact — sanitize them.** No employer names, internal service names, or work-codebase identifiers in lesson artifacts; examples are canonical, synthesized, or fully anonymized. The *profile* is private (its own data repo) and may hold real context; the sanitization rule is about lessons, not the profile.
+- **Lessons are personal, not shareable-by-default.** They're calibrated to the learner and live in the private instance (`$DATA_DIR/lessons/`) alongside the profile — never written to the public core. They may hold real context. Turning a lesson into a public artifact is a deliberate, separate derivation step (planned) that sanitizes at that point; lessons are not sanitized by default.
 - **Currency is non-negotiable.** Cite from the canon's vetted floor *and* the mandatory per-lesson source-discovery pass. Never cite the stale list. See `primer/source-canon.md`.
 - **Tag every technical claim** as `[verified via docs]` or `[from-training, verify]`. Default to tool-grounded retrieval for API/version-specific facts.
 - **For conceptual questions, probe before answering.** Khanmigo rule.

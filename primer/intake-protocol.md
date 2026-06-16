@@ -10,7 +10,7 @@ A cold profile is mostly assumption. The job of intake is to replace as much ass
 - **Intake follows the Primer's own philosophy.** Probe, don't lecture. Senior-peer register by default; read whether that fits and adjust live. No quizzing, no infantilizing.
 - **Self-report is the cheap signal; the probe is the real one.** Self-rated skill level is unreliable in both directions. Always ground it with one live probe per domain.
 - **Discover, don't assume — broad ability *and* goal.** Do not presuppose the learner's field, their target, or even which domains matter. The spine is the same for a backend lead, a frontend dev wanting MCP, or someone learning their first new language in a decade; the content is *discovered*. Two things get discovered together: how broadly capable they already are (so transferable skill is found, not re-taught), and what they're actually trying to do (so the calibration starts in the right place). The goal decomposes into the skill map; the broad-ability scan says which parts of that map are new.
-- **Everything here is private.** The profile lives only in the learner's private data repo. Collect real context — real stack, real stakes, real anxieties. The public-safe constraint applies to *lessons* (shareable artifacts), never to the profile.
+- **Everything here is private.** The profile *and* the lessons it shapes live only in the learner's private data repo. Collect real context — real stack, real stakes, real anxieties. Nothing here faces a public-safe constraint; publishing a lesson is a separate, deliberate derivation step (planned).
 
 ## Phase 0 — Frame (~30s)
 

@@ -6,6 +6,16 @@ Format: decision, context, alternatives considered, tradeoff accepted.
 
 ---
 
+## D-0013 · 2026-06-15 · Lessons are private/personal, not shareable-by-default
+
+**Decision:** Lesson artifacts are personal — calibrated to the learner — and live only in the private instance, alongside the profile. The public core ships no personal lessons. Publishing is a deliberate, separate step. **Supersedes the lesson-sharing aspect of D-0001** (which framed "only lessons are sanitized," implying lessons were the shareable surface).
+
+**Context:** The point of the project is deep personalization; a lesson is shaped by the learner's profile, gaps, and scenarios, so it's as sensitive as the profile. Calling lessons "shareable" and sanitizing them by default both undercut that and add friction.
+
+**Alternatives:** lessons sanitized-and-public-by-default (rejected — caps personalization, leaks calibration signal); a public/private split per lesson (rejected — premature).
+
+**Tradeoff:** no public lesson corpus for now. A future **derivation skill** will turn a chosen personal lesson into a sanitized, shareable artifact on demand — sanitization happens at that step, not on every lesson. Resolved: `examples/` removed from the public core (no provisional public lessons); samples will come from the derivation skill.
+
 ## D-0012 · 2026-06-15 · Rename to `primer`; skill name from symlink; `${CLAUDE_SKILL_DIR}` for engine includes
 
 **Decision:** Skill renamed `learn-me-up` → `primer`. The command name is set by the installed symlink name (`~/.claude/skills/primer`), not frontmatter or the repo dir name. Engine `@`-includes switched from absolute `$HOME/...` paths to `@${CLAUDE_SKILL_DIR}/primer/...`.

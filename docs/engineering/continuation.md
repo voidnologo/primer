@@ -10,7 +10,7 @@
 - Reframed currency: canon = vetted floor + mandatory per-lesson source discovery.
 - Restructured profile (stable vs volatile; depth markers → topic-index with confidence + evidence).
 - Added this engineering-log system (GOALS, DECISIONS, sessions, two session skills).
-- **Migrated**: `voidnologo/primer-data` (private) created + pushed; personal data removed from the public core (now in examples/ + the instance).
+- **Migrated**: `voidnologo/primer-data` (private) created + pushed; all personal data (profile + lessons) removed from the public core — it now lives only in the private instance. Lessons are private-by-default (D-0013); `examples/` removed.
 - **Renamed** to `primer`: skill (symlink + `${CLAUDE_SKILL_DIR}` includes, reinstalled as `/primer`), GitHub repo (`voidnologo/primer`, remote updated), local dir. Work merged to `main` and pushed.
 
 ## Next up

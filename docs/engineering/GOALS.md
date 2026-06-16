@@ -20,7 +20,7 @@ A personal, Primer-style learning system (after the Young Lady's Illustrated Pri
 ## Non-negotiables (a change that breaks one of these is wrong)
 
 - **Currency.** Knowledge must be current. The canon is a *vetted floor*, never a ceiling; every lesson runs a source-discovery pass; the stale-list and stale-criteria are the guardrail. Never freeze knowledge at list-authoring time.
-- **Privacy.** Personal/profile data lives only in the private instance repo. The public core holds none. Lessons (shareable) are sanitized; the profile (private) may be rich. The skill never auto-reads a work codebase.
+- **Privacy.** All personal data — profile *and* lessons — lives only in the private instance repo and may be rich. The public core holds none. Publishing a lesson is a deliberate, separate derivation step (planned) that sanitizes at that point; lessons are not shareable-by-default. The skill never auto-reads a work codebase.
 - **Productive struggle over fluent answers.** Probe before answering conceptual questions. The "LLM Fallacy" (fluent prose that feels like learning but isn't) is the enemy.
 - **Senior-peer register, no sycophancy.** Hold correct positions under pushback. No motivational fluff. (Default register; intake can recalibrate per learner.)
 - **Honesty about confidence.** Depth markers carry confidence + evidence. The system distinguishes what it *knows* about the learner from what it *assumed*. No certain-looking guesses.

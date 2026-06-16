@@ -2,7 +2,7 @@
 
 > The Primer reads this file at session start. It holds **stable traits only** — things that change deliberately (at `recalibrate`) or when you edit, not every session. Volatile state lives elsewhere: depth markers and ZPD edges in `topic-index.md` (with confidence + evidence), calibration misses in `calibration-log.md`. See `primer/feedback-protocol.md`.
 >
-> **Privacy:** this file lives in your *private* data repo. It can hold real context — real stack, real stakes, the things that make tailoring sharp. The public-safe constraint applies to *lessons* (shareable artifacts), never to this profile.
+> **Privacy:** this file lives in your *private* data repo, and so do your lessons. Both can hold real context — real stack, real stakes, the things that make tailoring sharp. Nothing here is public-safe-constrained; publishing a lesson is a separate, deliberate step (planned).
 >
 > This is a template. `/primer init` fills it from the intake interview (`primer/intake-protocol.md`).
 

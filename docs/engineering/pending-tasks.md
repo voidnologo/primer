@@ -15,10 +15,11 @@ Live checklist for primer engineering. `session-end` checks off / prunes complet
 - [x] Class/instance split + migration: `voidnologo/primer-data` (private) created and pushed; personal data removed from core.
 - [x] Rename to `primer` (skill name + verbs, install.sh, README, REQUIREMENTS, memory). Live skill reinstalled as `/primer`.
 - [x] GitHub repo renamed `knowledge → primer` (`voidnologo/primer`), remote updated, pushed. Local dir moved to `~/personal/learning/primer`.
+- [x] Lessons reframed as private-by-default (D-0013); `examples/` removed from the public core.
 
 ## Ideas / proposals (not committed)
 
+- **Lesson → public-artifact derivation skill** (D-0013): take a personal lesson from the private instance and derive a sanitized, shareable artifact on demand. The only sanctioned path to a public lesson.
 - Tune `N` (minor-recalibrate cadence) after real lesson data; currently 5.
-- Decide whether `examples/` ships 1–2 sanitized sample lessons, or stays empty.
 - Possible `/primer config` verb to set N and register without a full recalibrate.
 - Consider a "transfer-confirm" micro-probe in the first lesson that touches an assumed-held skill (closes the Phase-3 transfer assumption).
