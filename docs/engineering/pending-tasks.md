@@ -30,7 +30,8 @@ Wave C — quality & hygiene: **[done — Session 3]**
 Wave D — resolved into goals + Proposal 0002:
 - [x] **T3** — resolved: self-contained in-repo scheduling (not Anki). Folded into Proposal 0002. (D-0018)
 - [x] New goals captured: **D-0018** (self-contained; bookkeeping-as-code), **D-0019** (Goal 5 — cultivate learning habits). Anchor reworked onto the lesson flow (Elicit recall); `/primer review` now optional + habit-building.
-- [ ] **E3** — generation-effect tweak (learner states invariant before Primer writes prompts). No decision needed; queued.
+- [x] **E3** — generation-effect tweak (learner states the takeaway before the Primer summarizes). `lesson-protocol.md §5`.
+- [x] Consistency sweep: fixed stale "every 5 lessons" in SKILL.md and two depth-marker→`profile.md` paths (→ `topic-index.md`).
 - [ ] **E2** / **E4** — still deferred until post-use data.
 
 ### ⚑ Proposal 0002 — deterministic state layer + habit-formation (NEEDS MAINTAINER DECISION)

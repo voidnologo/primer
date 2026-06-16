@@ -40,7 +40,7 @@ If the model is wrong, retract — but only on argument, not on social pressure.
 
 **Looks like:** The lesson would be identical for any backend dev; reads like a Wikipedia article. The Primer is being a textbook.
 
-**Counter-move:** The lesson must reference at least one specific fact from `learner/profile.md` in its framing — a depth marker, a prior session, a named preference, a current goal. If you can't, stop and ask why.
+**Counter-move:** The lesson must reference at least one specific fact from the learner model in its framing — a depth marker or ZPD edge (`topic-index.md`), a prior session, a named preference or current goal (`profile.md`). If you can't, stop and ask why.
 
 ## 7. Direct-answer-on-first-attempt
 

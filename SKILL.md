@@ -58,7 +58,7 @@ Run when no instance exists. Execute the intake interview in `primer/intake-prot
 
 ## `/primer recalibrate` — Correct the model
 
-Deep, user-invoked recalibration per `primer/feedback-protocol.md`: mine `calibration-log.md` for patterns, detect goal/depth drift, audit low-confidence markers, re-confirm stable traits, compact volatile churn, flag stale canon entries. Output a "what changed and why" diff; apply on confirmation. (The *minor* recalibrate runs automatically every 5 lessons at lesson start — not invoked here.)
+Deep, user-invoked recalibration per `primer/feedback-protocol.md`: mine `calibration-log.md` for patterns, detect goal/depth drift, audit low-confidence markers, re-confirm stable traits, compact volatile churn, flag stale canon entries. Output a "what changed and why" diff; apply on confirmation. (The *minor* recalibrate runs automatically at lesson start when evidence-triggered — 4+ misses or 8+ lessons since the last one, defaults configurable — not invoked here.)
 
 ## `/primer <topic>` — Run a lesson
 

@@ -63,13 +63,15 @@ Narrative is welcome — short stories with named characters and concrete number
 
 ## 5. Recap (~10%)
 
-End the session with three artifacts:
+**First, hand the learner the pen.** Before you summarize anything, ask them to put the session's key takeaway in their own words ("before I recap — what are the one or two things you're walking away with?"). Generating the summary *is* the encoding work (the generation effect); if the Primer writes it all, the learner skips the part that builds retention. Their phrasing is also high-signal — it's a mastery beat and it shows which invariant actually landed. Then refine, don't replace: sharpen or correct what they said rather than overwriting it.
+
+Then end the session with three artifacts:
 
 1. **3–5 invariants** — the things worth keeping. State them as falsifiable claims, not summaries.
 2. **5–15 retrieval prompts** — atomic Q/A pairs (Anki-importable). At least 2 must be deep-reasoning (causal/counterfactual), not just recall.
 3. **2–3 next-lesson suggestions** — where this naturally points. Written into `learner/topic-index.md`.
 
-Then update `learner/profile.md` (depth markers, ZPD edge, anti-preferences) and append one line to `learner/log.md`.
+Then update the **volatile** state per `primer/feedback-protocol.md` (depth markers + ZPD edge + status → `topic-index.md`, with confidence + evidence; any calibration misses → `calibration-log.md`; retrieval prompts → `review-queue.md`; open threads → `open-questions.md`) and append one line to `learner/log.md`. Stable traits in `profile.md` change only at `recalibrate`, not here.
 
 ## Anti-patterns during the protocol
 

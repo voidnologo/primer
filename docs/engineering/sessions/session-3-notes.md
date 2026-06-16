@@ -77,6 +77,15 @@ Resolving Wave D turned into a design conversation that produced new direction (
   source-of-truth (A/B/C), scheduler (SM-2-lite vs FSRS), and build-order choices left as ⚑ decisions. No
   build started — awaiting the maintainer's scope call.
 
+**Post-push — unblocked work before the decision point**
+- **E3 (generation effect)** — Recap now hands the learner the pen first: they state the key takeaway in their
+  own words before the Primer summarizes/writes prompts (preserves the encoding work; also a calibration beat).
+  `lesson-protocol.md §5`.
+- **Consistency sweep** — grepped for stragglers from the rapid edits and fixed three: `SKILL.md` still said
+  the minor recalibrate runs "every 5 lessons" (now evidence-triggered, D-0017); and two spots still routed
+  **depth markers to `profile.md`** (`lesson-protocol.md §5` Recap update, `anti-patterns.md` #6) — corrected
+  to `topic-index.md` per the D-0003 stable/volatile split. (The latter two predated this session.)
+
 ## Files Modified
 
 | File | Change |
