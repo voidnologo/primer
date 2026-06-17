@@ -2,6 +2,8 @@
 
 A personal, Primer-style learning system — an adaptive tutor that runs interactive lessons calibrated to *you* and gets sharper the more you use it.
 
+> **New here?** The [10-minute pitch deck](docs/pitch/primer-pitch.html) walks through the motivation, what it is, and how it works. It's a self-contained HTML deck — clone the repo and open the file in a browser (GitHub won't render it inline), or `docs/pitch/primer-pitch.html?print-pdf` to export a PDF.
+
 ## What's a "Primer"?
 
 In Neal Stephenson's *The Diamond Age*, the *Young Lady's Illustrated Primer* is the book you wish you'd had as a kid. It starts with a grandfather who wants something *more* for his granddaughter — who sees the makings of someone remarkable in her and sets out to give her every chance to become it. So he commissions a marvel, a book made possible only by technology just dreamed into being: it talks back, notices who's reading it, and reshapes itself to fit them. A copy finds its way to Nell, a young girl it was never made for — and it works just as beautifully for her. That's the heart of it: a book like this could do this for *anyone*.

@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Primer — a learning system that knows you</title>
+
+<!-- reveal.js core (CDN — needs internet at present time; see note at end of file) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#14141d;
+  --ink-2:#1c1c29;
+  --ink-3:#232333;
+  --paper:#f3ebdd;
+  --paper-dim:#aaa498;
+  --gold:#e3ad52;       /* the human / book / relationship thread */
+  --teal:#5bd0c0;       /* the engine / technical thread */
+  --rust:#e08068;       /* stale / wrong / pain */
+  --green:#7fc99a;
+  --line:rgba(243,235,221,.13);
+  --line-2:rgba(243,235,221,.07);
+}
+
+/* ---------- base ---------- */
+.reveal{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:30px;
+  color:var(--paper);
+  font-weight:400;
+}
+.reveal-viewport{
+  background:
+    radial-gradient(1100px 700px at 78% -10%, rgba(227,173,82,.10), transparent 60%),
+    radial-gradient(900px 700px at 10% 110%, rgba(91,208,192,.09), transparent 60%),
+    var(--ink);
+}
+.reveal .slides{ text-align:left; }
+.reveal section{ height:100%; }
+
+.reveal h1,.reveal h2,.reveal h3{
+  font-family:'Newsreader',Georgia,serif;
+  color:var(--paper);
+  font-weight:500;
+  text-transform:none;
+  letter-spacing:-.01em;
+  line-height:1.07;
+  margin:0 0 .35em 0;
+}
+.reveal h1{ font-size:2.5em; }
+.reveal h2{ font-size:1.62em; }
+.reveal h3{ font-size:1.05em; }
+.reveal p{ line-height:1.45; margin:0 0 .6em 0; }
+.reveal strong{ color:var(--paper); font-weight:600; }
+.reveal em{ color:var(--gold); font-style:italic; }
+.reveal a{ color:var(--teal); }
+.reveal ul,.reveal ol{ margin:0; }
+.reveal li{ margin:.32em 0; line-height:1.38; }
+.reveal section img{ border:none; box-shadow:none; }
+
+/* kicker / eyebrow */
+.kicker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.5em;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--teal);
+  margin:0 0 1.1em 0;
+  display:block;
+}
+.gold .kicker{ color:var(--gold); }
+
+/* layout helpers */
+.center-slide{ display:flex; flex-direction:column; justify-content:center; height:100%; }
+.lead{ font-size:1.18em; color:var(--paper-dim); max-width:24em; line-height:1.4; }
+.dim{ color:var(--paper-dim); }
+.small{ font-size:.62em; color:var(--paper-dim); line-height:1.4; }
+.mono{ font-family:'JetBrains Mono',monospace; }
+.gold-t{ color:var(--gold); }
+.teal-t{ color:var(--teal); }
+.rust-t{ color:var(--rust); }
+
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:.9em; }
+.grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:.7em; }
+
+/* cards */
+.card{
+  background:linear-gradient(180deg,var(--ink-2),rgba(28,28,41,.55));
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:.85em .95em;
+}
+.card h3{ margin-bottom:.25em; }
+.card .num{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--teal); font-size:.7em; letter-spacing:.1em;
+}
+.card.gold-edge{ border-top:2px solid var(--gold); }
+.card.teal-edge{ border-top:2px solid var(--teal); }
+.card.rust-edge{ border-top:2px solid var(--rust); }
+
+/* footer brand */
+.brand{
+  position:absolute; bottom:14px; left:24px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--paper-dim); opacity:.55;
+}
+.reveal .slide-number{
+  font-family:'JetBrains Mono',monospace;
+  background:transparent; color:var(--paper-dim); opacity:.5; font-size:13px;
+}
+
+/* pipeline diagram (lesson loop) */
+.pipe{ display:flex; align-items:stretch; gap:0; margin:.4em 0 .2em; }
+.pipe .stage{
+  flex:1; background:var(--ink-2); border:1px solid var(--line);
+  border-radius:10px; padding:.5em .35em; text-align:center; position:relative;
+}
+.pipe .stage .s-name{ font-family:'Newsreader',serif; font-size:.82em; color:var(--paper); }
+.pipe .stage .s-sub{ font-size:.42em; color:var(--paper-dim); display:block; margin-top:.25em; line-height:1.25; }
+.pipe .arrow{ align-self:center; color:var(--teal); font-size:.9em; padding:0 .28em; }
+.pipe .stage.hot{ border-color:rgba(227,173,82,.5); background:linear-gradient(180deg,rgba(227,173,82,.13),var(--ink-2)); }
+
+/* split arch diagram */
+.split{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:.4em; margin-top:.3em; }
+.panel{ background:var(--ink-2); border:1px solid var(--line); border-radius:14px; padding:1em; }
+.panel.pub{ border-top:3px solid var(--teal); }
+.panel.priv{ border-top:3px solid var(--gold); }
+.panel h3{ margin-bottom:.45em; }
+.panel ul{ list-style:none; padding:0; }
+.panel li{ font-size:.66em; color:var(--paper-dim); padding:.18em 0; padding-left:1em; position:relative; }
+.panel li::before{ content:'›'; position:absolute; left:0; color:var(--teal); }
+.panel.priv li::before{ color:var(--gold); }
+.sync{ text-align:center; color:var(--paper-dim); font-size:.5em; line-height:1.3; }
+.sync .big{ font-size:2.4em; color:var(--paper); display:block; }
+
+/* confidence chips */
+.chip{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.5em;
+  padding:.12em .5em; border-radius:999px; letter-spacing:.04em; }
+.chip.low{ background:rgba(224,128,104,.16); color:var(--rust); border:1px solid rgba(224,128,104,.35); }
+.chip.med{ background:rgba(227,173,82,.16); color:var(--gold); border:1px solid rgba(227,173,82,.35); }
+.chip.high{ background:rgba(127,201,154,.16); color:var(--green); border:1px solid rgba(127,201,154,.35); }
+
+/* terminal block */
+.term{
+  background:#0e0e16; border:1px solid var(--line); border-radius:12px;
+  font-family:'JetBrains Mono',monospace; font-size:.5em; line-height:1.6;
+  padding:1em 1.1em; color:var(--paper-dim); box-shadow:0 18px 50px rgba(0,0,0,.4);
+}
+.term .dots{ margin-bottom:.8em; }
+.term .dots span{ display:inline-block; width:.7em; height:.7em; border-radius:50%; margin-right:.45em; }
+.term .prompt{ color:var(--teal); }
+.term .gold-t{ color:var(--gold); }
+.term .you{ color:var(--paper); }
+.term .tag{ color:var(--green); }
+
+/* pain row */
+.pain{ display:flex; gap:.6em; align-items:baseline; margin:.5em 0; }
+.pain .ico{ font-family:'JetBrains Mono',monospace; color:var(--rust); font-size:.8em; flex:0 0 auto; }
+
+.tag-pill{ font-family:'JetBrains Mono',monospace; font-size:.46em; padding:.1em .5em; border-radius:6px; }
+.tag-v{ background:rgba(127,201,154,.15); color:var(--green); }
+.tag-t{ background:rgba(227,173,82,.15); color:var(--gold); }
+.tag-stale{ background:rgba(224,128,104,.15); color:var(--rust); text-decoration:line-through; }
+
+.fragment.fade-in-then-dim.visible{ opacity:1; }
+.hr{ height:1px; background:var(--line); margin:.7em 0; border:0; }
+.quote-big{ font-family:'Newsreader',serif; font-size:1.35em; line-height:1.28; color:var(--paper); font-style:italic; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- 1 · TITLE -->
+<section class="gold" data-background-color="#14141d">
+  <div class="center-slide">
+    <span class="kicker">after the Young Lady's Illustrated Primer · The Diamond Age</span>
+    <h1>Primer</h1>
+    <p class="lead" style="font-size:1.3em;color:var(--paper);max-width:20em;">
+      A learning system that actually <em>knows you</em> — and gets sharper every time you show up.
+    </p>
+    <p class="small" style="margin-top:1.3em;">
+      Staying sharp in a field that reinvents itself every eighteen&nbsp;months.
+    </p>
+  </div>
+  <div class="brand">PRIMER</div>
+  <aside class="notes">
+    10 minutes. Audience: people who might use it + curious engineers. Arc: why it needs to exist →
+    what it is → how it works → see it real → try it. Keep ~45s/slide.
+  </aside>
+</section>
+
+<!-- 2 · MOTIVATION: the floor moved -->
+<section>
+  <span class="kicker rust-t" style="color:var(--rust)">why now</span>
+  <h2>The floor moved.</h2>
+  <div class="grid2" style="margin-top:.5em;align-items:center;">
+    <div>
+      <p>For a decade, the moat was <strong>writing good code</strong>.</p>
+      <p>That skill just got commoditized. An assistant writes it faster than I can.</p>
+      <p class="fragment">So the value moves <em>up the stack</em> — to the judgment, architecture, and decisions an LLM can't make on its own.</p>
+    </div>
+    <div class="fragment">
+      <div class="card rust-edge">
+        <p class="small" style="margin:0;">The quiet question under it:</p>
+        <p class="quote-big" style="font-size:1.05em;margin:.3em 0 0;">
+          “Tens of thousands of strong engineers are on the market. If I were too — what makes me distinguishable?”
+        </p>
+      </div>
+      <p class="small" style="margin-top:.7em;">Staying distinguishable <span class="gold-t">is</span> the job now. That takes deliberate growth — not whatever work happens to hand you.</p>
+    </div>
+  </div>
+  <div class="brand">PRIMER</div>
+  <aside class="notes">This is the emotional hook. Most engineers in the room feel this. Don't oversell doom — frame as: the bar moved, growth is the response.</aside>
+</section>
+
+<!-- 3 · MOTIVATION: how we keep up is broken -->
+<section>
+  <span class="kicker rust-t" style="color:var(--rust)">the problem</span>
+  <h2>But how we keep up is broken.</h2>
+  <div class="grid3" style="margin-top:.6em;">
+    <div class="card rust-edge fragment">
+      <h3>Demand-driven</h3>
+      <p class="small">You only learn what work puts in front of you. Everything else stays a blind spot until it's an emergency.</p>
+    </div>
+    <div class="card rust-edge fragment">
+      <h3>Generic &amp; stale</h3>
+      <p class="small">Tutorials are written for everyone, so they fit no one — happy-path demos, and half are teaching what the field already moved past.</p>
+    </div>
+    <div class="card rust-edge fragment">
+      <h3>It doesn't stick</h3>
+      <p class="small">Read the article, feel smart, retain almost nothing. Fluent prose <em>feels</em> like learning without being it.</p>
+    </div>
+  </div>
+  <p class="fragment" style="margin-top:.8em;font-size:.92em;">
+    A search engine, a chatbot, and a stack of bookmarks don't fix any of these. They make the <span class="rust-t">feeling</span> of progress cheap and the <span class="gold-t">substance</span> rare.
+  </p>
+  <div class="brand">PRIMER</div>
+</section>
+
+<!-- 4 · NORTH STAR -->
+<section class="gold">
+  <span class="kicker">the north star</span>
+  <div class="grid2" style="align-items:center;gap:1.4em;">
+    <div>
+      <h2>The book you wish you'd had.</h2>
+      <p>In <em>The Diamond Age</em>, the Primer is a book that notices who's reading it and reshapes itself to fit them — teaching through story and Socratic back-and-forth, always one step past what you can already do.</p>
+    </div>
+    <div>
+      <p class="quote-big">“The magic was never the nanotech. It's that the Primer is a <span class="gold-t">relationship</span>, not a syllabus — patient, genuinely curious about its reader, and built around exactly one person.”</p>
+    </div>
+  </div>
+  <hr class="hr">
+  <p class="small">We can't spin the fairy tale. The part that <span class="gold-t">is</span> reproducible — a tutor that knows where you are, what you're reaching for, and how you like to be talked to — we chase hard.</p>
+  <div class="brand">PRIMER</div>
+  <aside class="notes">Don't dwell — 30s. The point is the framing: relationship, not syllabus; built around one person.</aside>
+</section>
+
+<!-- 5 · WHAT IT IS -->
+<section>
+  <span class="kicker">what it is</span>
+  <h2>A senior peer who happens to know your whole history.</h2>
+  <p class="dim" style="font-size:.85em;margin-top:-.2em;">A Claude Code skill. You type <span class="mono teal-t">/primer&nbsp;&lt;topic&gt;</span>; it runs a calibrated, narrative lesson — and writes down what it learned about you. Three rules it never breaks:</p>
+  <div class="grid3" style="margin-top:.5em;">
+    <div class="card teal-edge">
+      <span class="num">01</span>
+      <h3>Senior peer, not teacher</h3>
+      <p class="small">Talks to you like a colleague at a meetup. No cheerleading. Disagrees when you're wrong — and holds the line under pushback.</p>
+    </div>
+    <div class="card gold-edge">
+      <span class="num">02</span>
+      <h3>Struggle &gt; fluent answers</h3>
+      <p class="small">Makes you predict or derive <em>before</em> it explains. You build the idea in your own head — the part that actually sticks.</p>
+    </div>
+    <div class="card teal-edge">
+      <span class="num">03</span>
+      <h3>Current &amp; grounded</h3>
+      <p class="small">Every technical claim tagged <span class="tag-pill tag-v">verified&nbsp;via&nbsp;docs</span> or <span class="tag-pill tag-t">from-training</span>. Never teaches a take the field has moved past.</p>
+    </div>
+  </div>
+  <p class="fragment" style="margin-top:.7em;text-align:center;font-size:.95em;">Calibrated to <em>you</em> — and sharper the more you use it.</p>
+  <div class="brand">PRIMER</div>
+</section>
+
+<!-- 6 · HOW: architecture -->
+<section>
+  <span class="kicker">how it works · 1 of 3 — the shape</span>
+  <h2>Public engine, private you.</h2>
+  <div class="split">
+    <div class="panel pub">
+      <h3 class="teal-t">The engine <span class="small">(public)</span></h3>
+      <ul>
+        <li>The skill + the lesson protocols</li>
+        <li>Source canon &amp; stale-list</li>
+        <li>Profile templates</li>
+        <li><strong>Zero</strong> personal data — clone &amp; improve it</li>
+      </ul>
+    </div>
+    <div class="sync">
+      <span class="big teal-t">⇄</span>
+      git-synced<br>across<br>your machines
+    </div>
+    <div class="panel priv">
+      <h3 class="gold-t">Your instance <span class="small">(private)</span></h3>
+      <ul>
+        <li>Your profile &amp; goals</li>
+        <li>Depth markers + evidence</li>
+        <li>Every lesson you've done</li>
+        <li>Rich &amp; real — and it never leaks</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:.7em;font-size:.86em;">This split is why your data can be <span class="gold-t">honest</span> — real stack, real stakes — without ever touching a public repo. And the engine <span class="dim">never reads your work codebase.</span></p>
+  <div class="brand">PRIMER</div>
+</section>
+
+<!-- 7 · HOW: the lesson loop -->
+<section>
+  <span class="kicker">how it works · 2 of 3 — a lesson</span>
+  <h2>Every session runs the same loop.</h2>
+  <div class="pipe">
+    <div class="stage"><span class="s-name">Elicit</span><span class="s-sub">what's your model now?</span></div>
+    <span class="arrow">▸</span>
+    <div class="stage hot"><span class="s-name">Probe</span><span class="s-sub">predict before I explain</span></div>
+    <span class="arrow">▸</span>
+    <div class="stage"><span class="s-name">Diagnose</span><span class="s-sub">where's the real edge?</span></div>
+    <span class="arrow">▸</span>
+    <div class="stage"><span class="s-name">Deepen</span><span class="s-sub">worked → faded → free</span></div>
+    <span class="arrow">▸</span>
+    <div class="stage"><span class="s-name">Recap</span><span class="s-sub">you summarize; prompts out</span></div>
+  </div>
+  <div class="grid2" style="margin-top:.7em;gap:1.2em;">
+    <p class="small">It opens by asking what <em>you</em> already believe — then probes you with a real failure scenario and <strong>waits</strong>. No auto-complete. It teaches only at your edge: skip what you know, slow down where you're fuzzy.</p>
+    <p class="small">It closes by handing <em>you</em> the pen — you put the takeaway in your own words (that's the encoding), and the session emits <strong>retrieval prompts</strong> for spaced review later.</p>
+  </div>
+  <div class="brand">PRIMER</div>
+  <aside class="notes">Probe-first is the heart. Contrast with "ask ChatGPT and get the answer instantly" — that skips the part that builds you.</aside>
+</section>
+
+<!-- 8 · HOW: it learns you -->
+<section>
+  <span class="kicker">how it works · 3 of 3 — it learns you</span>
+  <h2>It tracks what it has <em>seen</em> vs. what it <em>assumed</em>.</h2>
+  <div class="grid2" style="gap:1.1em;align-items:start;">
+    <div>
+      <p class="small" style="margin-bottom:.5em;">Every topic carries a depth marker with <strong>confidence + evidence</strong> — never a certain-looking guess:</p>
+      <div class="card" style="font-size:.92em;">
+        <p class="mono" style="font-size:.55em;margin:0;line-height:1.7;">
+          async&nbsp;event&nbsp;loop <span class="chip low">confidence: low</span><br>
+          <span class="dim">↳ intake probe: reasoned well, but the<br>&nbsp;&nbsp;&nbsp;blocking-freezes-the-loop invariant isn't locked</span><br><br>
+          outbox&nbsp;pattern <span class="chip high">confidence: high</span><br>
+          <span class="dim">↳ derived it live, sketched the schema</span>
+        </p>
+      </div>
+    </div>
+    <div>
+      <p class="small">Confidence moves <strong>both ways</strong> — and the loop isn't allowed to just grade itself:</p>
+      <ul class="small" style="list-style:none;padding:0;">
+        <li>↑ <span class="green" style="color:var(--green)">You correct its mistake</span> → strongest signal of mastery.</li>
+        <li>↓ <span class="rust-t">You blank on a cold-recall prompt</span> → confidence drops, topic requeues.</li>
+        <li>⏳ <span class="gold-t">Untouched too long</span> → it decays toward "needs review." Knowledge you don't retrieve, you lose.</li>
+      </ul>
+      <p class="small dim" style="margin-top:.4em;">So the picture of you gets <em>truer</em> with use — not quietly more optimistic.</p>
+    </div>
+  </div>
+  <div class="brand">PRIMER</div>
+</section>
+
+<!-- 9 · DIFFERENTIATOR -->
+<section>
+  <span class="kicker">why not just ask the chatbot</span>
+  <h2>Because a fluent answer is the trap.</h2>
+  <div class="grid2" style="align-items:center;">
+    <div>
+      <p>Ask a chatbot to “explain X” and you get a perfect paragraph. You nod. You feel sharper. You retain <span class="rust-t">almost none of it</span> — nothing was built in your head.</p>
+      <p class="fragment">Primer is designed against exactly that:</p>
+    </div>
+    <div class="fragment">
+      <div class="card gold-edge">
+        <ul class="small" style="margin:0;">
+          <li><strong>Makes you produce</strong> the idea before it confirms it.</li>
+          <li><strong>Cold-recall &amp; spaced review</strong> — Anki-importable prompts from every lesson.</li>
+          <li><strong>Honest about its own confidence</strong> — flags guesses, won't fake authority.</li>
+          <li><strong>Currency as a rule</strong> — searches for current sources every lesson; a stale-list is the guardrail. <span class="tag-pill tag-stale">event-source everything</span> <span class="tag-pill tag-stale">Alpine by default</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="fragment small dim" style="margin-top:.6em;">The goal isn't a good answer in the moment. It's <span class="gold-t">a better engineer over time</span> — and better at learning, too.</p>
+  <div class="brand">PRIMER</div>
+</section>
+
+<!-- 10 · WHAT YOU KEEP -->
+<section>
+  <span class="kicker">what you walk away with</span>
+  <h2>Lessons that outlast the session.</h2>
+  <div class="grid3" style="margin-top:.5em;">
+    <div class="card teal-edge">
+      <h3>A durable artifact</h3>
+      <p class="small">Every session writes a lesson file: TL;DR invariants, worked examples, diagrams, an honest tradeoff table, and the exact questions you asked.</p>
+    </div>
+    <div class="card gold-edge">
+      <h3>Retrieval prompts</h3>
+      <p class="small">5–15 atomic Q/A pairs per lesson, built to test understanding — yours to review, in Primer or your own SRS.</p>
+    </div>
+    <div class="card teal-edge">
+      <h3>A truer model of you</h3>
+      <p class="small">Markers, evidence, open threads, next-lesson suggestions — the map sharpens so the <em>next</em> lesson starts where you actually are.</p>
+    </div>
+  </div>
+  <p style="margin-top:.8em;font-size:.9em;text-align:center;">It's all <strong>yours</strong> — plain markdown, in your own private repo. <span class="dim">Nothing locked in a product.</span></p>
+  <div class="brand">PRIMER</div>
+</section>
+
+<!-- 11 · SEE IT REAL -->
+<section>
+  <span class="kicker">it's real — a 60-second glimpse</span>
+  <h2>From a guess to a calibrated start.</h2>
+  <div class="grid2" style="gap:1em;align-items:center;">
+    <div class="term">
+      <div class="dots"><span style="background:#e0746a"></span><span style="background:#e3ad52"></span><span style="background:#7fc99a"></span></div>
+      <div><span class="prompt">primer ›</span> you self-rate async as “can build with it.”</div>
+      <br>
+      <div class="gold-t">probe ›</div>
+      <div>“50 requests hit an <span class="you">async def</span> handler that makes one <span class="you">blocking</span> call. What happens — and would sync Falcon do better or worse?”</div>
+      <br>
+      <div class="you">you › “…they'd fan out across workers? Though — if it's blocking, maybe the loop can't switch…”</div>
+      <br>
+      <div><span class="tag">diagnose ›</span> right instinct, invariant not locked.</div>
+      <div class="dim">→ marker set <span class="chip low">low</span>, lesson built at exactly that edge.</div>
+    </div>
+    <div>
+      <p class="small">No quiz. No generic curriculum. One real scenario tells it <strong>where you actually are</strong> — the gap between what you <em>said</em> and what you can <em>do</em>.</p>
+      <p class="small">Then it pre-builds the lesson on <em>that</em> edge — sources already verified against current docs — ready when you are.</p>
+      <p class="small dim">(That's a real exchange from setting this up.)</p>
+    </div>
+  </div>
+  <div class="brand">PRIMER</div>
+  <aside class="notes">This is the "show, don't tell" slide. If short on time, this is the one to land — it proves calibration is real, not a slogan.</aside>
+</section>
+
+<!-- 12 · CLOSE / TRY IT -->
+<section class="gold" data-background-color="#14141d">
+  <div class="center-slide">
+    <span class="kicker">try it</span>
+    <h2 style="font-size:1.9em;">A tutor that genuinely knows you.</h2>
+    <p class="lead" style="color:var(--paper);font-size:1.05em;max-width:26em;">
+      Where you actually are, what you're reaching for, the way you like to be talked to — and a picture of you that gets a little truer, and a little more capable, every time you show up.
+    </p>
+    <div class="card" style="margin-top:1.1em;max-width:24em;">
+      <p class="mono small" style="margin:0;line-height:1.9;">
+        <span class="teal-t">$</span> git clone … &amp;&amp; ./tools/install.sh<br>
+        <span class="teal-t">›</span> /primer init <span class="dim"># 30-min intake, then go</span><br>
+        <span class="teal-t">›</span> /primer &lt;topic&gt;
+      </p>
+    </div>
+    <p class="small" style="margin-top:1.1em;">Open core · private data · works for any goal — system design, MCP, a new language, distributed systems.</p>
+  </div>
+  <div class="brand">PRIMER</div>
+  <aside class="notes">Invite them in. It works for any learner and any goal — not just backend. Offer to set someone up.</aside>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1280, height: 720,
+    margin: 0.055,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    controlsTutorial: false
+  });
+</script>
+
+<!--
+  PRESENTING THIS DECK
+  --------------------
+  • Open primer-pitch.html in any browser. Arrow keys / space to advance.
+  • Press  S  for speaker notes (per-slide delivery cues are embedded).
+  • Press  O  for the slide overview;  F  for fullscreen.
+  • Export to PDF:  open  primer-pitch.html?print-pdf  in Chrome,
+    then Print → Save as PDF (Background graphics ON, margins None).
+  • NOTE: reveal.js and the fonts load from a CDN, so the machine needs
+    internet the first time. To present fully offline, download reveal.js
+    4.6.1 locally and repoint the two <script>/<link> CDN URLs at the local
+    copies (and swap the Google Fonts <link> for local font files).
+-->
+</body>
+</html>
