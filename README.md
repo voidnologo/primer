@@ -12,7 +12,13 @@ It meets her exactly where she is, and grows right along with her. It pays atten
 
 Year by year, the Primer helps an ordinary kid grow into one of the most capable, quick-witted people in her world. The magic was never really the nanotech. It's that the Primer is a *relationship*, not a syllabus — patient, genuinely curious about its reader, and built around exactly one person.
 
-That's the north star, pointed at a smaller but stubbornly real problem: staying sharp in a field that reinvents itself every eighteen months. This won't spin you a fairy tale — but the part that *is* reproducible, it chases hard. A tutor that genuinely knows you: where you actually are, what you're reaching for, the way you like to be talked to. One that teaches when *you* tug on a thread, not when a curriculum decides it's time. And one whose lessons are yours to keep — they live in your own repo, they outlast the session, and the picture it holds of you gets a little truer, and a little more capable, every time you show up.
+That's the north star, and it is less of a stretch than it used to be. Anyone reading this has more of the world's knowledge within reach than any scholar in history. What almost nobody has is someone to **teach** them it: a tutor who knows what you already understand, notices when you're bluffing, and is still there next year. That was something you bought with money, or went without.
+
+Most of us were *schooled* for a while. Being *educated* is a longer project, and nobody hands you the tutor for it. primer was prompted by one narrow problem — staying current in a field that keeps moving — and it is driven by a much less narrow one: wanting to know how mountains get made, and what counterpoint actually is, and why the cat does that.
+
+So what it chases is the part that *is* reproducible. A tutor that knows where you are, what you're reaching for, and the way you like to be talked to. One that teaches when *you* tug on a thread, not when a curriculum decides it's time. One whose lessons are yours to keep: they live in your own repo, they outlast the session, and the picture it holds of you gets a little truer every time you show up.
+
+A book that will teach anyone anything, patiently, for as long as they stay curious, was fiction when Stephenson wrote it. It isn't fiction now.
 
 ## What this is
 
