@@ -6,7 +6,7 @@
 <title>Primer — a learning system that knows you</title>
 
 <!-- reveal.js core (CDN — needs internet at present time; see note at end of file) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -171,6 +171,39 @@
 .fragment.fade-in-then-dim.visible{ opacity:1; }
 .hr{ height:1px; background:var(--line); margin:.7em 0; border:0; }
 .quote-big{ font-family:'Newsreader',serif; font-size:1.35em; line-height:1.28; color:var(--paper); font-style:italic; }
+
+/* ---- Phone ------------------------------------------------------------
+   reveal scales a fixed-size slide to fit the viewport, so a 1280-wide slide on
+   a 390px screen renders at 0.29 and the 30px body lands at ~9px. Raising the
+   scale is the fix, not shrinking the type: the JS below gives phones a
+   700x1360 coordinate system (scale ~0.53). These rules stack the layouts a
+   700-unit slide can no longer hold side by side, and compress the type ramp —
+   it spans 2.5em to .46em, which is fine on a projector but collapses on a
+   phone, where nested ems compound a .46em pill down to about 4px. */
+@media (max-width: 800px) {
+  .grid2, .grid3 { grid-template-columns: 1fr; gap: .7em; }
+  .split { grid-template-columns: 1fr; gap: .6em; }
+  .pipe { flex-direction: column; align-items: stretch; }
+  .pipe .arrow { transform: rotate(90deg); align-self: center; margin: .1em 0; }
+  .sync .big { transform: rotate(90deg); display: block; margin: .1em auto; }
+  .brand { display: none; }
+
+  .reveal h1 { font-size: 2em; }
+  .reveal h2 { font-size: 1.45em; }
+  .small { font-size: .89em; }
+  .panel li { font-size: .89em; }
+  .kicker { font-size: .73em; letter-spacing: .16em; }
+  .sync { font-size: .76em; }
+  .pipe .stage .s-name { font-size: .9em; }
+  .pipe .stage .s-sub { font-size: .73em; }
+  .card .num { font-size: .85em; }
+  .quote-big { font-size: 1.1em; }
+  .term { font-size: .8em; }
+  .tag-pill { font-size: .85em; }
+  /* carries an inline font-size, which a class cannot outrank */
+  .card p.mono[style] { font-size: .8em !important; }
+  .chip { font-size: .95em; }
+}
 </style>
 </head>
 <body>
@@ -317,7 +350,7 @@
       </ul>
     </div>
   </div>
-  <p style="margin-top:.7em;font-size:.86em;">The split is what lets your data be <span class="gold-t">honest</span> about your what you know and what you care about without any of it touching a public repo. The engine <span class="dim">never goes digging through your own files.</span></p>
+  <p style="margin-top:.7em;font-size:.86em;">The split is what lets your data be <span class="gold-t">honest</span> about what you know and what you care about without any of it touching a public repo. The engine <span class="dim">never goes digging through your own files.</span></p>
   <div class="brand">PRIMER</div>
 </section>
 
@@ -470,16 +503,37 @@
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
 <script>
+  // A phone cannot read a 1280-wide slide scaled to 0.29, so give it a narrower
+  // coordinate system and let the scroll view turn swiping into scrolling.
+  // 1360 tall because the tallest slide runs to 1262 units once stacked.
+  var PHONE = 800;
+  function slideSize() {
+    return window.innerWidth <= PHONE
+      ? { width: 700, height: 1360 }
+      : { width: 1280, height: 720 };
+  }
+  var size = slideSize();
   Reveal.initialize({
-    width: 1280, height: 720,
+    width: size.width, height: size.height,
+    scrollActivationWidth: PHONE,
     margin: 0.055,
     hash: true,
     slideNumber: 'c/t',
     transition: 'fade',
     transitionSpeed: 'fast',
     controlsTutorial: false
+  });
+
+  // Re-apply on rotate/resize, but only when the breakpoint is actually crossed.
+  var wasPhone = window.innerWidth <= PHONE, t;
+  window.addEventListener('resize', function () {
+    clearTimeout(t);
+    t = setTimeout(function () {
+      var isPhone = window.innerWidth <= PHONE;
+      if (isPhone !== wasPhone) { wasPhone = isPhone; Reveal.configure(slideSize()); }
+    }, 180);
   });
 </script>
 
