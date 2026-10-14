@@ -52,6 +52,10 @@ h1{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,10vw,5.5rem);
 .btn-solid:hover{background:#efc074;text-decoration:none}
 .btn-ghost{color:var(--paper);border-color:var(--rule)}
 .btn-ghost:hover{border-color:var(--paper-dim);text-decoration:none}
+.btn-deck{color:var(--teal);border-color:color-mix(in srgb,var(--teal) 45%,transparent)}
+.btn-deck:hover{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 10%,transparent);
+  text-decoration:none}
+.cta-note{margin:.9rem 0 0;font-size:.84rem;color:var(--paper-dim)}
 
 /* ---------- terminal ---------- */
 .term{margin-top:clamp(2.5rem,6vw,3.5rem);background:var(--ink-2);
@@ -121,12 +125,14 @@ footer{padding-block:2.5rem 3.5rem;display:flex;flex-wrap:wrap;gap:1rem 2rem;
   <div class="wrap">
     <p class="eyebrow">A Claude Code skill</p>
     <h1>primer</h1>
-    <p class="lede">A tutor that knows <em>where you are</em> — and gets sharper every time you show up.</p>
-    <p class="sub">Most AI tutoring starts over every session. primer keeps a learner model in your own git repo: what you've actually demonstrated, what it merely assumed, and how far each of those has decayed. Lessons are calibrated against it.</p>
+    <p class="lede">A tutor that knows <em>where you are</em>, and gets sharper every time you show up.</p>
+    <p class="sub">Most AI tutoring starts over every session. primer keeps a learner model in your own git repo: what you have demonstrated, what it merely assumed, and how far each of those has decayed. Lessons are calibrated against that.</p>
     <div class="cta">
       <a class="btn btn-solid" href="#start">Get started</a>
-      <a class="btn btn-ghost" href="https://github.com/voidnologo/primer">View on GitHub</a>
+      <a class="btn btn-deck" href="pitch/primer-pitch.html">The 10-minute pitch &rarr;</a>
+      <a class="btn btn-ghost" href="https://github.com/voidnologo/primer">GitHub</a>
     </div>
+    <p class="cta-note">New here? The deck walks through why it exists and how it works.</p>
 
     <div class="term">
       <div class="term-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -155,8 +161,8 @@ its budget? Commit before I show you.</span>
   <div class="wrap">
     <h2>Named for the book you wish you'd had</h2>
     <div class="prose">
-      <p>In Neal Stephenson's <em>The Diamond Age</em>, the Young Lady's Illustrated Primer is a book that notices who's reading it and reshapes itself to fit. It meets its reader exactly where she is and grows alongside her — never pitched over her head, never beneath it.</p>
-      <p>That's the north star, aimed at a smaller and stubbornly real problem: <strong>staying sharp in a field that reinvents itself every eighteen months.</strong> No fairy tale. But the reproducible part — a tutor that genuinely knows your depth, teaches when you tug the thread rather than when a syllabus says so, and leaves you lessons you keep — that part it chases hard.</p>
+      <p>In Neal Stephenson's <em>The Diamond Age</em>, the Young Lady's Illustrated Primer is a book that notices who's reading it and reshapes itself to fit. It meets its reader where she is and grows alongside her, never pitched over her head or beneath it.</p>
+      <p>That's the north star, aimed at a smaller and stubbornly real problem: <strong>staying sharp in a field that reinvents itself every eighteen months.</strong> No fairy tale. But a tutor that knows your depth, teaches when you tug a thread rather than when a syllabus says so, and leaves you lessons you keep: that part is reproducible, and that is what it chases.</p>
     </div>
   </div>
 </section>
@@ -168,15 +174,15 @@ its budget? Commit before I show you.</span>
     <div class="grid">
       <div class="card">
         <h3>It knows what it knows</h3>
-        <p>Depth markers carry <strong>confidence and evidence</strong>. primer distinguishes what it has watched you do from what it inferred — and decays both over time. No certain-looking guesses about you.</p>
+        <p>Depth markers carry <strong>confidence and evidence</strong>. primer distinguishes what it has watched you do from what it inferred, and decays both over time. It will not hand you a certain-looking guess about yourself.</p>
       </div>
       <div class="card">
         <h3>You predict first</h3>
-        <p>Diagrams arrive with the causal step <strong>blanked</strong>. You commit to an answer before the reveal is reachable. Generating beats receiving, so the tool is built so you can't passively receive.</p>
+        <p>Diagrams arrive with the causal step <strong>blanked</strong>. You commit to an answer before the reveal is reachable. Generating an idea beats being handed one, so the page will not let you be handed one.</p>
       </div>
       <div class="card">
         <h3>Never quietly stale</h3>
-        <p>Every lesson runs a <strong>source-discovery pass</strong> and records its verdicts. The built-in canon is a vetted floor, never a ceiling — so knowledge doesn't freeze on the day someone wrote a list.</p>
+        <p>Every lesson runs a <strong>source-discovery pass</strong> and records its verdicts. The built-in canon is a vetted floor rather than a ceiling, so knowledge doesn't freeze on the day someone wrote a list.</p>
       </div>
       <div class="card">
         <h3>Private by architecture</h3>
@@ -189,7 +195,7 @@ its budget? Commit before I show you.</span>
 <section id="start">
   <div class="wrap">
     <h2>Get started</h2>
-    <div class="prose"><p>Two commands and an interview. The interview is the part that matters — it discovers your actual depth instead of assuming a curriculum.</p></div>
+    <div class="prose"><p>Two commands and an interview. The interview is where the work happens: it discovers your depth instead of assuming a curriculum.</p></div>
 
     <div class="steps">
       <div class="step">
@@ -226,7 +232,7 @@ cd primer &amp;&amp; ./tools/install.sh</pre>
     </div>
 
     <div class="note">
-      <div><strong>What you need.</strong> Claude Code, in a local session — the terminal CLI, or the Code tab of the desktop app. primer reads your local skills and writes to a private git repo you own, so cloud and Cowork sessions can't reach it. Nothing else is required: no server, no account, no third-party service.</div>
+      <div><strong>What you need.</strong> Claude Code in a local session: the terminal CLI, or the Code tab of the desktop app. primer reads your local skills and writes to a private git repo you own, so cloud and Cowork sessions can't reach it. Nothing else is required: no server, no account, no third-party service.</div>
     </div>
   </div>
 </section>
