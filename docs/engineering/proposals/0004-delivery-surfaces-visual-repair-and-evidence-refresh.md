@@ -6,9 +6,36 @@
 >
 > **Motivation.** Three maintainer requests: make the project fast and current; improve the graphics, which read as amateur and arrive slowly; and find out whether primer can serve users who want Claude Desktop rather than the CLI. Two further directives arrived during the review: push repeatable work out of model prose and into deterministic scripts, since the project is token-heavy; and pipeline work — prepare the next beat while the learner is reading the current one.
 >
+>
+> **Portability directive (maintainer, during review).** Privacy is a weaker objection than it first appeared: being in a Claude session already concedes that Anthropic can see the interaction under its privacy policy, so publishing a page does not change the threat model much. The binding constraints are instead **ease of use, low-friction high-quality interaction, and not having to rebuild when a vendor changes or drops a feature**. The project should stay as independent and vendor-agnostic as it can. Swapping the backend model (Qwen, OpenAI, Grok) is not a goal now, but it must remain possible, and no vendor's product decision should be able to sink the project. This reorders Wave D: the axis is coupling, not privacy.
+>
+>
+> **Register directive (maintainer, during review).** The semi-antagonistic Socratic grilling works for this maintainer and has drawn feedback that it does not suit everyone. Some learners want to be taught a topic and reinforced with questions afterwards, rather than being asked to derive it from first principles — and that is hardest to defend precisely where the topic is new and the learner has little foundation to build from. Intake should discover this and the profile should carry it. See **E3b**, which is where the evidence turns out to agree, though not for the reason preference would suggest.
+>
 > **Item IDs.** `V` = visual layer repair, `D` = delivery surfaces, `S` = scripts and determinism, `E` = evidence-driven pedagogy changes, `P` = pipelining. Each item names the goal it serves and the non-negotiable it could threaten, per the `GOALS.md` anti-drift checklist.
 >
 > **Sequencing note.** Wave V is defect repair and is independent of everything else. Wave D contains the decision with the widest consequences (whether lesson content may leave the machine) and should be decided before anything is built against it. Wave E is the largest body of new evidence and the slowest to adopt. Wave S and Wave P are cost reductions that make the rest affordable.
+
+---
+
+## The portability constraint, and where primer actually stands
+
+Before Wave D proposes anything, it is worth auditing what in primer is vendor-specific today. The answer is encouraging, and it is the reason Wave D has to be written carefully: **the engine is already close to vendor-agnostic, and the delivery options are the first thing that would change that.**
+
+| Component | Coupling |
+|---|---|
+| `SKILL.md`, `primer/*.md` | Prose instructions. Any instruction-following model can read them. The pedagogy — the part that took the most work — is the most portable part of the project. |
+| `tools/*.py` | Python 3.11+ **stdlib only**. No vendor surface at all. |
+| The private instance | Markdown in a git repo. No vendor surface. |
+| Skill discovery | `~/.claude/skills/`, `${CLAUDE_SKILL_DIR}`. Claude Code-specific, but it is a packaging convention — a path and a loader, replaceable in an afternoon. |
+| Subagent dispatch (the sweep, R2) | Harness-specific. **Wave S2 removes most of this** by moving fetch-and-extract into a script. |
+| Search and fetch | Harness tool names. Replaceable per host. |
+
+So the lock-in today is packaging and two tool names. That is a small surface, and D-0018's bookkeeping-as-code is why: every decision to put mechanics in stdlib Python instead of model prose was also, accidentally, a portability decision.
+
+**The convergence worth naming:** Wave S and the portability directive point the same way. Work moved out of "model follows prose using harness tools" and into "deterministic stdlib Python" gets cheaper in tokens *and* loses its vendor coupling. These are not two initiatives competing for effort; they are the same change scored on two axes.
+
+**The principle this proposal adopts:** separate **what is rendered** from **how it is delivered**. Today `primer_view.py render` does both — it writes the page and prints the `file://` link. If rendering emits a standard artifact (self-contained HTML, which it already does) and delivery is a thin adapter chosen by config, then a vendor channel is cheap to add and cheap to lose. Losing one costs an adapter, not the visual layer.
 
 ---
 
@@ -107,52 +134,58 @@ Two additions worth making: local and terminal sessions *also* load claude.ai-ac
 
 *Serves:* low-friction onboarding. *Threatens:* nothing.
 
-### D2 — The artifact channel, and the decision it forces
+### D2 — Delivery as a swappable adapter, not a channel choice
 
-**This is the decision with the widest consequences in the proposal, and it should be made deliberately rather than by default.**
+The original framing of this item was privacy versus convenience. The maintainer has relaxed the privacy objection, which changes the question to **coupling versus convenience** — and that is a question with a better answer than picking a side.
 
-Claude Code has a first-party `Artifact` tool that a skill can call. An artifact is a live web page published to a private claude.ai URL, updatable in place across a long lesson, with version history. It reaches the CLI and the Desktop Code tab (desktop ≥ 1.13576.0). It would replace the `file://` hand-off with a link that renders in a real browser and updates as the lesson advances rather than requiring a manual reload after each `--upto`.
+**What the artifact channel buys:** a real browser renderer, a stable URL that updates in place across a long lesson instead of a manual reload after each `--upto`, version history, and a return channel (D3). It reaches the CLI and the Desktop Code tab. For the maintainer's stated priority — low-friction, high-quality interaction — it is the strongest option available today.
 
-It also carries a return channel, which is what makes interactive figures possible at all (see D3).
+**What it costs in coupling, stated concretely:** the artifact runtime capabilities are versioned **`0.2.78`** (verified on this machine at `bundled-skills/2.1.300/.../artifact-capabilities/0.2.78/`). A pre-1.0 contract is a reasonable thing to use and an unreasonable thing to build a core loop on. The surface is entirely Anthropic-proprietary — the `Artifact` tool, `claude.use()`, the `db` and `room` capabilities, the `ArtifactData` tool — with no specification, no second implementation, and no external governance. Availability is also gated on plan tier and a `/login` session, so it is unavailable on API-key, Bedrock, Vertex and Foundry sessions regardless of what primer wants.
 
-**The cost is the privacy property.** D-0023 rejected artifacts as a default because publishing pushes calibrated personal material off the machine. That reasoning still applies — artifacts are private by default, which weakens but does not remove it. Lesson content would live in claude.ai storage, which cuts against the README's "it lives only in your private repo" and against the Privacy non-negotiable as currently written.
+**The resolution:** make delivery an adapter. `primer_view.py` already emits a self-contained HTML page with zero external requests, which is the most portable artifact the project could produce. Add `--deliver local|artifact|serve`, defaulting to `local`, selected per instance by a config key in the learner's own data repo. The renderer never learns which channel it is feeding.
 
-Further constraints: Pro/Max/Team/Enterprise with a `/login` session (unavailable on API key, Bedrock, Vertex, Foundry); 16 MiB rendered; CSP admits scripts only from a short CDN allowlist and stylesheets only from Google Fonts; and a styled page costs more output tokens than terminal text.
+Then the artifact path is a convenience that costs one adapter to add and one adapter to lose. If Anthropic changes the capability contract — which a `0.2.x` version says is likely — primer loses a delivery option and keeps its visual layer, its pedagogy and its data.
 
-**Recommended shape:** opt-in per instance, never the default, with the local file as the path that always works. A config key in the data repo (`VIEW_CHANNEL=local|artifact`) keeps the choice with the learner's own data rather than in the public core. The Self-contained non-negotiable is satisfied as long as the local path remains complete, which it does.
+**Rule to hold:** the `local` path stays complete and tested. Any lesson that can be taught through the artifact channel can be taught without it. That is `GOALS.md`'s Self-contained non-negotiable, and it is also the portability directive, arriving at the same place from a different argument.
 
-*Serves:* the graphics and inline-rendering requests. *Threatens:* **Privacy** directly, and **Self-contained** if it ever becomes the only path. Requires an explicit decision entry, not a quiet default.
+*Serves:* ease of use and low-friction interaction, without conceding independence. *Threatens:* Self-contained, only if the `local` path is ever allowed to rot.
 
-### D3 — A return channel for interactive figures
+### D3 — The return channel, ranked by coupling rather than convenience
 
-The maintainer asked how an interactive figure could emit feedback into the running session. Four mechanisms work today, and the first two families are **mutually exclusive**, because artifact CSP permits `fetch` only to the page's own origin — an artifact page cannot call a localhost server.
+Four mechanisms work today. Under the portability directive the ranking inverts from what convenience alone would suggest.
 
-| Mechanism | Works today | Cost | Persists |
+| Mechanism | Standard? | Reaches | Cost of a vendor change |
 |---|---|---|---|
-| Artifact `db` + the `ArtifactData` tool | Yes | declare the capability, write the page against the namespace | Yes, across sessions |
-| Artifact comments, "Send to Claude" | Yes | zero page code | Thread only |
-| Artifact `room` | Yes; the publishing session joins as an `agent` peer | small | **No** — nothing persists, messages can drop |
-| Local page + a localhost server the skill starts | Yes | port handling, process lifecycle, tab must stay open | Yes, on disk |
+| **Local page + a localhost server the skill starts** | Pure web standards, no vendor surface | Any browser, any host that can run a shell command | None |
+| **Local MCP server** | **Open standard under the Linux Foundation** (below) | Claude Desktop Chat, Cowork, Claude Code, and any MCP-capable client | Low — the protocol outlives any one client |
+| Artifact `db` + `ArtifactData` | Proprietary, contract `0.2.78` | CLI, Desktop Code tab, plan-gated | Rebuild the loop |
+| Artifact `room` | Proprietary; also ephemeral — nothing persists, messages can drop | same | Rebuild the loop |
 
-`db` is the one to build on if D2 is adopted: durable, readable from the session, survives republishes. `room` complements it for live co-presence and is not a substitute. If D2 is declined, the localhost server is the equivalent — and note D-0023 rejected a local server as *"a service dependency for a core capability."* That rejection still holds for the core loop; it does not bind an optional enhancement, which `GOALS.md` explicitly permits ("Integrations … are optional conveniences, never load-bearing").
+**MCP's governance changed in a way that matters here.** Anthropic donated MCP to the **Agentic AI Foundation**, a directed fund under the Linux Foundation, on 2025-12-09. AAIF was co-founded by Anthropic, Block and OpenAI, with Google, Microsoft, AWS, Cloudflare and Bloomberg supporting; the Linux Foundation states it will not dictate MCP's technical direction, and maintainers operate independently. OpenAI adopted MCP in its Agents SDK in March 2025 and later in ChatGPT apps; Google confirmed support in the Gemini SDK; Microsoft embedded it in Azure AI, VS Code and Copilot Studio.
 
-**MCP Apps (SEP-1865)** is architecturally the closest fit — predeclared HTML in a sandboxed iframe, interaction returning over JSON-RPC through normal tool consent, `ui/update-model-context` to push learner state. **Do not build on it yet.** `modelcontextprotocol/ext-apps` issue #671 is open as of 2026-10-14 with reports from Claude Desktop on two platforms and Claude Code for Web of the UI resource fetching and no iframe appearing; the only known workaround is an undocumented domain requirement described by a third party; and `code.claude.com/docs/en/mcp` does not mention MCP Apps. Re-check later.
+That makes MCP the one delivery mechanism in this proposal that is **not** a bet on a single vendor. A local MCP server runs on the learner's machine with full filesystem and git access, speaks a governed protocol, and would keep working against a different model or client.
 
-*Serves:* the interactivity request. *Threatens:* Privacy (via D2) or Self-contained (via a server), depending on which branch is taken.
+**Recommendation:** build the return channel on the localhost server first — it is the smallest delta from what `primer_view.py` already does, costs nothing in coupling, and is the reference the other adapters are measured against. Treat a local MCP server as the considered second step, and the one to reach for if "primer in the Desktop Chat tab" ever becomes a real goal (D5). Treat artifact `db` as an adapter behind D2's boundary, never as the place the learner's answers live.
 
-### D4 — Mods, as an additive option
+**MCP Apps (SEP-1865)** remains the right-shaped answer for rendering and is still not ready: `ext-apps` issue #671 is open as of 2026-10-14 with reports from Claude Desktop on two platforms and Claude Code for Web of the UI resource fetching and no iframe appearing, and `code.claude.com/docs/en/mcp` does not mention MCP Apps. Worth re-checking, because when it works it is the portable version of everything D2 and D3 are reaching for.
 
-A Claude Code plugin can carry a *mod*: a `Pane` rendered beside the transcript with `Button` / `Select` / `Input` elements whose events feed straight back into the turn via `$.prompt.submit`, with no HTTP anywhere. Here the interaction surface and the agent are the same process, and it needs no account plan, no network and no published page.
+*Serves:* the interactivity request, at the lowest coupling available. *Threatens:* Self-contained, if a server ever becomes required rather than optional — which `GOALS.md` permits as an optional convenience and forbids as a requirement.
 
-Its ceiling is the element set: `Svg` renders on Desktop, `Raster` and `Image` in the terminal, never both, and there is no arbitrary HTML/CSS. So it suits lesson state, progress, and a committed-prediction control — not the explorable.
+### D4 — Mods: useful, and the most coupled thing in this proposal
 
-Packaging primer as a plugin would also give one install covering `skills/`, `hooks/`, `monitors/` and, if ever wanted, an MCP bundle.
+A Claude Code plugin can carry a *mod* — a `Pane` beside the transcript with controls feeding straight into the turn via `$.prompt.submit`, no HTTP anywhere. Here the interaction surface and the agent are the same process, and it needs no account plan, no network and no published page.
 
-*Serves:* the Desktop request without touching Privacy. *Threatens:* nothing. Additive to D2/D3, not a replacement.
+It is also Claude Code-specific in a way nothing else here is: the hooks module, the element set, the event names and the state store have no analogue elsewhere, and a mod cannot be ported — only rewritten.
 
-### D5 — What is not worth doing
+**Recommendation under the portability directive: defer.** The in-terminal experience it buys is real, but it is the highest coupling per unit of benefit in the proposal, and D2's adapter boundary does not help because a mod is not a delivery channel for a rendered page — it is a separate UI. Revisit if and when the terminal experience becomes the priority, and build it knowing it is disposable.
 
-Porting primer to the Chat tab or claude.ai. That container has no network and no access to the user's filesystem, so the git-backed private instance cannot exist there; state would have to live in artifact Storage (20 MB text, no binaries). It would be a different product sharing a name, not a port. A local MCP server is the only route that reaches Chat and Cowork at all, and it would carry the state while leaving the pedagogy — which lives in `SKILL.md`'s prose — behind.
+### D5 — Chat-tab support, reframed
+
+Previously filed under "not worth doing" on the grounds that the container has no network and no filesystem, so the git-backed instance cannot exist there. That is still true for a skill upload.
+
+The portability directive changes the calculus slightly, because the route that *does* reach Chat and Cowork is a local MCP server — which is also the most portable option in D3. So Chat-tab support is no longer a separate project competing with everything else; it is a possible consequence of a decision taken for independence reasons. Still not a goal, but worth knowing that the portable choice and the wider-reach choice are the same choice.
+
+The honest limit remains: primer's pedagogy lives in `SKILL.md`'s prose, and prose does not travel through MCP tool definitions the way it travels through a skill body. A Chat-tab primer would hold the same state and teach differently. That gap is the real reason to defer, not the filesystem.
 
 ---
 
@@ -251,6 +284,27 @@ This converges with deployment data. In the Khanmigo two-year RCT (18 schools, 6
 
 *Serves:* productive struggle, with better evidence than the current formulation. *Threatens:* nothing — it strengthens the non-negotiable rather than relaxing it. The existing `just show me` escape hatch is the right instinct and should be measured, not only counted.
 
+### E3b — Register and assistance level are two dials, and only one of them is a non-negotiable
+
+The maintainer's observation is correct, and the evidence supports it more strongly than preference alone would. But the reason matters, because the obvious implementation of "ask learners how they like to learn" walks into two findings that say it backfires.
+
+**Where the evidence agrees with the directive.** Grilling a learner who has no foundation is the exact case the expertise-reversal meta-analysis prices: low prior knowledge paired with **high**-assistance instruction is **d = 0.505**. The cost is incurred by withholding assistance from a novice, not by giving it. Hou et al. add that a question-only Socratic tutor leaked the full answer **1 session in 6** against 1 in 16 for a contingent system, *and* produced more frustration — so pure Socratic loses on both the pedagogy axis and the experience axis. And the productive-failure boundary work (Pyke et al.) converges: tune difficulty to **element interactivity and learner expertise**, with lower difficulty on high-element-interactivity material to prevent overload. A genuinely new topic with many interacting parts, taught to a low-prior-knowledge learner, is where both competing frameworks agree struggle gating goes wrong.
+
+**Where asking the learner goes wrong.** Two findings caution against treating this as a preference setting. Learner preference anticorrelates with learning — in the Kreijkes RCT students preferred the condition that cost them ~0.4 SD, and a Socratic chatbot was rated *less* helpful than one that answered directly. And learning styles (visual/auditory/kinesthetic) remain unsupported; a profile field shaped like a learning style would encode a myth into the learner model.
+
+**The resolution: separate the dials.**
+
+- **Register** — tone, directness, how much pushback, how much warmth. This is affective, it governs whether the learner trusts and returns, and primer already calibrates it at intake. Preference is the right input here. Extend what intake asks.
+- **Assistance level** — worked example → completion problem → open problem. This is *not* a preference setting. It should be driven by the depth marker and by the topic's element interactivity, and it should fade contingently (E3) rather than being fixed at intake. Under low confidence, default toward **more** assistance: the asymmetry favors it, 0.505 gained for a novice against 0.428 lost for an expert.
+
+**The wording change this forces.** `GOALS.md` currently reads "**Senior-peer register, no sycophancy.** Hold correct positions under pushback. No motivational fluff." That bundles two things of different kinds. *Holding a correct position under pushback* is a genuine non-negotiable and should never flex — it is what keeps the tutor honest, and the sycophancy eval (E8) tests exactly it. *Semi-antagonistic grilling* is a stylistic default, it is the thing the feedback is about, and it should be a per-learner setting with a per-topic override. Splitting the sentence makes the first unconditional and the second adjustable, which is what the maintainer is asking for without weakening the part that matters.
+
+**Intake changes.** Add to the cold-start interview: how the learner wants a genuinely unfamiliar topic opened (taught first then tested, versus derived); their tolerance for being wrong in front of the tutor; and how much directness they want when they are wrong. Record these as register fields, separate from the depth markers. Then let the lesson protocol choose the opening move from *prior knowledge in this domain*, not from the register field — the register field decides how it sounds, the depth marker decides how much help it carries.
+
+**A guard worth adding.** For a cold domain — no depth marker, or a low one with low confidence — the default opening should be a worked example with the reasoning shown, followed by a completion problem, followed by retrieval later. That is the fading sequence the worked-example literature supports, and it is what the maintainer describes. The predict-before-explain beat still runs, but it predicts the *next step of a shown example* rather than an unseen mechanism, which keeps the generation effect without asking for derivation from a foundation the learner does not have.
+
+*Serves:* Goal 1 (personal, calibrated), Goal 3 (low-friction onboarding for a stranger), and the maintainer's directive. *Threatens:* **Productive struggle over fluent answers** and **Senior-peer register** as those are currently *worded* — and the item's argument is that the wording conflates a non-negotiable with a default. This needs a DECISIONS entry, not a quiet edit.
+
 ### E4 — Never present a review item without immediate corrective feedback
 
 Gonçalves et al. (2025, 44 studies, 142 comparisons): retrieval practice over elaborative encoding is **g = 0.14** overall — but **g = 0.50 with feedback, and without feedback elaborative encoding wins**. Separately, Murray et al. (2025) find spacing robust in mathematics (**g = 0.28**) while testing-vs-restudy has a **CI crossing zero** in that domain.
@@ -339,8 +393,10 @@ Primer's profile-driven calibration is the mechanism that critique targets. A ch
 
 ## What this proposal does not recommend
 
-- Porting to the Chat tab or claude.ai (D5).
+- Porting to the Chat tab or claude.ai as a goal in its own right (D5) — though the portable choice and the wider-reach choice turn out to be the same choice.
+- Building a mod now (D4). Highest coupling per unit of benefit, and not portable — only rewritable.
 - Building on MCP Apps (D3) until a rendering MCP App is reproduced locally.
+- Putting learner answers in artifact `db` as their home. Behind D2's adapter it is a convenience; as the place the data lives it is a rebuild waiting on a `0.2.x` contract bump.
 - Per-user FSRS parameter optimization (E12).
 - Raster image generation. Proposal 0003's reasoning stands: a spec is inspectable, diffable and regenerable; a PNG is none of those.
 - Adopting learner satisfaction as a quality signal. Three independent results have preference anticorrelating with learning; primer should expect its correct behaviors to be rated worse.
@@ -351,6 +407,14 @@ Primer's profile-driven calibration is the mechanism that critique targets. A ch
 2. **V1 + V2** — the styling request, and the cheapest visible win.
 3. **D1** — a README correction that unblocks the desktop users who prompted this review.
 4. **S1 + S3** — cost reductions that make the rest affordable.
-5. **D2** — decide the privacy question before building against either branch.
-6. **E1 + E2** — the measurements that make every other claim checkable.
-7. Everything else, by appetite.
+5. **D2's adapter boundary** — split rendering from delivery before adding any channel. This is the change that makes every later channel decision reversible, and it is small.
+6. **D3 on the localhost server** — the return channel at zero coupling, and the reference the other adapters are measured against.
+7. **E3b** — split the register dial from the assistance dial, and fix the `GOALS.md` wording. Cheap, and it is the item with a reported learner complaint behind it rather than an inference.
+8. **E1 + E2** — the measurements that make every other claim checkable.
+9. Everything else, by appetite. The artifact adapter is cheap once step 5 exists, and should be added as a convenience rather than as a commitment.
+
+## A note on what this proposal is betting
+
+Two of the maintainer's constraints pull against each other: low-friction high-quality interaction argues for the artifact channel, and independence argues against it. The adapter boundary is the bet that this tension is an architectural problem rather than a choice — that the project can take the convenience without taking the dependency, provided the local path stays complete and the vendor path stays thin.
+
+That bet fails in one specific way worth naming: if the artifact channel becomes good enough that lessons are authored assuming it, the local path will rot through disuse rather than through a decision, and the dependency arrives anyway. The guard is a test, not an intention — the suite should render and validate every lesson through the `local` adapter, so a lesson that only works on the vendor path fails CI.
