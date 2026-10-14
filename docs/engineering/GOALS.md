@@ -6,6 +6,8 @@
 
 A personal, Primer-style learning system (after the Young Lady's Illustrated Primer in Neal Stephenson's *The Diamond Age*): an adaptive tutor that runs interactive lessons calibrated to a persistent, evidence-backed learner profile, and captures each session as a durable artifact.
 
+**Scope, stated so it stops being re-litigated:** primer is general-purpose. It was prompted by one maintainer's need to stay current in a fast-moving technical field, and that origin is honest, but it is not the boundary. The target is a learner who wants to be *educated* rather than *schooled* — any subject, over years, driven by curiosity rather than by a syllabus or a resume gap. Geology, orbital mechanics, a language, game design, distributed systems. A change that only makes sense for a software-engineering learner is out of scope unless it generalizes.
+
 **Architecture is class/instance:**
 - **Public core ("the class")** — this repo. The engine: skill, protocols, templates, examples. Sharable, community-improvable. Holds **zero** personal data.
 - **Private instance** — each user's own private data repo: profile, depth markers, calibration log, lessons. Synced across their machines via git. Spawned from the core by `init`.
