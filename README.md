@@ -2,7 +2,7 @@
 
 A personal, Primer-style learning system — an adaptive tutor for *any* subject, that runs interactive lessons calibrated to *you* and gets sharper the more you use it.
 
-> **New here?** Start at **[voidnologo.com/primer](https://voidnologo.com/primer/)** — what it is, what makes it different, and how to get set up. From there, [launch the 10-minute pitch deck](https://voidnologo.com/primer/pitch/primer-pitch.html) — it walks through the motivation, what it is, and how it works. Add [`?print-pdf`](https://voidnologo.com/primer/pitch/primer-pitch.html?print-pdf) to export a PDF. Source lives at `docs/pitch/primer-pitch.html`.
+> **New here?** Start at **[voidnologo.com/primer](https://voidnologo.com/primer/)** — what it is, what makes it different, and how to get set up. From there, [launch the pitch deck](https://voidnologo.com/primer/pitch/primer-pitch.html) — it walks through the motivation, what it is, and how it works. Add [`?print-pdf`](https://voidnologo.com/primer/pitch/primer-pitch.html?print-pdf) to export a PDF. Source lives at `docs/pitch/primer-pitch.html`.
 
 ## What's a "Primer"?
 
@@ -86,8 +86,8 @@ conversation, never from reading the code.
 
 - `/primer init` — first-time setup: intake interview, builds your profile
 - `/primer <topic>` — start an interactive lesson
-- `/primer next` — suggest 2–3 best-next lessons
-- `/primer recalibrate` — deep profile review (the minor one runs automatically every 5 lessons)
+- `/primer next` — suggest what to learn next
+- `/primer recalibrate` — deep profile review (a lighter one runs automatically when the evidence warrants it)
 - `/primer review` — interleaved spaced-retrieval warm-up from prior lessons
 - `/primer resume` — pick up an in-progress lesson
 - `/primer view [lesson]` — open a lesson's visual page (figures, faded reveals, explorables)
