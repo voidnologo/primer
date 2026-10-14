@@ -56,6 +56,20 @@ h1{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,10vw,5.5rem);
 .btn-deck:hover{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 10%,transparent);
   text-decoration:none}
 .cta-note{margin:.9rem 0 0;font-size:.84rem;color:var(--paper-dim)}
+.sub-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);margin:2.25rem 0 .9rem;font-weight:500}
+.paste{display:flex;align-items:stretch;margin-top:1.1rem;border:1px solid var(--rule);
+  border-radius:4px;background:var(--ink-2);overflow:hidden}
+.paste pre{margin:0;padding:.95rem 1.1rem;flex:1 1 auto;min-width:0;
+  font-family:var(--mono);font-size:.82rem;line-height:1.7;color:var(--paper);
+  white-space:pre-wrap;word-break:break-word}
+#copy-btn{flex:0 0 auto;border:0;border-left:1px solid var(--rule);background:transparent;
+  color:var(--gold);font-family:var(--sans);font-size:.8rem;font-weight:600;
+  padding:0 1.1rem;cursor:pointer;white-space:nowrap}
+#copy-btn:hover{background:var(--ink-3)}
+#copy-btn:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
+@media (max-width:34rem){.paste{flex-direction:column}
+  #copy-btn{border-left:0;border-top:1px solid var(--rule);padding:.7rem 0}}
 .topics{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
 .topics code{font-family:var(--mono);font-size:.8rem;color:var(--paper-dim);
   background:var(--ink-2);border:1px solid var(--rule);border-radius:3px;
@@ -219,26 +233,46 @@ How much time is missing at it? Commit before I show you.</span>
 <section id="start">
   <div class="wrap">
     <h2>Get started</h2>
-    <div class="prose"><p>Install it, then let the interview do the work. It discovers your depth instead of assuming a curriculum.</p></div>
 
+    <div class="note">
+      <div><strong>What you need first.</strong> <strong>Claude Code, in a local session</strong> &mdash; the terminal CLI, or the <strong>Code tab</strong> of the desktop app with its environment set to <strong>Local</strong>. Cloud, Cowork and the Chat tab can&rsquo;t reach your own machine, so primer won&rsquo;t run there. That part is technical. What you point it at is not.</div>
+    </div>
+
+    <h3 class="sub-head">The easy way</h3>
+    <div class="prose"><p>Paste this into a Claude Code session. It will check what you already have, install the rest, and walk you through the parts that need you. You don&rsquo;t need git, a GitHub account, or any of this explained first.</p></div>
+
+    <div class="paste">
+      <pre id="paste-prompt">Read https://voidnologo.com/primer/agent-setup.md and follow it to set up primer on this machine. Walk me through anything you need from me.</pre>
+      <button id="copy-btn" type="button">Copy</button>
+    </div>
+    <p class="cta-note">That points it at <a href="agent-setup.md">agent-setup.md</a>, a plain-language runbook you can read yourself first.</p>
+
+    <h3 class="sub-head">Or do it yourself</h3>
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
         <div class="step-body">
           <p>Clone the engine and install it as a skill.</p>
-<pre class="cmd">git clone https://github.com/voidnologo/primer
-cd primer &amp;&amp; ./tools/install.sh</pre>
+<pre class="cmd">git clone https://github.com/voidnologo/primer ~/primer
+cd ~/primer &amp;&amp; ./tools/install.sh</pre>
         </div>
       </div>
       <div class="step">
         <div class="num">2</div>
         <div class="step-body">
-          <p>In any Claude Code session, run the one-time setup. It scaffolds your private data repo, then runs the cold-start interview.</p>
-<pre class="cmd">/primer init</pre>
+          <p>Create your private learning folder. Everything primer learns about you lives here and nowhere else.</p>
+<pre class="cmd">~/primer/tools/init-instance.sh</pre>
         </div>
       </div>
       <div class="step">
         <div class="num">3</div>
+        <div class="step-body">
+          <p>Restart Claude Code so it picks up the new skill, then run the intake interview.</p>
+<pre class="cmd">/primer init</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
         <div class="step-body">
           <p>Learn something.</p>
 <pre class="cmd">/primer plate tectonics</pre>
@@ -249,14 +283,10 @@ cd primer &amp;&amp; ./tools/install.sh</pre>
     <div class="verbs">
       <div class="verb"><code>/primer next</code><span>what to learn next</span></div>
       <div class="verb"><code>/primer review</code><span>spaced-retrieval warm-up</span></div>
-      <div class="verb"><code>/primer view</code><span>open a lesson's figures</span></div>
+      <div class="verb"><code>/primer view</code><span>open a lesson&rsquo;s figures</span></div>
       <div class="verb"><code>/primer index</code><span>your topic map, with status</span></div>
       <div class="verb"><code>/primer recalibrate</code><span>deep profile review</span></div>
       <div class="verb"><code>/primer update</code><span>engine + instance, one step</span></div>
-    </div>
-
-    <div class="note">
-      <div><strong>What you need.</strong> Claude Code in a local session: the terminal CLI, or the Code tab of the desktop app. That part is technical. What you point it at is not — primer reads your local skills and writes to a private git repo you own, so cloud and Cowork sessions can't reach it. Nothing else is required: no server, no account, no third-party service.</div>
     </div>
   </div>
 </section>
@@ -269,6 +299,28 @@ cd primer &amp;&amp; ./tools/install.sh</pre>
     <a href="https://github.com/voidnologo/primer/blob/main/docs/engineering/GOALS.md">Design principles</a>
   </div>
 </footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('copy-btn');
+  var pre = document.getElementById('paste-prompt');
+  if (!btn || !pre) return;
+  function flash(msg, ms){ btn.textContent = msg; setTimeout(function(){ btn.textContent = 'Copy'; }, ms); }
+  function selectIt(){
+    try {
+      var r = document.createRange(); r.selectNodeContents(pre);
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      flash('Press Ctrl/Cmd+C', 2800);
+    } catch (e) { flash('Select and copy', 2800); }
+  }
+  btn.addEventListener('click', function(){
+    var text = pre.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ flash('Copied', 1800); }, selectIt);
+    } else { selectIt(); }
+  });
+})();
+</script>
 
 </body>
 </html>

@@ -37,24 +37,36 @@ This is why your data can be rich (real stack, real goals) without ever leaking:
 
 ## Install & first run
 
+**You need Claude Code, in a local session** — the terminal CLI, or the **Code tab** of the desktop app with its environment set to **Local**. Cloud, Cowork and the Chat tab can't reach your own machine, so primer won't run there.
+
+### The easy way
+
+Paste this into a Claude Code session and it will do the rest — checking what you already have, installing what you don't, and walking you through the parts that need you. No git knowledge required, and no GitHub account unless you want a backup.
+
+```
+Read https://voidnologo.com/primer/agent-setup.md and follow it to set up primer
+on this machine. Walk me through anything you need from me.
+```
+
+That points it at [`agent-setup.md`](https://voidnologo.com/primer/agent-setup.md) ([source](docs/agent-setup.md)) — a plain-language runbook you're welcome to read yourself first.
+
+### Or do it yourself
+
 ```bash
-git clone <this repo>
-cd primer
-./tools/install.sh          # symlinks the repo as the `primer` skill
+git clone https://github.com/voidnologo/primer ~/primer
+cd ~/primer && ./tools/install.sh      # symlinks the repo as the `primer` skill
+~/primer/tools/init-instance.sh        # scaffolds your private data repo
 ```
 
-Then, in any Claude Code session:
+**Restart Claude Code** so it picks up the new skill, then:
 
 ```
-/primer init                # one-time: scaffold your private data repo + intake interview
-```
-
-`init` walks you through `tools/init-instance.sh` (scaffolds your data repo locally and prints the `git`/`gh` commands to push it private), then runs the cold-start interview to build your first profile. After that:
-
-```
-/primer <topic>             # run a lesson
+/primer init                # one-time: intake interview, builds your profile
+/primer plate tectonics     # run a lesson on anything you like
 /primer index               # show your topic map
 ```
+
+`init-instance.sh` scaffolds your data repo locally and prints the `git`/`gh` commands to push it somewhere private. **Those are optional** — primer works fine with a local-only folder on one machine. A private remote is for backup and for syncing to a second computer.
 
 ### Second machine
 
