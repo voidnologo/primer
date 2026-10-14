@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>primer — a tutor that knows where you are</title>
-<meta name="description" content="A personal, adaptive tutor that runs calibrated lessons against a learner model it keeps getting righter. A Claude Code skill. Your data stays yours.">
+<meta name="description" content="A personal, adaptive tutor for any subject — geology, astronomy, a language, game design, software. Calibrated lessons against a learner model it keeps getting righter. A Claude Code skill. Your data stays yours.">
 <meta property="og:title" content="primer">
 <meta property="og:description" content="A personal, adaptive tutor that runs calibrated lessons against a learner model it keeps getting righter.">
 <meta property="og:type" content="website">
@@ -56,6 +56,10 @@ h1{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,10vw,5.5rem);
 .btn-deck:hover{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 10%,transparent);
   text-decoration:none}
 .cta-note{margin:.9rem 0 0;font-size:.84rem;color:var(--paper-dim)}
+.topics{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+.topics code{font-family:var(--mono);font-size:.8rem;color:var(--paper-dim);
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:3px;
+  padding:.35rem .7rem;white-space:nowrap}
 
 /* ---------- terminal ---------- */
 .term{margin-top:clamp(2.5rem,6vw,3.5rem);background:var(--ink-2);
@@ -126,7 +130,7 @@ footer{padding-block:2.5rem 3.5rem;display:flex;flex-wrap:wrap;gap:1rem 2rem;
     <p class="eyebrow">A Claude Code skill</p>
     <h1>primer</h1>
     <p class="lede">A tutor that knows <em>where you are</em>, and gets sharper every time you show up.</p>
-    <p class="sub">Most AI tutoring starts over every session. primer keeps a learner model in your own git repo: what you have demonstrated, what it merely assumed, and how far each of those has decayed. Lessons are calibrated against that.</p>
+    <p class="sub">Point it at anything you want to understand. Most AI tutoring starts over every session; primer keeps a learner model in your own git repo — what you have demonstrated, what it merely assumed, and how far each has decayed — and calibrates every lesson against it.</p>
     <div class="cta">
       <a class="btn btn-solid" href="#start">Get started</a>
       <a class="btn btn-deck" href="pitch/primer-pitch.html">The 10-minute pitch &rarr;</a>
@@ -136,26 +140,44 @@ footer{padding-block:2.5rem 3.5rem;display:flex;flex-wrap:wrap;gap:1rem 2rem;
 
     <div class="term">
       <div class="term-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="term-title">~ /primer tail-latency</span></div>
+        <span class="term-title">~ /primer unconformities</span></div>
 <pre><span class="c-dim"># Elicit — before anything new</span>
 
-Three weeks ago you called p99 "p50 plus noise." Still
-your answer?
+Last week you said an unconformity was "a gap in the rock."
+Want to sharpen that?
 
-<span class="c-green">&gt; no — it's usually a different mechanism entirely</span>
+<span class="c-green">&gt; it's a missing layer, right? something eroded away</span>
 
-Right. Here is one of them, with the window blanked.
+Close. Here is the contact, with the gap blanked.
 
-<span class="c-dim">   request │</span><span class="c-teal">██████████████</span><span class="c-dim">                          │ p50 path
-  GC pause │</span><span class="c-gold">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span><span class="c-dim">│ </span><span class="c-gold">?</span><span class="c-dim">
-           └0                                    120 ms</span>
+<span class="c-dim">   rock record │</span><span class="c-teal">██████████████</span><span class="c-dim">               </span><span class="c-teal">███████████</span><span class="c-dim">│ sandstone, shale
+  missing time │</span><span class="c-gold">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span><span class="c-dim">│ </span><span class="c-gold">?</span><span class="c-dim">
+               └0                                    120 Myr</span>
 
-<span class="c-teal">Where does the pause have to sit for the request to miss
-its budget? Commit before I show you.</span>
+<span class="c-teal">The contact is one surface you could put a finger on.
+How much time is missing at it? Commit before I show you.</span>
 </pre>
     </div>
   </div>
 </header>
+
+<section>
+  <div class="wrap">
+    <h2>Point it at anything</h2>
+    <div class="prose"><p>The intake interview discovers what you already know and decomposes the goal you actually have. There is no built-in curriculum to fit into, so the subject is yours to choose.</p></div>
+    <div class="topics">
+      <code>/primer plate tectonics</code>
+      <code>/primer how cats regulate body heat</code>
+      <code>/primer orbital resonance</code>
+      <code>/primer combat math for my RPG</code>
+      <code>/primer Italian subjunctive</code>
+      <code>/primer consistent hashing</code>
+      <code>/primer wine fermentation</code>
+      <code>/primer counterpoint</code>
+    </div>
+    <div class="prose" style="margin-top:1.4rem"><p>The figure above is from a geology lesson. The same six diagram forms draw a protocol handshake, a stellar lifecycle, or an initiative order — because they describe shapes of ideas, not a field.</p></div>
+  </div>
+</section>
 
 <section>
   <div class="wrap">
@@ -186,7 +208,7 @@ its budget? Commit before I show you.</span>
       </div>
       <div class="card">
         <h3>Private by architecture</h3>
-        <p>Your profile <em>and</em> your lessons live only in <strong>your own private repo</strong>. The public engine holds zero personal data, and the skill never reads your work codebase.</p>
+        <p>Your profile <em>and</em> your lessons live only in <strong>your own private repo</strong>. The public engine holds zero personal data, and the skill never goes digging through your own files.</p>
       </div>
     </div>
   </div>
@@ -217,7 +239,7 @@ cd primer &amp;&amp; ./tools/install.sh</pre>
         <div class="num">3</div>
         <div class="step-body">
           <p>Learn something.</p>
-<pre class="cmd">/primer consistent hashing</pre>
+<pre class="cmd">/primer plate tectonics</pre>
         </div>
       </div>
     </div>
@@ -232,7 +254,7 @@ cd primer &amp;&amp; ./tools/install.sh</pre>
     </div>
 
     <div class="note">
-      <div><strong>What you need.</strong> Claude Code in a local session: the terminal CLI, or the Code tab of the desktop app. primer reads your local skills and writes to a private git repo you own, so cloud and Cowork sessions can't reach it. Nothing else is required: no server, no account, no third-party service.</div>
+      <div><strong>What you need.</strong> Claude Code in a local session: the terminal CLI, or the Code tab of the desktop app. That part is technical. What you point it at is not — primer reads your local skills and writes to a private git repo you own, so cloud and Cowork sessions can't reach it. Nothing else is required: no server, no account, no third-party service.</div>
     </div>
   </div>
 </section>

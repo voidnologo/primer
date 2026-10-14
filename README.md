@@ -1,6 +1,6 @@
 # primer
 
-A personal, Primer-style learning system — an adaptive tutor that runs interactive lessons calibrated to *you* and gets sharper the more you use it.
+A personal, Primer-style learning system — an adaptive tutor for *any* subject, that runs interactive lessons calibrated to *you* and gets sharper the more you use it.
 
 > **New here?** Start at **[voidnologo.com/primer](https://voidnologo.com/primer/)** — what it is, what makes it different, and how to get set up. From there, [launch the 10-minute pitch deck](https://voidnologo.com/primer/pitch/primer-pitch.html) — it walks through the motivation, what it is, and how it works. Add [`?print-pdf`](https://voidnologo.com/primer/pitch/primer-pitch.html?print-pdf) to export a PDF. Source lives at `docs/pitch/primer-pitch.html`.
 
@@ -16,7 +16,9 @@ That's the north star, pointed at a smaller but stubbornly real problem: staying
 
 ## What this is
 
-Implemented as a Claude Code skill, primer runs narrative, calibrated lessons against a persistent, evidence-backed learner profile and captures every session as a durable markdown artifact. It works for any learner and any goal — system design, MCP and AI-assisted development, picking up a new language, distributed systems. The intake interview discovers your ability and decomposes *your* goal; it doesn't assume a curriculum.
+Implemented as a Claude Code skill, primer runs narrative, calibrated lessons against a persistent, evidence-backed learner profile and captures every session as a durable markdown artifact. **Any subject.** Geology, orbital mechanics, how cats regulate body heat, the combat math for a role-playing game you're designing, Italian grammar, distributed systems. The intake interview discovers your ability and decomposes *your* goal; it doesn't assume a curriculum, so there is nothing for the subject to fit into.
+
+Running it takes Claude Code, so that part is technical. What you point it at is not.
 
 ## Class and instance
 
