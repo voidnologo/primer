@@ -17,6 +17,13 @@ initial_prompt
 # rendered page must never land in the public core.
 *.view.html
 
+# Python bytecode and tool caches (tests and tools run straight from the checkout)
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
 # Editor / OS noise
 *.swp
 *.swo
