@@ -92,7 +92,7 @@ The view page enforces the rest structurally: the reveal is hidden until the lea
 
 One residual limit worth knowing: the reveal is in the page's DOM, so a browser's find-in-page expands closed `<details>`. This is inherent to a static local page. It's not a defence against a learner who wants the answer — it's a defence against *receiving* it without choosing to.
 
-For a learner whose profile shows low productive-struggle tolerance, still emit the blank — but say the answer immediately after they engage, rather than waiting them out. Same as the `just show me` rule in `lesson-protocol.md`.
+For a learner new to the material (no depth marker, or a low one), still emit the blank — but reveal immediately after they commit to a guess, rather than waiting them out. Same as the `just show me` rule in `lesson-protocol.md`.
 
 ## Figure spec format
 
