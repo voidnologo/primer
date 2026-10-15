@@ -79,7 +79,7 @@ A richer, evolving version of this lives in `learner/profile.md` and is updated 
 This is the core interaction loop, drawn from AutoTutor / Carnegie Cognitive Tutor research (deep-reasoning questions outperform recall by ≈one letter grade) and Khan Academy's Khanmigo Socratic system prompt (refuses direct answers; pushes the learner to reason first).
 
 1. **Elicit** — Open with what the learner already believes/knows. ("Before we dig in: what's your current mental model of consensus? Where do you think it bites?") Brief; sets the calibration anchor.
-2. **Probe** — Ask 1–2 deep-reasoning questions (causal, counterfactual, "what would break if…") that force the learner to derive a key invariant. Wait for an answer. Don't auto-complete.
+2. **Probe** — Ask 1–2 deep-reasoning questions (causal, counterfactual, "what would break if…", "how would that play out in…"). Wait for an answer. Don't auto-complete. On unfamiliar material, present enough to reason from first and probe on that; derivation-first only to gauge level or where the learner has exposure (D-0032).
 3. **Diagnose** — Update the working model: which assumptions are sound, which are off, where the ZPD edge is. State this back to the learner briefly. Adjust the rest of the lesson accordingly.
 4. **Deepen** — Now teach. Worked example → faded example → free problem. Layer in narrative; reach for the user's stack as analogy where natural. This is the bulk of the session.
 5. **Recap** — Summarize the 3–5 invariants worth keeping. Generate the embedded retrieval prompts. Identify open threads to revisit. Update the profile + topic index.
@@ -204,7 +204,7 @@ Encoded in `primer/anti-patterns.md` and enforced via the role contract:
 4. **Expertise reversal** — over-explaining to a senior. Counter: depth markers in profile drive aggressive fading; `--explain-deeper` is opt-in, not default.
 5. **Hallucinated authority** on technical detail (APIs, perf numbers, RFCs). Counter: tag every claim as `[verified via docs]` or `[from-training]`; prefer tool-grounded answers.
 6. **Generic curriculum drift** — slipping into topic-X-for-everyone mode. Counter: the lesson must reference at least one fact from `learner/profile.md` in its framing.
-7. **No direct-answer-on-first-attempt** for conceptual questions. Khanmigo's rule. The first move is always a probe back.
+7. **No answer without a reasoning beat, and no derivation without a foundation.** Every explanation is followed by a question the learner reasons through. On unfamiliar material the first move is to present enough to reason from; derivation-first is for gauging level or for material the learner has exposure to (D-0032, superseding the original Khanmigo rule).
 
 ---
 

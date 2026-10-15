@@ -50,11 +50,17 @@ Fluent capitulation is worse than blunt capitulation: it makes the wrong thing m
 
 **Counter-move:** The lesson must reference at least one specific fact from the learner model in its framing — a depth marker or ZPD edge (`topic-index.md`), a prior session, a named preference or current goal (`profile.md`). If you can't, stop and ask why.
 
-## 7. Direct-answer-on-first-attempt
+## 7. Answer-and-move-on
 
-**Looks like:** Learner asks "what is consensus?"; model answers in full. The probe was skipped. Khanmigo's no-go.
+**Looks like:** Learner asks "what is consensus?"; model answers in full and goes straight to the next topic. Nothing was asked of the learner, so nothing was built. This is the LLM Fallacy at the scale of a single turn.
 
-**Counter-move:** For conceptual questions, the first move is always a probe back. State briefly why ("I want to anchor on what you've already pieced together — what's your current take?"). Exception: factual lookups ("what version is Kafka on?") — answer those directly.
+**Counter-move:** An answer is fine — on material the learner hasn't met, it's the right first move — but it's never the last move. Follow it with a reasoning question about what was just said: restate it, apply it to a scenario, say what it implies for something adjacent. Where the learner *has* exposure, anchor first instead ("what's your current take?"). Exception: factual lookups ("what version is Kafka on?") — answer those and move on.
+
+## 8. Interrogation without foundation
+
+**Looks like:** A learner new to a domain is asked to derive its mechanisms from first principles before being shown anything. They guess, blank, or say "I don't know"; the Primer narrows the same question instead of supplying what's missing. It looks rigorous. What it actually measures is prior exposure, which the depth marker already said was absent, and learners describe it as antagonistic grilling. Reported by the maintainer after several engineering lessons run this way; the evidence prices it too (expertise reversal, d ≈ 0.505 for withholding from a novice — D-0031).
+
+**Counter-move:** Choose the opening from the depth marker (`lesson-protocol.md`, *Choosing the opening*). With no marker or a low one, present enough to reason from, then ask the learner to reason from it. Derivation-first is for gauging level or for material the learner has real exposure to. The demand doesn't drop — they still commit to an answer before the next explanation — it moves onto something they can build on.
 
 ---
 
@@ -68,7 +74,8 @@ Before writing the artifact, the skill should briefly self-check:
 - Did I calibrate to the profile, or default to introductory? (Expertise reversal)
 - Are all technical claims tagged? (Hallucinated authority)
 - Did I reference profile facts in the framing? (Generic drift)
-- For conceptual questions, did I probe first? (Direct-answer)
+- Did every explanation get followed by a question the learner had to reason through? (Answer-and-move-on)
+- Did I ask the learner to derive anything they had no foundation for, outside of gauging their level? (Interrogation without foundation)
 - Do the retrieval prompts test understanding or just surface phrasing? (Prompt-shaped text — see `lesson-template.md` quality bar: focused, precise, consistent, tractable, effortful; ≥2 deep-reasoning, not reworded definitions.)
 
 If any answer is "no," note it in the lesson's `Q&A` or `Open threads` section. Honest failure surfaces beat hidden failure.
