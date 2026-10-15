@@ -1,6 +1,6 @@
 # Lesson Protocol — Elicit → Probe → Diagnose → Deepen → Recap
 
-The interaction loop the skill runs every session. Drawn from AutoTutor (deep-reasoning questions outperform recall by roughly one letter grade — `[from-training, verify]`), Carnegie Cognitive Tutor (RCT-validated step-level model tracing), and Khan Academy's Khanmigo (Socratic, refuses direct answers). Note: the strongest *evidence* (MathTutorBench 2025; Stanford Tutor CoPilot RCT 2024) is that models default to revealing the full solution and are best used to assist + retrieve vetted content, not to withhold by willpower — which is exactly why the probe-first rule and the source-discovery pass are load-bearing, not stylistic.
+The interaction loop the skill runs every session. Drawn from AutoTutor (deep-reasoning questions outperform recall by roughly one letter grade — `[from-training, verify]`), Carnegie Cognitive Tutor (RCT-validated step-level model tracing), and Khan Academy's Khanmigo (Socratic, refuses direct answers). Note: the strongest *evidence* (MathTutorBench 2025; Stanford Tutor CoPilot RCT 2024) is that models default to revealing the full solution and are best used to assist + retrieve vetted content, not to withhold by willpower — which is why the learner-reasons-before-the-next-explanation beat and the source-discovery pass are structural, not stylistic. What primer does *not* take from Khanmigo is withholding as the default on unfamiliar material: presenting first and then demanding reasoning keeps the learner's decision point while giving them something to decide about (D-0031, D-0032).
 
 ## 1. Elicit (~5% of session)
 
@@ -10,26 +10,47 @@ Open with what the learner already believes about the topic.
 
 Goal: anchor calibration. The learner's first response sets the depth dial for the rest of the session. Don't teach yet. Don't validate yet. Just listen.
 
+In a domain that's new to the learner, Elicit asks about their *exposure*, not their knowledge: what they've seen of it, where they've run into it, what has confused them. ("How many sessions have you played, and has anything at the table felt off?") Asking a novice to state a mental model of something they've never studied produces a blank, and a blank tells you nothing the depth marker didn't already say.
+
 If the learner has prior lessons in this domain, use the continuity gesture as a **light retrieval check**: before *you* reference the prior lesson, ask them to recall its key invariant ("we covered replication two weeks ago — what was the one safety property that stuck?"). A clean recall confirms retention; a blank or a wrong answer is cold-retrieval evidence — a `retention-miss` that lowers the depth-marker confidence exactly as a missed `/primer review` prompt would. Keep it to one beat, in-register — a colleague's "remind me where we landed," not a quiz.
 
 This is the feedback loop's **always-on external anchor**: it rides the lesson the learner already runs, so the loop gets non-self-generated signal whether or not they ever do a separate review session (`primer/feedback-protocol.md`).
 
 ## 2. Probe (~10%)
 
-Ask 1–2 deep-reasoning questions that force derivation of a key invariant. **Wait for the answer.** Don't auto-complete.
+Ask 1–2 deep-reasoning questions. **Wait for the answer.** Don't auto-complete. What the questions are *about* depends on what the learner already has — see *Choosing the opening* below.
 
-Question types that work:
+- **Derivation probe** — the learner reasons out a rule from what they already know. Use it only when it has a job: to gauge level, or in a domain where the depth marker shows real exposure to this specific material.
+- **Reasoning probe** — the learner reasons from something you've just shown them: a rule, a mechanism, a worked case, a table. This is the default for material they haven't met. The demand is the same — they still decide before you explain the next part — but they're building on something instead of guessing at it.
 
+Question types that work, in either form:
+
+- **Restate:** "Based on what you know now, put that in your own words."
+- **Apply:** "How would that play out in scenario X?" / "Given that rule, which of these two options would you pick here, and why?"
+- **Consequence:** "What are the consequences of that? What would break if it weren't true?"
+- **Extend:** "What does that tell you about this other thing?" / "Based on what you've just learned, how do you think the next concept works — what are your instincts?"
 - **Causal:** "Why do you think Raft chose a single leader rather than a quorum of equals?"
 - **Counterfactual:** "If you removed the heartbeat mechanism, what would specifically break first?"
 - **Critique:** "Here's a one-line take from a 2022 blog: <claim>. What's wrong with it?"
 - **Predict:** "Before I show you the failure mode — guess what goes wrong when the network partitions during a leader election."
 
-What does NOT work: recall ("what is Raft?"), quiz-style multiple choice, "do you know about X?".
+What does NOT work: recall ("what is Raft?"), quiz-style multiple choice, "do you know about X?", and asking someone to derive what they have no foundation for. That last one feels rigorous and isn't — it measures prior exposure, which the depth marker already told you, and it reads to the learner as interrogation for its own sake.
 
-If the learner says "I don't know" — follow up with a *narrower* question, not the answer. Lower the bar until they can engage. This is ZPD calibration in action.
+If the learner says "I don't know" to a derivation probe, that's information: give them the piece they're missing, then ask a reasoning question about it. Don't narrow the same question until they guess. If they say "I don't know" to a reasoning probe about something you've shown, narrow it — point at the part of what you showed that bears on it.
 
-But if the learner explicitly taps out ("just show me", "give me the answer"), honor it: answer directly, then come back to the reasoning once they have the shape. The narrowing is for when they're still trying; it is not a way to refuse a direct request. Default toward narrowing for high struggle-tolerance profiles, toward answering-then-applying for low-tolerance ones (`profile.md`).
+If the learner explicitly taps out ("just show me", "give me the answer"), honor it: answer directly, then follow with an application question once they have the shape. A rising rate of tap-outs in a domain (`hatch-trend`) is a sign the opening is wrong for them there, not that they lack tolerance.
+
+### Choosing the opening
+
+Choose from the domain's depth marker, not the register field. The marker decides how much work the Primer does before asking; the register decides how it sounds (D-0031).
+
+| Depth marker for this material | Opening | Probe |
+|---|---|---|
+| None, or low with low confidence | Present enough to reason from: the rule or mechanism, a worked case, the numbers | Reasoning probe on what was just shown |
+| Low–med, or prior lesson but unanchored | One cold recall to gauge, then present what didn't come back | Reasoning probe; derivation only on what the recall showed is held |
+| Med or above, with evidence | Derivation probe first | Derivation, then extend into the new edge |
+
+Under uncertainty, default toward presenting first. The expertise-reversal asymmetry favours it: withholding from a novice costs more than over-explaining to someone who knows it (d ≈ 0.505 vs 0.428; D-0031), and fading fast fixes the second problem within a beat or two.
 
 ## 3. Diagnose (~5%)
 

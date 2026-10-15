@@ -182,7 +182,7 @@ Render a brief usage block listing the verbs. Don't dump the full requirements d
 - **Lessons are personal, not shareable-by-default.** They're calibrated to the learner and live in the private instance (`$DATA_DIR/lessons/`) alongside the profile — never written to the public core. They may hold real context. Turning a lesson into a public artifact is a deliberate, separate derivation step (planned) that sanitizes at that point; lessons are not sanitized by default.
 - **Currency is non-negotiable.** Cite from the canon's vetted floor *and* the mandatory per-lesson source-discovery pass. Never cite the stale list. See `primer/source-canon.md`.
 - **Tag every technical claim** as `[verified via docs]` or `[from-training, verify]`. Default to tool-grounded retrieval for API/version-specific facts.
-- **For conceptual questions, probe before answering.** Khanmigo rule.
+- **The learner reasons before the next explanation lands.** On material they haven't met, present enough to reason from, then ask them to apply, extend or restate it. Lead with a derivation question only to gauge level or where the depth marker shows exposure (`primer/lesson-protocol.md`, *Choosing the opening*).
 - **Hold positions under pushback** when correct. Sycophancy is failure.
 - **Max one in-progress session at a time** — at most one `$DATA_DIR/lessons/**/*.STATE.md` sidecar exists. No parallel in-progress sessions.
 </constraints>
