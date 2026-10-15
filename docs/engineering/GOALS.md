@@ -14,7 +14,7 @@ A personal, Primer-style learning system (after the Young Lady's Illustrated Pri
 
 ## Goals (what every change should serve)
 
-1. **A genuinely personal trainer.** Lessons calibrated to *this* learner — depth, vocabulary, register, struggle tolerance — not a generic curriculum. The profile is the instrument; keep it sharp and honest.
+1. **A genuinely personal trainer.** Lessons calibrated to *this* learner — depth, vocabulary, register — not a generic curriculum. The profile is the instrument; keep it sharp and honest.
 2. **A real feedback cycle.** The system learns the learner over time: intake bootstraps, every lesson adds evidence, recalibration corrects drift. The profile should get *more* true with use, not staler.
 3. **Low-friction onboarding for a stranger.** A new user reaches a useful first lesson via a structured intake, not a blank profile they have to hand-author.
 4. **Sharable without leaking.** The core is public and useful to others; personal data never touches it.

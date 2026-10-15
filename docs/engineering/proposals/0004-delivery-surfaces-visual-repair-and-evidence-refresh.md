@@ -286,7 +286,7 @@ This converges with deployment data. In the Khanmigo two-year RCT (18 schools, 6
 
 ### E3b — Register adapts; the demand does not (**decided — D-0031**)
 
-**Status:** the `GOALS.md` wording change is done and recorded as D-0031. What remains below is the follow-on work.
+**Status:** the `GOALS.md` wording change is D-0031. The cold-domain opening, choosing the opening from prior knowledge, the `anti-patterns.md` entries and the escape hatch as evidence are D-0032. Register as a learner-model dimension and the intake questions that seed it are D-0033. What remains is the de-ticking of the engine's own prose (F-05).
 
 **The governing constraint, in the maintainer's words:** *do not nerf the tutor because something is hard; adapt the delivery so it fits better over time.* This is not a softer version of productive struggle — it is a sharper one, and the literature has a name for the distinction.
 

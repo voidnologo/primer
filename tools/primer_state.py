@@ -452,8 +452,8 @@ def cmd_recalibrate_mark(args: argparse.Namespace) -> int:
 # T7's "just show me" hatch is the right call — misaligned Socratic pressure causes
 # overload — but a *rising* rate is precisely the AI-dependence signal the cognitive-
 # offloading literature describes, and it was invisible: nothing counted it. It is logged
-# as an ordinary calibration miss (a struggle-tolerance mismatch, which is what it is, and
-# what minor recalibrate should act on) with a fixed type token so the rate is computable.
+# as an ordinary calibration miss (an opening mismatch until shown otherwise -- D-0032 --
+# and what minor recalibrate should act on) with a fixed type token so the rate is computable.
 HATCH_TYPE = "escape-hatch"
 # Enough lessons for a rate to mean something without averaging away a recent change.
 HATCH_WINDOW = 10
@@ -518,7 +518,7 @@ def _dated(lines: list[str], mode: str | None = None) -> list[date]:
 
 def cmd_hatch_log(args: argparse.Namespace) -> int:
     path = _learner(resolve_data_dir(args.data_dir), "calibration-log.md")
-    note = args.note or "consider lowering the struggle-tolerance setting for this domain"
+    note = args.note or "check the opening: did they have something to reason from? (D-0032)"
     entry = (f"{_today(args).isoformat()} | {args.domain} | {HATCH_TYPE} | "
              f"learner asked for the answer directly | {note}")
     _write_lines(path, _read_lines(path) + [entry])

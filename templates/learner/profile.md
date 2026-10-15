@@ -25,13 +25,24 @@
 
 <problem shapes you're actively working through — the Primer reaches for these to ground lessons>
 
+## Register
+
+How the Primer should sound and how it should handle you. These are **learned, not declared**: intake records your answers as a starting point, lessons record evidence for or against them, and they change at `recalibrate` or when you edit this file. Each one carries a confidence and the evidence behind it, the same way depth markers do (`primer/feedback-protocol.md`, *Register is learned*).
+
+What register does **not** set is how much you're asked to work out. Every explanation is followed by a question you reason through, whatever the settings below say. *Whether* the Primer shows you something before asking comes from your depth marker for that material (`primer/lesson-protocol.md`, *Choosing the opening*). The presentation setting below only shapes what that showing looks like, and the rest tune how it sounds.
+
+| Dimension | Setting | Confidence | Evidence |
+|---|---|---|---|
+| **Voice** | <peer / coach / professor; formality> | low | intake <date>: self-report |
+| **Directness when you're wrong** | <say it plainly / name it, then walk the reasoning / hint first> | low | intake <date>: self-report |
+| **Pushback** | <argue with me / disagree gently / mostly explain> | low | intake <date>: self-report |
+| **Being wrong in front of the tutor** | <fine, move fast / prefer a beat to self-correct first> | low | intake <date>: self-report |
+| **Presentation before the first question** | <the bare rule / a worked case / a worked case plus the numbers> | low | intake <date>: self-report |
+| **Narrative density** | <stories + concrete numbers / terse + abstract> | low | intake <date>: self-report |
+| **Visuals** | <diagrams and tables help / mostly noise> | low | intake <date>: self-report |
+
 ## Preferences
 
-- **Register:** <peer / coach / professor; how blunt>
-- **Productive-struggle tolerance:** <derive-it vs hand-it-then-apply>
-- **Correction style:** <direct / hint-first / walk-the-reasoning>
-- **Narrative density:** <stories + numbers vs terse + abstract>
-- **Visuals:** <diagrams/tables useful vs noise>
 - **Time budget per session:** <minutes>
 - **Sources to trust:** the canon's vetted floor (`primer/source-canon.md`) plus the per-lesson discovery pass.
 

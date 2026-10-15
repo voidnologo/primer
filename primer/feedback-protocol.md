@@ -10,7 +10,7 @@ The core failure of a naive loop is conflating things that change at different r
 
 Two kinds of fact live in the profile, and mixing them in one file means the volatile churn drags the stable traits along and the stable traits never get deliberately revisited.
 
-- **Stable traits** → `profile.md`. Identity, real context, register, productive-struggle tolerance, correction style, narrative density, visual prefs, session length, anti-preferences, goals (semi-stable). Changes deliberately — at `recalibrate`, or when the learner edits.
+- **Stable traits** → `profile.md`. Identity, real context, the *Register* table (voice, directness, pushback, being wrong in front of the tutor, presentation before the first question, narrative density, visuals — each with confidence + evidence), session length, anti-preferences, goals (semi-stable). Changes deliberately — at `recalibrate`, or when the learner edits.
 - **Volatile state** → `learner/`. Depth markers (with confidence + evidence), `[status]` tags, ZPD edges → `topic-index.md`. Calibration misses → `calibration-log.md`. These churn every session.
 
 Depth markers live in `topic-index.md`, **not** `profile.md`. Each marker carries `[confidence: low/med/high]` and the evidence that earned it (which session, what was demonstrated). Intake claims start `low`; each lesson that confirms raises confidence. This lets the Primer distinguish what it *knows* about the learner from what it *assumed*.
@@ -25,7 +25,7 @@ Miss types to watch for:
 - vocabulary gap (used a term before establishing it)
 - dead analogy (the framing didn't connect)
 - pacing off (rushed or dragged)
-- struggle-tolerance mismatch (learner bounced off a Socratic probe and wanted the answer) — **log it**: `primer_state.py hatch-log --domain <d>`. The "just show me" hatch is the right call in the moment, but a *rising* rate is the AI-dependence signal, and it was invisible until it was counted. `hatch-trend` reports the rate per domain over the last N lessons; read it at recalibrate as "the register is mis-set for this learner here", not as a failure.
+- **opening mismatch** (learner bounced off a probe and wanted the answer) — **log it**: `primer_state.py hatch-log --domain <d>`. The "just show me" hatch is the right call in the moment, but a *rising* rate was invisible until it was counted. `hatch-trend` reports the rate per domain over the last N lessons. Read a rising rate first as **the opening being wrong for this learner in this domain**: were they asked to derive something they had no foundation for (`lesson-protocol.md`, *Choosing the opening*)? Only once the openings check out is it the AI-dependence signal the offloading literature describes. It is never a reason to stop asking reasoning questions (D-0032).
 - **register miss** — the voice, vocabulary, or figure delivery didn't fit and the learner said so. Token: `register-miss`. This is the *Style confirmation* signal below, which the protocol asked the Primer to infer while giving it nowhere to write the result; a recurring one is a candidate anti-preference. Both instances so far traced back to the engine's own prose rather than to a per-learner preference, so check the instruction files before recording it as a trait.
 - **analogy transfer** — an analogy carried the structure across correctly and the magnitude or cost incorrectly. Token: `analogy-transfer`. Distinct from a dead analogy, which never connected: this one connected, was productive, and mispriced something. The correction differs too — keep the analogy, fix the number.
 
@@ -86,6 +86,26 @@ The Primer does **not** ask "did the difficulty land?" — that crosses into the
 
 These feed the calibration-log and, when a pattern is clear, the anti-preferences. If a single lesson contradicts a stable trait, note it — don't rewrite the trait on one data point; that's what `recalibrate` is for.
 
+### Register is learned
+
+The *Register* table in `profile.md` holds how the Primer sounds and handles the learner. It is learner-model state with confidence and evidence, the same as a depth marker, not a preference form filled in once (D-0031). Intake writes the prior; this is how it moves.
+
+**Evidence that counts**, all already written somewhere:
+
+- `register-miss` rows in `calibration-log.md`: the voice, vocabulary, correction or figure delivery didn't fit and the learner said so.
+- *Style confirmation* signals (the table above): friction or fit, inferred and logged as annotations.
+- The escape-hatch trend in a domain where the openings were correct (see *opening mismatch* above).
+- Anything the learner states outright about how they want to be taught. A direct statement is the strongest single piece of evidence there is, and when they ask for a change the Primer makes it on the spot rather than waiting for a recalibrate. D-0032 records an instance.
+
+**How it moves:**
+
+- **Confidence** moves at minor recalibrate, both ways. Two or more consistent observations since the last check raise or lower a row one step; a single observation is noted in the evidence column and leaves the confidence alone.
+- **Settings** move at deep recalibrate, or immediately when the learner states or edits one. The Primer may *propose* a setting change from evidence alone, but it shows the proposal to the learner and applies it on confirmation, never silently. This matters most when the evidence runs against what the learner said: preference and learning can diverge, and the learner should see that case argued rather than have it decided for them.
+
+**What no row can do** is lower the demand. A request like "don't ask me questions" is recorded as the presentation row set to its fullest (worked case plus numbers) and an anti-preference noting the friction. The reasoning beat after each explanation stays, and "just show me" stays available on every beat. The table changes how the Primer sounds and how much it shows. It never changes whether the learner is asked to think (D-0031, D-0032).
+
+**Older profiles** have a *Preferences* list instead of the table. At the next deep recalibrate, convert it: carry each preference into its row at `low` confidence with "pre-table profile" as evidence. Fold any *Productive-struggle tolerance* line into the presentation and pushback rows, because it was the field that encoded the demand. Show the converted table to the learner before writing it.
+
 ## Timescale 3 — recalibration (two tiers)
 
 The append-only loop accretes volatile state until it needs compacting and the model needs correcting. Two tiers, by the user's design.
@@ -102,12 +122,13 @@ Both defaults are configurable. This replaces the old fixed "every 5 lessons": i
 1. Scan `calibration-log.md` since the last recalibrate for **repeated** miss-types in the same domain → fold into the relevant depth marker or anti-preference.
 2. Flip any `[status]` that the evidence clearly warrants (e.g., `[in-progress]` → `[covered]`).
 3. Apply time decay (forgetting-aware): **drift any `[confidence: high]` marker untouched for several lessons toward `med`** and flag it as a reprobe candidate; and surface — don't resolve — any `[confidence: low]` marker untouched for several lessons (a standing assumption worth a probe next time). Both are about markers going stale; the difference is high-confidence ones decay, low-confidence ones just get re-flagged.
-4. Show a 3–5 line "changed since last check" diff. Proceed into the lesson.
-5. **Close with `primer_state.py recalibrate-mark`.** It writes a positional marker into `calibration-log.md`, and everything below the last marker is what the next check counts. This is not bookkeeping for its own sake: the trigger used to compare dates across two files, so every miss logged on the same calendar day as a recalibrate was invisible — and since a recalibrate runs at session start while the session's misses are written at its end, *the common case silently dropped a whole session's evidence*.
+4. Move **Register confidences** per *Register is learned*: two or more consistent observations since the last check move a row one step. Settings don't change here.
+5. Show a 3–5 line "changed since last check" diff. Proceed into the lesson.
+6. **Close with `primer_state.py recalibrate-mark`.** It writes a positional marker into `calibration-log.md`, and everything below the last marker is what the next check counts. This is not bookkeeping for its own sake: the trigger used to compare dates across two files, so every miss logged on the same calendar day as a recalibrate was invisible — and since a recalibrate runs at session start while the session's misses are written at its end, *the common case silently dropped a whole session's evidence*.
 
 **What the trigger counts.** Only rows whose miss-type begins with a documented token (`templates/learner/calibration-log.md` holds the list; `MISS_TYPES` in `tools/primer_state.py` must agree, and a test asserts it). Rows written as annotations — `(mastery signal, not a miss)`, `(examiner outcome: agreement)` — are deliberately not counted. Counting them inverted the signal for the strongest evidence the log carries: a demonstration of mastery raised the apparent need to correct the model.
 
-Minor recalibrate does **not** rewrite stable traits or goals.
+Minor recalibrate does **not** rewrite stable traits or goals. It moves Register *confidences*, never Register *settings*.
 
 ### Deep recalibrate — user-invoked (`/primer recalibrate`)
 
@@ -116,7 +137,7 @@ On demand, a full meta-session (not a lesson):
 1. **Mine `calibration-log.md` for patterns** across all domains → promote recurring misses to stable traits / anti-preferences. (This is how a one-off observation legitimately becomes a rule.)
 2. **Detect drift:** Are the goals in `profile.md` still current? Should any domain flip to `[mastered]`? Are the ZPD edges stale?
 3. **Confidence audit:** List low-confidence markers — assumptions never actually tested — as candidates to probe in upcoming lessons.
-4. **Re-confirm stable traits** with the learner: has register / struggle tolerance / correction style changed? People change; the profile should be allowed to.
+4. **Re-confirm stable traits** with the learner, and **work the Register table** per *Register is learned*: propose setting changes the evidence supports, show the rows whose confidence moved, and ask about any row still at intake-only evidence. People change; the profile should be allowed to.
 5. **Compact volatile churn:** collapse superseded depth-marker history; archive resolved open-questions.
 6. **Flag stale sources:** ask the ledger rather than re-reading the canon by eye — `primer_sources.py sources-stale` (past the freshness horizon, most-used first) and `sources-unverified` (the `[from-training, verify]` backlog). Both are queryable lists now, not remembered rituals; work the top of each. See `primer/research-protocol.md`.
 7. **Output a "what I changed and why" diff** and apply on confirmation.

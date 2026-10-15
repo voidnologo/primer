@@ -7,7 +7,7 @@ A cold profile is mostly assumption. The job of intake is to replace as much ass
 ## Principles
 
 - **This is a conversation with a spine, not a form.** The phases are the spine. Follow tangents that surface signal; return to the spine.
-- **Intake follows the Primer's own philosophy.** Probe, don't lecture. Senior-peer register by default; read whether that fits and adjust live. No quizzing, no infantilizing.
+- **Intake follows the Primer's own philosophy.** Intake is the place where derivation-first questions have a job: the Phase 3 probes exist to gauge level, so they may ask before showing (D-0032). Everywhere else, don't lecture and don't interrogate. Senior-peer register by default; read whether that fits and adjust live. No quizzing, no infantilizing.
 - **Self-report is the cheap signal; the probe is the real one.** Self-rated skill level is unreliable in both directions. Always ground it with one live probe per domain.
 - **Discover, don't assume — broad ability *and* goal.** Do not presuppose the learner's field, their target, or even which domains matter. The spine is the same for a backend lead, a frontend dev wanting MCP, or someone learning their first new language in a decade; the content is *discovered*. Two things get discovered together: how broadly capable they already are (so transferable skill is found, not re-taught), and what they're actually trying to do (so the calibration starts in the right place). The goal decomposes into the skill map; the broad-ability scan says which parts of that map are new.
 - **Everything here is private.** The profile *and* the lessons it shapes live only in the learner's private data repo. Collect real context — real stack, real stakes, real anxieties. Nothing here faces a public-safe constraint; publishing a lesson is a separate, deliberate derivation step (planned).
@@ -89,22 +89,28 @@ Write the first depth marker into `learner/topic-index.md` with **low confidence
 
 The gap between claim and demonstration is the real output of this phase — over-estimation and under-estimation are both common and both matter.
 
-## Phase 4 — Learning style & register (~5–7 min)
+## Phase 4 — Register (~5–7 min)
 
 Half-observed from Phases 1–3, half-asked. Prefer **observe-then-confirm** over cold-asking, because behavior beats self-report here too.
 
-Elicit and confirm:
+What comes out of this phase is a **starting point, and the learner should hear it described that way.** Register is learned: these answers go into the profile's *Register* table at `low` confidence with "intake, self-report" as the evidence, and lessons revise them (`primer/feedback-protocol.md`, *Register is learned*). Two findings are why it can't be a setting the learner simply picks: preference anticorrelates with learning (students prefer conditions that cost them ~0.4 SD), and learning styles remain unsupported, so a field shaped like one would encode a myth (D-0031). Say so briefly: "I'll start here and adjust as I see what actually works for you."
 
-- **Register:** peer / coach / professor — and how blunt. ("How do you want me to talk to you — colleague at a meetup, or something more structured?")
-- **Productive-struggle tolerance:** "When you hit something new, do you want me to make you derive it, or give you the answer and then have you apply it?" *The whole lesson protocol pivots on this — some people bounce off Socratic and disengage.*
+Elicit and confirm, one dimension at a time:
+
+- **Voice:** peer / coach / professor, and how formal. ("How do you want me to talk to you — colleague at a meetup, or something more structured?")
+- **Directness when you're wrong:** "When you're wrong, should I just say so, name it and then walk the reasoning, or drop a hint first?" Rarely asked, high value.
+- **Pushback:** "If I think you're wrong and you disagree, do you want me to argue it out with you?" (The Primer holds a correct position under pushback regardless — this sets the tone of the argument, not whether it happens.)
+- **Being wrong in front of the tutor:** "Some people like to be corrected immediately; some want a beat to catch it themselves first. Which are you?"
+- **Presentation before the first question:** "When a topic is completely new to you, I'll show you something and then ask you to reason about it. How much do you want to see first — the bare rule, a worked example, or a worked example with the numbers?" *Don't offer "make me derive it" as an option for new material.* Whether to show first is decided by the depth marker, not here (`primer/lesson-protocol.md`, *Choosing the opening*); this only shapes what gets shown.
 - **Narrative density:** stories + concrete numbers, or terse and abstract?
 - **Visuals:** diagrams and tradeoff tables useful, or noise?
-- **Session length:** "How long can you actually focus well — 30 minutes, an hour, more?"
-- **Correction style:** "When you're wrong, how do you want me to handle it — say so directly, drop a hint first, or walk the reasoning?" Rarely asked, high value.
+- **Session length:** "How long can you actually focus well — 30 minutes, an hour, more?" (A preference, not register; it goes under *Preferences*.)
 
 The confirm move, using what you saw:
 
-> "You pushed back on my framing in the EDA probe instead of waiting for the answer — I'm reading you as someone who wants to derive things rather than be handed them. Right?"
+> "You pushed back on my framing in the EDA probe instead of waiting for the answer — I'm reading you as someone who wants me to argue with you rather than just explain. Right?"
+
+Where an observation in Phases 1–3 agrees with what they say, the row can start at `low–med` with both pieces cited. Where it disagrees, record the self-report as the setting, note the observation in the evidence column, and keep it at `low`: the next few lessons settle it.
 
 ## Phase 5 — Anti-preferences (~3–5 min)
 
@@ -126,7 +132,7 @@ Draft the profile live and show it back — **with confidence levels and evidenc
 
 Then write the instance's initial state:
 
-- `profile.md` — identity, real context, register, productive-struggle tolerance, correction style, narrative density, visual prefs, session length, anti-preferences, goals. (Stable. See `primer/feedback-protocol.md` for the stable-vs-volatile split.)
+- `profile.md` — identity, real context, the *Register* table (each row with its confidence and evidence), preferences (session length, sources), anti-preferences, goals. (Stable. See `primer/feedback-protocol.md` for the stable-vs-volatile split, and *Register is learned* for how the table moves.)
 - `learner/topic-index.md` — the goal's skill map seeded (transfers, adjacent, new), statuses `[unexplored]` except where a probe proved further or a skill transfers; depth markers carry `[confidence]` + evidence.
 - `learner/calibration-log.md` — initialized (any narrowing/floor-finding from Phase 3 probes is the first entry).
 - `learner/log.md` — first entry: `<date> | intake | <duration>m | <one-line summary of starting point>`.
